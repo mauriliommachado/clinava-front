@@ -12,13 +12,17 @@ import { UserService } from '../_services';
 export class HomeComponent implements OnInit {
     currentUser: User;
     users: User[] = [];
+    title: String;
 
     constructor(private userService: UserService) {
-        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     }
 
     ngOnInit() {
         //this.loadAllUsers();
+    }
+
+    private setTitle(title: String){
+        this.title = title;
     }
 
     private loadAllUsers() {

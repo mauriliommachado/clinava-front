@@ -1,7 +1,10 @@
 ﻿export class User {
-    id: number;
+
+    id: string;
     username: string;
     password: string;
-    firstName: string;
-    lastName: string;
+    name: string;
+    email: string;
+    role: Array<string>;
 }
+

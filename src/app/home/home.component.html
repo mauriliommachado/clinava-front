@@ -1,2 +1,23 @@
-﻿<router-outlet></router-outlet>
+﻿<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Recepção</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+  
+      <div class="btn-group mr-2">
+        <button class="btn btn-sm btn-outline-secondary" routerLink="/home/consult">Nova Consulta</button>
+        <button class="btn btn-sm btn-outline-primary" routerLink="/home/pacient">Cadastro Cliente</button>
+      </div>
+      <div class="dropdown">
+        <button class="btn btn-secondary btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Atalho Agenda
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" routerLink="/home/agenda">Dr. Diogo</a>
+          <a class="dropdown-item" routerLink="/home/agenda">Dr. Maurílio</a>
+          <a class="dropdown-item" routerLink="/home/agenda">Dra. Amanda</a>
+        </div>
+      </div>
+    </div>
+  </div>
+<router-outlet></router-outlet>
 

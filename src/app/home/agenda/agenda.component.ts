@@ -7,7 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AgendaComponent implements OnInit {
 
-  constructor() { }
+  moduleName: String
+
+  constructor() {
+    this.moduleName = "Agenda";
+   }
 
   ngOnInit() {
   }

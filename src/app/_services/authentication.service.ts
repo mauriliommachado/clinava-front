@@ -2,7 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
-import { environment } from '../../environments/environment';
+import { User } from '../_models';
 
 @Injectable()
 export class AuthenticationService {
@@ -16,6 +16,14 @@ export class AuthenticationService {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify(response));
                 }
+                return response;
+            }));
+    }
+
+    signin(user: User) {
+        return this.http.post<any>(`https://clinava.herokuapp.com/api/auth/signup`, user)
+            .pipe(map(response => {
+                alert(response);
                 return response;
             }));
     }

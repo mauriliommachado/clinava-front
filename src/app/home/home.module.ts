@@ -6,6 +6,7 @@ import { HomeRoutingModule } from './home-routing.module';
 import { ReceptionComponent } from './reception/reception.component';
 import { AgendaComponent } from './agenda/agenda.component';
 import { ConsultComponent } from './consult/consult.component';
+import { PacientComponent } from './pacient/pacient.component';
 import { from } from 'rxjs';
 
 @NgModule({
@@ -15,7 +16,7 @@ import { from } from 'rxjs';
   ],
   declarations: [
     ReceptionComponent,
-    AgendaComponent,
+    AgendaComponent,PacientComponent,
     ConsultComponent,HomeComponent]
 })
 export class HomeModule { }

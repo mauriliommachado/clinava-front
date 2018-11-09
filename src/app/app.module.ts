@@ -16,6 +16,7 @@ import { IndexComponent } from './index/index.component';
 
 import { HomeRoutingModule } from './home/home-routing.module'; //<-- import
 import { HomeModule }     from './home/home.module'; //<-- import
+import { AdminModuleModule }     from './admin-module/admin-module.module'; //<-- import
 
 @NgModule({
     imports: [
@@ -23,7 +24,7 @@ import { HomeModule }     from './home/home.module'; //<-- import
         ReactiveFormsModule,
         HttpClientModule,
         routing,
-        HomeModule,
+        HomeModule,AdminModuleModule,
         HomeRoutingModule
     ],
     declarations: [
