@@ -21,13 +21,4 @@ export class HomeComponent implements OnInit {
         //this.loadAllUsers();
     }
 
-    private setTitle(title: String){
-        this.title = title;
-    }
-
-    private loadAllUsers() {
-        this.userService.getAll().pipe(first()).subscribe(users => {
-            this.users = users;
-        });
-    }
 }

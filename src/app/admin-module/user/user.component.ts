@@ -1,51 +1,67 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../_models';
-import { UserService, AlertService,AuthenticationService } from '../../_services';
+import { AlertService, UserService } from '../../_services';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { first } from 'rxjs/operators';
+
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition
+} from '@angular/animations';
+
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css']
+  styleUrls: ['./user.component.css'],
+  animations: [
+    trigger('popOverState', [
+      state('none', style({
+        display: 'none',
+        opacity: 0
+      })),
+      state('block',   style({
+        display: 'block',
+        opacity: 1
+      })),
+      transition('block => none', animate('300ms ease-out')),
+      transition('none => block', animate('300ms ease-in'))
+    ])
+  ]
 })
 export class UserComponent implements OnInit {
   currentUser: User;
-  users: Array<User>;
   title: String;
+  registerForm: FormGroup;
+  loading = false;
+  submitted = false;
+  show = false;
+
+  get stateList() {
+    return this.show ? 'block' : 'none'
+  }
+
+
+  toggle() {
+    this.show = !this.show;
+  }
 
   constructor(private formBuilder: FormBuilder,
-    private router: Router,
-    private userService: UserService,
-    private authService: AuthenticationService,
-    private alertService: AlertService) {
+    private alertService: AlertService,
+    private userService: UserService) {
 
   }
 
   ngOnInit() {
-    this.users = new Array();
     this.currentUser = new User();
-    this.currentUser.id = "1";
+    this.currentUser.id = (this.userService.getAll().length+1).toString();
     this.currentUser.name = "Maurílio Miranda Machado";
     this.currentUser.email = "mauriliommachado@gmail.com";
     this.currentUser.username = "mauriliommachado@gmail.com";
     this.currentUser.role = new Array("Administrador");
-    let user = new User();
-    user.id = "2";
-    user.name = "Diogo";
-    user.email = "diogo@gmail.com";
-    user.username = "diogo@gmail.com";
-    user.role = new Array("Usuário");
-    this.users.push(this.currentUser);
-    this.users.push(user);
-    user = new User();
-    user.id = "3";
-    user.name = "Teste Teste";
-    user.email = "teste@gmail.com";
-    user.username = "teste@gmail.com";
-    user.role = new Array("Usuário");
-    this.users.push(user);
+    this.userService.register(this.currentUser);
     this.registerForm = this.formBuilder.group({
       name: ['', Validators.required],
       username: ['', Validators.required],
@@ -55,14 +71,20 @@ export class UserComponent implements OnInit {
     });
   }
 
-  registerForm: FormGroup;
-  loading = false;
-  submitted = false;
+
   // convenience getter for easy access to form fields
   get f() { return this.registerForm.controls; }
 
   onSubmit() {
     this.alertService.success('Registro efetuado com sucesso', true);
+    
+    if (this.registerForm.invalid) {
+      return;
+    }
+    let user = <User>this.registerForm.value;
+    user.id = (this.userService.getAll().length+1).toString();
+    this.userService.register(user);
+    this.toggle();
     /* this.submitted = true;
     if (this.registerForm.invalid) {
       return;

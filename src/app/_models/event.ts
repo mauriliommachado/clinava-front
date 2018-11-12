@@ -1,4 +1,9 @@
-﻿export class Auth {
+﻿import {User} from "./user";
+
+export class Event {
     id: string;
-    title: string;
+    user: User;
+    date: Date;
+    obs: string;
+    duration: number;
 }

@@ -1,1 +1,70 @@
 <h4>Consulta</h4>
+<button class="btn btn-primary float-right mb-4" (click)="toggle()">Nova Consulta</button>
+<br>
+<div id="new" [@popOverState]="stateList">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="date">Data</label>
+                <input type="date" formControlName="date" class="form-control" [ngModel]="date" [ngClass]="{ 'is-invalid': submitted && f.date.errors }" />
+                <div *ngIf="submitted && f.date.errors" class="invalid-feedback">
+                    <div *ngIf="f.date.errors.required">A data tem de ser preenchida</div>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="time">Hora</label>
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <button class="input-group-text" (click)="subMinutes()">-</button>
+                    </div>
+                    <input type="time" formControlName="time" [ngModel]="time" [ngClass]="{ 'is-invalid': submitted && f.time.errors }"
+                        class="form-control" id="time">
+                    <div class="input-group-prepend">
+                        <button class="input-group-text" (click)="addMinutes()">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="duration">Duração</label>
+            <input type="number" formControlName="duration" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.duration.errors }" />
+            <div *ngIf="submitted && f.duration.errors" class="invalid-feedback">
+                <div *ngIf="f.duration.errors.required">Duração tem que ser preenchida</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="obs">Observação</label>
+            <input type="text" formControlName="obs" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.obs.errors }" />
+        </div>
+        <div class="form-group">
+            <label for="user">Atendente</label>
+            <select formControlName="user" class="form-control">
+                <option [value]="user.id" *ngFor="let user of userService.getAll()">{{user.name}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button [disabled]="loading" class="btn btn-primary">Salvar</button>
+            <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+        </div>
+    </form>
+</div>
+<div id="list">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Data</th>
+                <th scope="col">Duração</th>
+                <th scope="col">Observação</th>
+                <th scope="col">Atendente</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let event of eventService.getAll()">
+                <td>{{ event.date | date:'dd/MM/yy - HH:mm' }}</td>
+                <td>{{ event.duration }}</td>
+                <td>{{ event.obs }}</td>
+                <td>{{ event.user.name }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
