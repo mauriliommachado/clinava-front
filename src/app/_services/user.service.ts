@@ -4,11 +4,19 @@ import { User } from '../_models';
 
 @Injectable()
 export class UserService {
-    
+
     users: Array<User>;
+    currentUser:User;
 
     constructor(private http: HttpClient) {
         this.users = new Array();
+        this.currentUser = new User();
+        this.currentUser.id = (this.getAll().length + 1).toString();
+        this.currentUser.name = "Maurílio Miranda Machado";
+        this.currentUser.email = "mauriliommachado@gmail.com";
+        this.currentUser.username = "mauriliommachado@gmail.com";
+        this.currentUser.role = new Array("Administrador");
+        this.register(this.currentUser);
     }
 
 
@@ -28,7 +36,7 @@ export class UserService {
     }
 
     update(user: User) {
-        
+
         //return this.http.put(`${environment.apiUrl}/users/` + user.id, user);
     }
 

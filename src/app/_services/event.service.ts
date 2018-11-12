@@ -1,6 +1,6 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Event } from '../_models';
+import { Event, User } from '../_models';
 
 @Injectable()
 export class EventService {
@@ -9,6 +9,93 @@ export class EventService {
 
     constructor(private http: HttpClient) {
         this.events = new Array();
+        let event = new Event();
+        event.date = new Date();
+        event.date.setHours(8);
+        event.date.setMinutes(30);
+        event.user = new User();
+        event.user.name = "Amanda Schmit";
+        this.register(event);
+        event = new Event();
+        event.date = new Date();
+        event.date.setDate(event.date.getDate());
+        event.date.setHours(10);
+        event.date.setMinutes(0);
+        event.user = new User();
+        event.user.name = "João Azevedo";
+        this.register(event);
+        event = new Event();
+        event.date = new Date();
+        event.date.setDate(event.date.getDate()+1);
+        event.date.setHours(8);
+        event.date.setMinutes(0);
+        event.user = new User();
+        event.user.name = "José Augusto";
+        this.register(event);
+        event = new Event();
+        event.date = new Date();
+        event.date.setDate(event.date.getDate()+1);
+        event.date.setHours(8);
+        event.date.setMinutes(30);
+        event.user = new User();
+        event.user.name = "Andréa Silva";
+        this.register(event);
+        event = new Event();
+        event.date = new Date();
+        event.date.setDate(event.date.getDate()+1);
+        event.date.setHours(9);
+        event.date.setMinutes(30);
+        event.user = new User();
+        event.user.name = "Ricardo Almeida";
+        this.register(event);
+        event = new Event();
+        event.date = new Date();
+        event.date.setDate(event.date.getDate()+2);
+        event.date.setHours(9);
+        event.date.setMinutes(0);
+        event.user = new User();
+        event.user.name = "Lucas Torres";
+        this.register(event);
+        event = new Event();
+        event.date = new Date();
+        event.date.setDate(event.date.getDate()+2);
+        event.date.setHours(11);
+        event.date.setMinutes(0);
+        event.user = new User();
+        event.user.name = "André Simões";
+        this.register(event);
+        event = new Event();
+        event.date = new Date();
+        event.date.setDate(event.date.getDate()+2);
+        event.date.setHours(8);
+        event.date.setMinutes(30);
+        event.user = new User();
+        event.user.name = "Nuno Braga";
+        this.register(event);
+        event = new Event();
+        event.date = new Date();
+        event.date.setDate(event.date.getDate()+3);
+        event.date.setHours(8);
+        event.date.setMinutes(0);
+        event.user = new User();
+        event.user.name = "Gustavo Costa";
+        this.register(event);
+        event = new Event();
+        event.date = new Date();
+        event.date.setDate(event.date.getDate()+3);
+        event.date.setHours(10);
+        event.date.setMinutes(30);
+        event.user = new User();
+        event.user.name = "Bruno Enescu asda";
+        this.register(event);
+        event = new Event();
+        event.date = new Date();
+        event.date.setDate(event.date.getDate()+3);
+        event.date.setHours(8);
+        event.date.setMinutes(30);
+        event.user = new User();
+        event.user.name = "Nuno Braga";
+        this.register(event);
     }
 
 

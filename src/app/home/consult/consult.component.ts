@@ -39,7 +39,7 @@ export class ConsultComponent implements OnInit {
   registerForm: FormGroup;
   loading = false;
   submitted = false;
-  show = true;
+  show = false;
   config: Config;
   initDay: number;
   endDay: number;
@@ -53,6 +53,7 @@ export class ConsultComponent implements OnInit {
 
   toggle() {
     this.show = !this.show;
+    this.title = this.show ? 'Cancelar' : 'Cadastrar'
   }
 
   constructor(private formBuilder: FormBuilder, private userService: UserService, private configService: ConfigService
@@ -82,6 +83,7 @@ export class ConsultComponent implements OnInit {
       obs: [],
       time: [this.time, Validators.required]
     });
+    this.title = this.show ? 'Cancelar' : 'Cadastrar'
   }
 
   onSubmit() {

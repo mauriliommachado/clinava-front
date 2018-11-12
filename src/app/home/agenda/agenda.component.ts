@@ -25,14 +25,6 @@ export class AgendaComponent implements OnInit {
 
   constructor(private configService: ConfigService, private eventService: EventService) {
     this.config = this.configService.getConfig();
-
-    let event = new Event();
-    event.date = new Date();
-    event.date.setHours(this.config.hourInit);
-    event.date.setMinutes(0);
-    event.user = new User();
-    event.user.name="Teste";
-    eventService.register(event);
   }
 
   ngOnInit() {

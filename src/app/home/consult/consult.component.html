@@ -1,5 +1,5 @@
 <h4>Consulta</h4>
-<button class="btn btn-primary float-right mb-4" (click)="toggle()">Nova Consulta</button>
+<button class="btn btn-primary float-right mb-4" (click)="toggle()">{{title}}</button>
 <br>
 <div id="new" [@popOverState]="stateList">
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
@@ -56,6 +56,8 @@
                 <th scope="col">Duração</th>
                 <th scope="col">Observação</th>
                 <th scope="col">Atendente</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
@@ -64,6 +66,11 @@
                 <td>{{ event.duration }}</td>
                 <td>{{ event.obs }}</td>
                 <td>{{ event.user.name }}</td>
+                <td>
+                    <a class="btn btn-info" href="#">
+                        <i class="far fa-edit"></i> Editar</a></td>
+                <td><a class="btn btn-danger" href="#">
+                        <i class="icon-trash icon-large"></i> Deletar</a></td>
             </tr>
         </tbody>
     </table>

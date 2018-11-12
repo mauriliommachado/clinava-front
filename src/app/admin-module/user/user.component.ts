@@ -46,6 +46,7 @@ export class UserComponent implements OnInit {
 
   toggle() {
     this.show = !this.show;
+    this.title = this.show ? 'Cancelar' : 'Cadastrar'
   }
 
   constructor(private formBuilder: FormBuilder,
@@ -56,12 +57,6 @@ export class UserComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = new User();
-    this.currentUser.id = (this.userService.getAll().length+1).toString();
-    this.currentUser.name = "Maurílio Miranda Machado";
-    this.currentUser.email = "mauriliommachado@gmail.com";
-    this.currentUser.username = "mauriliommachado@gmail.com";
-    this.currentUser.role = new Array("Administrador");
-    this.userService.register(this.currentUser);
     this.registerForm = this.formBuilder.group({
       name: ['', Validators.required],
       username: ['', Validators.required],
@@ -69,6 +64,7 @@ export class UserComponent implements OnInit {
       role: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
+    this.title = this.show ? 'Cancelar' : 'Cadastrar'
   }
 
 
