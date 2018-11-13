@@ -65,10 +65,11 @@
         <td>{{ user.email }}</td>
         <td>{{ user.role }}</td>
         <td>
-          <a class="btn btn-info btn-sm" href="#">
+          <a class="btn btn-info btn-sm" (click)="edit(user.id)">
             <i class="far fa-edit"></i> Editar</a></td>
-        <td><a class="btn btn-danger btn-sm" href="#">
-            <i class="icon-trash icon-large"></i> Deletar</a></td>
+        <td>
+          <a class="btn btn-danger btn-sm" (click)="edit(event.id)">
+            <i class="far fa-trash-alt"></i> Deletar</a></td>
       </tr>
     </tbody>
   </table>

@@ -14,7 +14,6 @@ export class AgendaComponent implements OnInit {
 
   monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
     "Julho", "Agosto", "Setembro", "Outrubro", "Novembro", "Dezembro"];
-  headers: string[] = new Array("Segunda", "Terça", "Quarta", "Quinta", "Sexta");
   config: Config;
   initDay: number;
   endDay: number;
@@ -42,13 +41,13 @@ export class AgendaComponent implements OnInit {
       this.today.setHours(-24 * (day - 1));   // Set the hours to day number minus 1
     }
     this.initDay = this.today.getDate();
-    this.endDay = this.today.getDate() + this.headers.length - 1;
+    this.endDay = this.today.getDate() + this.config.workingDays.length - 1;
     this.month = this.monthNames[this.today.getMonth()];
     let spots = (60 / this.config.interval) * (this.config.hourEnd - this.config.hourInit);
-    for (let d = 0; d < this.headers.length; d++) {
+    for (let d = 0; d < this.config.workingDays.length; d++) {
       let day = new Day();
       day.events = new Array();
-      day.header = this.today.getDate() + d + "/" + (this.today.getMonth() + 1) + " - " + this.headers[d];
+      day.header = this.today.getDate() + d + "/" + (this.today.getMonth() + 1) + " - " + this.config.workingDays[d];
       for (let index = 0; index <= spots; index++) {
         let event = new Event();
         event.date = new Date(this.today);

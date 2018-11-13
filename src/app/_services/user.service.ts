@@ -36,11 +36,13 @@ export class UserService {
     }
 
     update(user: User) {
-
+        this.delete(user.id);
+        this.register(user);
         //return this.http.put(`${environment.apiUrl}/users/` + user.id, user);
     }
 
-    delete(id: number) {
+    delete(id: string) {
+        this.users = this.users.filter(e => e.id !== id);
         //return this.http.delete(`${environment.apiUrl}/users/` + id);
     }
 }

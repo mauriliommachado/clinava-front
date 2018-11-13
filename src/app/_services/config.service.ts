@@ -18,6 +18,7 @@ export class ConfigService {
         this.config.hourEnd = 18;
         this.config.hourInit = 8;
         this.config.interval = 30;
+        this.config.workingDays =new Array("Segunda", "Terça", "Quarta", "Quinta", "Sexta");
         return this.config;
         //return this.http.get<User[]>(`${environment.apiUrl}/users`);
     }

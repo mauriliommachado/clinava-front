@@ -11,7 +11,6 @@ import {
   animate,
   transition
 } from '@angular/animations';
-import { identity } from 'rxjs';
 
 @Component({
   selector: 'app-consult',
@@ -34,12 +33,13 @@ import { identity } from 'rxjs';
 })
 export class ConsultComponent implements OnInit {
 
-  event: Event;
+  currentEvent: string;
   title: String;
   registerForm: FormGroup;
   loading = false;
   submitted = false;
   show = false;
+  editing = false;
   config: Config;
   initDay: number;
   endDay: number;
@@ -47,35 +47,40 @@ export class ConsultComponent implements OnInit {
   date: string;
   time: string;
 
+  constructor(private formBuilder: FormBuilder, private userService: UserService, private configService: ConfigService
+    , private eventService: EventService) {
+    this.config = this.configService.getConfig();
+  }
+
+
+  ngOnInit() {
+    this.indexDate = new Date();
+    if ((this.indexDate.getHours()) < this.config.hourInit) {
+      this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (this.config.hourInit - this.indexDate.getHours())));
+      this.indexDate.setMinutes(0);
+    } else if ((this.indexDate.getHours() + 1) > this.config.hourEnd) {
+      this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (24 - this.indexDate.getHours())));
+      this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (this.config.hourInit - this.indexDate.getHours())));
+    }
+    this.resetDate();
+    this.cleanForm();
+    this.title = this.show ? 'Cancelar' : 'Cadastrar'
+  }
+
+
   get stateList() {
     return this.show ? 'block' : 'none'
   }
 
   toggle() {
     this.show = !this.show;
+    if (this.editing && !this.show) {
+      this.cleanForm()
+    }
     this.title = this.show ? 'Cancelar' : 'Cadastrar'
   }
 
-  constructor(private formBuilder: FormBuilder, private userService: UserService, private configService: ConfigService
-    , private eventService: EventService) {
-    this.config = this.configService.getConfig();
-   }
-
-  // convenience getter for easy access to form fields
-  get f() { return this.registerForm.controls; }
-
-  ngOnInit() {
-    this.indexDate = new Date();
-    if (this.indexDate.getMinutes() > this.config.interval) {
-      this.indexDate.setHours(this.indexDate.getHours() + 1);
-    } else {
-      this.indexDate.setMinutes(this.config.interval);
-    }
-    if((this.indexDate.getHours() + 1) > this.config.hourEnd){
-      this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * ((23 - this.config.hourEnd) + this.config.hourInit)));
-      this.indexDate.setMinutes(0);
-    }
-    this.resetDate();
+  cleanForm() {
     this.registerForm = this.formBuilder.group({
       user: ['', Validators.required],
       duration: [this.config.interval, Validators.required],
@@ -83,7 +88,30 @@ export class ConsultComponent implements OnInit {
       obs: [],
       time: [this.time, Validators.required]
     });
-    this.title = this.show ? 'Cancelar' : 'Cadastrar'
+  }
+
+  // convenience getter for easy access to form fields
+  get f() { return this.registerForm.controls; }
+
+  edit(id: string) {
+    let event = this.eventService.getById(id);
+    let sHour: string = event.date.getHours().toLocaleString();
+    let sMinute: string = event.date.getMinutes().toLocaleString();
+    let time = (sHour.length == 1 ? ("0" + sHour) : sHour) + ":" + (sMinute.length == 1 ? ("0" + sMinute) : sMinute);
+    this.registerForm = this.formBuilder.group({
+      user: [event.user.id, Validators.required],
+      duration: [event.duration, Validators.required],
+      date: [event.date.toISOString().split('T')[0], Validators.required],
+      obs: [event.obs],
+      time: [time, Validators.required]
+    });
+    this.editing = true;
+    this.currentEvent = id;
+    this.toggle();
+  }
+
+  delete(id: string) {
+    this.eventService.delete(id);
   }
 
   onSubmit() {
@@ -91,18 +119,21 @@ export class ConsultComponent implements OnInit {
       return;
     }
     let event = <Event>this.registerForm.value;
-    event.date = this.indexDate;
-    event.id = (this.eventService.getAll().length + 1).toString();
+    event.date = new Date(this.registerForm.value.date);
+    event.date.setHours(this.registerForm.value.time.split(':')[0]);
+    event.date.setMinutes(this.registerForm.value.time.split(':')[1]);
     event.user = this.userService.getById(this.registerForm.value.user);
-    this.eventService.register(event);
+    if (this.editing) {
+      event.id = this.currentEvent;
+      this.eventService.update(event);
+      this.editing = false;
+    } else {
+      event.id = (this.eventService.getAll().length + 1).toString();
+      this.eventService.register(event);
+    }
     this.toggle();
-    this.registerForm = this.formBuilder.group({
-      user: ['', Validators.required],
-      duration: [this.config.interval, Validators.required],
-      date: [this.date, Validators.required],
-      obs: [],
-      time: [this.time, Validators.required]
-    });
+    this.cleanForm();
+    this.indexDate = new Date();
   }
 
   addMinutes() {

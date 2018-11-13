@@ -38,14 +38,28 @@ export class UserComponent implements OnInit {
   loading = false;
   submitted = false;
   show = false;
+  editing = false;
 
   get stateList() {
     return this.show ? 'block' : 'none'
   }
 
+  cleanForm() {
+    this.registerForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      username: ['', Validators.required],
+      email: ['', Validators.required],
+      role: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
+  }
+
 
   toggle() {
     this.show = !this.show;
+    if (this.editing && !this.show) {
+      this.cleanForm()
+    }
     this.title = this.show ? 'Cancelar' : 'Cadastrar'
   }
 
@@ -56,7 +70,6 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.currentUser = new User();
     this.registerForm = this.formBuilder.group({
       name: ['', Validators.required],
       username: ['', Validators.required],
@@ -78,26 +91,34 @@ export class UserComponent implements OnInit {
       return;
     }
     let user = <User>this.registerForm.value;
-    user.id = (this.userService.getAll().length+1).toString();
+    if (this.editing) {
+      user.id = this.currentUser.id;
+      this.userService.update(user);
+      this.editing = false;
+    } else {
+      user.id = (this.userService.getAll().length+1).toString();
     this.userService.register(user);
-    this.toggle();
-    /* this.submitted = true;
-    if (this.registerForm.invalid) {
-      return;
     }
-    this.loading = true;
-    
-    this.authService.signin(this.registerForm.value)
-      .pipe(first())
-      .subscribe(
-        data => {
-          this.alertService.success('Registro efetuado com sucesso', true);
-          this.router.navigate(['/admin/user']);
-        },
-        error => {
-          this.alertService.error(error);
-          this.loading = false;
-        }); */
+    this.toggle();
+    this.cleanForm();
+  }
+
+  edit(id: string) {
+    let user = this.userService.getById(id);
+    this.registerForm = this.formBuilder.group({
+      name: [user.name, Validators.required],
+      username: [user.username, Validators.required],
+      email: [user.email, Validators.required],
+      role: [user.role, Validators.required],
+      password: [user.password, [Validators.required, Validators.minLength(6)]]
+    });
+    this.editing = true;
+    this.currentUser = user;
+    this.toggle();
+  }
+
+  delete(id: string) {
+    this.userService.delete(id);
   }
 
 }

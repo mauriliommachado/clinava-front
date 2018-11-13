@@ -10,89 +10,111 @@ export class EventService {
     constructor(private http: HttpClient) {
         this.events = new Array();
         let event = new Event();
+        event.id = (this.events.length+1).toString();
         event.date = new Date();
         event.date.setHours(8);
         event.date.setMinutes(30);
+        event.duration = 30;
         event.user = new User();
         event.user.name = "Amanda Schmit";
         this.register(event);
         event = new Event();
+        event.id = (this.events.length+1).toString();
         event.date = new Date();
         event.date.setDate(event.date.getDate());
         event.date.setHours(10);
+        event.duration = 30;
         event.date.setMinutes(0);
         event.user = new User();
         event.user.name = "João Azevedo";
         this.register(event);
         event = new Event();
+        event.id = (this.events.length+1).toString();
         event.date = new Date();
         event.date.setDate(event.date.getDate()+1);
         event.date.setHours(8);
+        event.duration = 30;
         event.date.setMinutes(0);
         event.user = new User();
         event.user.name = "José Augusto";
         this.register(event);
         event = new Event();
+        event.id = (this.events.length+1).toString();
         event.date = new Date();
         event.date.setDate(event.date.getDate()+1);
         event.date.setHours(8);
+        event.duration = 30;
         event.date.setMinutes(30);
         event.user = new User();
         event.user.name = "Andréa Silva";
         this.register(event);
         event = new Event();
+        event.id = (this.events.length+1).toString();
         event.date = new Date();
         event.date.setDate(event.date.getDate()+1);
         event.date.setHours(9);
+        event.duration = 30;
         event.date.setMinutes(30);
         event.user = new User();
         event.user.name = "Ricardo Almeida";
         this.register(event);
         event = new Event();
+        event.id = (this.events.length+1).toString();
         event.date = new Date();
         event.date.setDate(event.date.getDate()+2);
         event.date.setHours(9);
         event.date.setMinutes(0);
+        event.duration = 30;
         event.user = new User();
         event.user.name = "Lucas Torres";
         this.register(event);
         event = new Event();
+        event.id = (this.events.length+1).toString();
         event.date = new Date();
         event.date.setDate(event.date.getDate()+2);
         event.date.setHours(11);
         event.date.setMinutes(0);
+        event.duration = 30;
         event.user = new User();
         event.user.name = "André Simões";
         this.register(event);
         event = new Event();
+        event.id = (this.events.length+1).toString();
         event.date = new Date();
         event.date.setDate(event.date.getDate()+2);
         event.date.setHours(8);
         event.date.setMinutes(30);
+        event.duration = 30;
         event.user = new User();
         event.user.name = "Nuno Braga";
         this.register(event);
         event = new Event();
+        event.id = (this.events.length+1).toString();
         event.date = new Date();
         event.date.setDate(event.date.getDate()+3);
         event.date.setHours(8);
         event.date.setMinutes(0);
+        event.duration = 30;
         event.user = new User();
         event.user.name = "Gustavo Costa";
         this.register(event);
         event = new Event();
+        event.id = (this.events.length+1).toString();
         event.date = new Date();
         event.date.setDate(event.date.getDate()+3);
         event.date.setHours(10);
         event.date.setMinutes(30);
+        event.duration = 30;
         event.user = new User();
         event.user.name = "Bruno Enescu asda";
         this.register(event);
         event = new Event();
+        event.id = (this.events.length+1).toString();
         event.date = new Date();
         event.date.setDate(event.date.getDate()+3);
         event.date.setHours(8);
         event.date.setMinutes(30);
+        event.duration = 30;
         event.user = new User();
         event.user.name = "Nuno Braga";
         this.register(event);
@@ -100,7 +122,7 @@ export class EventService {
 
 
     getAll() {
-        return this.events;
+        return this.events.sort((n1,n2)=> n1.date.getTime() - n2.date.getTime());
         //return this.http.get<Event[]>(`${environment.apiUrl}/events`);
     }
 
@@ -120,11 +142,13 @@ export class EventService {
     }
 
     update(event: Event) {
-
+        this.delete(event.id);
+        this.register(event);
         //return this.http.put(`${environment.apiUrl}/events/` + event.id, event);
     }
 
-    delete(id: number) {
+    delete(id: string) {
+        this.events = this.events.filter(e => e.id !== id);
         //return this.http.delete(`${environment.apiUrl}/events/` + id);
     }
 }
