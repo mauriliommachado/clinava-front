@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { HomeComponent } from './home.component'
 import { HomeRoutingModule } from './home-routing.module';
+import {EventRegisterComponent } from './event-register/event-register.component'
 import { ReceptionComponent } from './reception/reception.component';
 import { AgendaComponent } from './agenda/agenda.component';
 import { ConsultComponent } from './consult/consult.component';
@@ -19,6 +20,6 @@ import { ReactiveFormsModule } from '@angular/forms';
   declarations: [
     ReceptionComponent,
     AgendaComponent, PacientComponent,
-    ConsultComponent, HomeComponent]
+    ConsultComponent, HomeComponent,EventRegisterComponent]
 })
 export class HomeModule { }

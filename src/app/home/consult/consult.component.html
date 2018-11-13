@@ -1,6 +1,7 @@
 <h4>Consulta</h4>
 <button class="btn btn-primary btn-sm float-right mb-4" (click)="toggle()">{{title}}</button>
 <br>
+<app-event-register></app-event-register>
 <div id="new" [@popOverState]="stateList">
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="form-row">
