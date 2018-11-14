@@ -32,6 +32,7 @@ export class UserService {
 
     register(user: User) {
         this.users.push(user);
+        console.log(this.users);
         //return this.http.post(`${environment.apiUrl}/users/register`, user);
     }
 

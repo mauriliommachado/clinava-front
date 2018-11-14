@@ -9,8 +9,8 @@ import { ConsultComponent } from './home/consult/consult.component'
 import { AgendaComponent } from './home/agenda/agenda.component';
 import { PacientComponent } from './home/pacient/pacient.component';
 import { UserComponent } from './admin-module/user/user.component';
+import { ConfigurationComponent } from './admin-module/configuration/configuration.component';
 import { AdminComponent } from './admin-module/admin.component';
-import { User } from './_models';
 
 const appRoutes: Routes = [
     {
@@ -20,6 +20,7 @@ const appRoutes: Routes = [
           children: [
             {path: '', component: AgendaComponent},
             {path: 'agenda', component: AgendaComponent},
+            {path: 'agenda/:id', component: AgendaComponent},
             {path: 'consult', component: ConsultComponent},
             {path: 'pacient', component: PacientComponent}
           ]}
@@ -30,6 +31,7 @@ const appRoutes: Routes = [
           {path: '', component: AdminComponent,
           children: [
             {path: 'user', component: UserComponent},
+            {path: 'configuration', component: ConfigurationComponent}
           ]}
         ]
     },

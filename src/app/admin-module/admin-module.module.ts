@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AdminModuleRoutingModule } from './admin-module-routing.module';
 import { UserComponent } from './user/user.component';
 import { AdminComponent } from './admin.component';
+import { ConfigurationComponent } from './configuration/configuration.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AlertService, AuthenticationService, UserService } from '../_services';
 
@@ -13,7 +14,7 @@ import { AlertService, AuthenticationService, UserService } from '../_services';
     AdminModuleRoutingModule,
     ReactiveFormsModule
   ],
-  declarations: [UserComponent, AdminComponent],
+  declarations: [UserComponent, AdminComponent,ConfigurationComponent],
   providers: [
     AlertService,
     AuthenticationService,

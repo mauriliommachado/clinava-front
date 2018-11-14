@@ -61,6 +61,7 @@ export class ConsultComponent implements OnInit {
     } else if ((this.indexDate.getHours() + 1) > this.config.hourEnd) {
       this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (24 - this.indexDate.getHours())));
       this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (this.config.hourInit - this.indexDate.getHours())));
+      this.indexDate.setMinutes(0);
     }
     this.resetDate();
     this.cleanForm();

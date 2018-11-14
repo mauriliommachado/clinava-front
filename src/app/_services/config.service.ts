@@ -10,15 +10,15 @@ export class ConfigService {
     config: Config;
 
     constructor(private http: HttpClient) {
-    }
-
-
-    getConfig() {
-        this.config = new Config();
+        this.config = this.config = new Config();
         this.config.hourEnd = 18;
         this.config.hourInit = 8;
         this.config.interval = 30;
         this.config.workingDays =new Array("Segunda", "Terça", "Quarta", "Quinta", "Sexta");
+    }
+
+
+    getConfig() {
         return this.config;
         //return this.http.get<User[]>(`${environment.apiUrl}/users`);
     }
@@ -28,7 +28,8 @@ export class ConfigService {
         //return this.http.get(`${environment.apiUrl}/users/` + id);
     }
 
-    register(user: Config) {
+    register(config: Config) {
+        this.config = config;
         //return this.http.post(`${environment.apiUrl}/users/register`, user);
     }
 
