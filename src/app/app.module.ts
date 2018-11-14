@@ -10,7 +10,7 @@ import { routing } from './app.routing';
 import { AlertComponent } from './_directives';
 import { AuthGuard } from './_guards';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
-import { AlertService, AuthenticationService, UserService, ConfigService, EventService } from './_services';
+import { AlertService, AuthenticationService, UserService, ConfigService, EventService, PacientService } from './_services';
 import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
 import { IndexComponent } from './index/index.component';
@@ -41,7 +41,7 @@ import { AdminModuleModule }     from './admin-module/admin-module.module'; //<-
         AuthenticationService,
         UserService,
         EventService,
-        ConfigService,
+        ConfigService,PacientService,
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     ],

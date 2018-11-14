@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Event } from '../../_models/event';
 import { Config } from '../../_models/config';
-import { UserService, ConfigService, EventService } from '../../_services';
+import { UserService, ConfigService, EventService, PacientService } from '../../_services';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import {
@@ -48,7 +48,7 @@ export class ConsultComponent implements OnInit {
   time: string;
 
   constructor(private formBuilder: FormBuilder, private userService: UserService, private configService: ConfigService
-    , private eventService: EventService) {
+    , private eventService: EventService, private pacientService:PacientService) {
     this.config = this.configService.getConfig();
   }
 
@@ -83,15 +83,13 @@ export class ConsultComponent implements OnInit {
   cleanForm() {
     this.registerForm = this.formBuilder.group({
       user: ['', Validators.required],
+      pacient: ['', Validators.required],
       duration: [this.config.interval, Validators.required],
       date: [this.date, Validators.required],
       obs: [],
       time: [this.time, Validators.required]
     });
   }
-
-  // convenience getter for easy access to form fields
-  get f() { return this.registerForm.controls; }
 
   edit(id: string) {
     let event = this.eventService.getById(id);
@@ -100,6 +98,7 @@ export class ConsultComponent implements OnInit {
     let time = (sHour.length == 1 ? ("0" + sHour) : sHour) + ":" + (sMinute.length == 1 ? ("0" + sMinute) : sMinute);
     this.registerForm = this.formBuilder.group({
       user: [event.user.id, Validators.required],
+      pacient: [event.pacient.id, Validators.required],
       duration: [event.duration, Validators.required],
       date: [event.date.toISOString().split('T')[0], Validators.required],
       obs: [event.obs],
@@ -123,6 +122,7 @@ export class ConsultComponent implements OnInit {
     event.date.setHours(this.registerForm.value.time.split(':')[0]);
     event.date.setMinutes(this.registerForm.value.time.split(':')[1]);
     event.user = this.userService.getById(this.registerForm.value.user);
+    event.pacient = this.pacientService.getById(this.registerForm.value.pacient);
     if (this.editing) {
       event.id = this.currentEvent;
       this.eventService.update(event);
