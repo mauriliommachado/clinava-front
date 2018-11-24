@@ -5,6 +5,6 @@
     password: string;
     name: string;
     email: string;
-    role: Array<string>;
+    role: string;
 }
 

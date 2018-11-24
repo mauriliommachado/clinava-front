@@ -50,12 +50,13 @@ export class UserComponent implements OnInit {
       username: ['', Validators.required],
       email: ['', Validators.required],
       role: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['']
     });
   }
 
 
   toggle() {
+    this.submitted = false;
     this.show = !this.show;
     if (this.editing && !this.show) {
       this.cleanForm()
@@ -75,7 +76,7 @@ export class UserComponent implements OnInit {
       username: ['', Validators.required],
       email: ['', Validators.required],
       role: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['']
     });
     this.title = this.show ? 'Cancelar' : 'Cadastrar'
   }
@@ -85,7 +86,7 @@ export class UserComponent implements OnInit {
   get f() { return this.registerForm.controls; }
 
   onSubmit() {
-    this.alertService.success('Registro efetuado com sucesso', true);
+    this.submitted = true;
     
     if (this.registerForm.invalid) {
       return;
@@ -100,7 +101,7 @@ export class UserComponent implements OnInit {
     this.userService.register(user);
     }
     this.toggle();
-    this.cleanForm();
+    this.cleanForm();    
   }
 
   edit(id: string) {
@@ -110,7 +111,7 @@ export class UserComponent implements OnInit {
       username: [user.username, Validators.required],
       email: [user.email, Validators.required],
       role: [user.role, Validators.required],
-      password: [user.password, [Validators.required, Validators.minLength(6)]]
+      password: [user.password]
     });
     this.editing = true;
     this.currentUser = user;
@@ -121,4 +122,16 @@ export class UserComponent implements OnInit {
     this.userService.delete(id);
   }
 
+}
+
+import {Pipe, PipeTransform} from '@angular/core';
+
+@Pipe({name: 'role'})
+export class RepeatPipe implements PipeTransform {
+  transform(value: any) {
+    if(value == "user"){
+        return "Usuário";
+    }
+    return "Atendente";
+  }
 }

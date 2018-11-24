@@ -7,36 +7,39 @@
       <label for="name">Nome Completo</label>
       <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
       <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
-        <div *ngIf="f.name.errors.required">First Name is required</div>
+        <div *ngIf="f.name.errors.required">Obrigatório</div>
       </div>
     </div>
     <div class="form-group">
       <label for="username">Usuário</label>
       <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
       <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-        <div *ngIf="f.username.errors.required">Username is required</div>
+        <div *ngIf="f.username.errors.required">Obrigatório</div>
       </div>
     </div>
     <div class="form-group">
       <label for="email">Email</label>
       <input type="text" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
       <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-        <div *ngIf="f.email.errors.required">Email is required</div>
+        <div *ngIf="f.email.errors.required">Obrigatório</div>
       </div>
     </div>
     <div class="form-group">
       <label for="role">Acesso</label>
-      <select formControlName="role" class="form-control">
+      <select formControlName="role" class="form-control"  [ngClass]="{ 'is-invalid': submitted && f.role.errors }">
         <option value="user">Usuário</option>
-        <option value="admin">Administrador</option>
+        <option value="attendant">Atendente</option>
       </select>
+      <div *ngIf="submitted && f.role.errors" class="invalid-feedback">
+          <div *ngIf="f.role.errors.required">Obrigatório</div>
+        </div>
     </div>
     <div class="form-group">
       <label for="password">Password</label>
       <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
       <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-        <div *ngIf="f.password.errors.required">Password is required</div>
-        <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
+        <div *ngIf="f.password.errors.required">Obrigatório</div>
+        <div *ngIf="f.password.errors.minlength">A senha tem que ter no mínimo 6 caracteres</div>
       </div>
     </div>
     <div class="form-group">
@@ -63,7 +66,7 @@
         <th scope="row">{{ user.id }}</th>
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
-        <td>{{ user.role }}</td>
+        <td>{{ user.role | role}}</td>
         <td>
           <a class="btn btn-info btn-sm" (click)="edit(user.id)">
             <i class="far fa-edit"></i></a></td>

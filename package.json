@@ -35,9 +35,11 @@
     "jquery": "^3.3.1",
     "moment": "^2.22.2",
     "ng-fullcalendar": "^1.7.1",
+    "ng2-completer": "^2.0.8",
     "ngx-date-fns": "^2.0.2",
     "open-iconic": "^1.1.1",
-    "rxjs": "^6.0.0",
+    "rxjs": "^6.3.3",
+    "rxjs-compat": "^6.3.3",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {

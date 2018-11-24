@@ -1,3 +1,36 @@
-<p>
-  event-register works!
-</p>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Consulta Rápida</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group" id="pacientDiv">
+          <label for="pacient">Paciente</label>
+          <input type="text" (keyup)="onKey($event)" [(ngModel)]="pacientName" id="pacient" name="pacient" class="form-control" autocomplete="off" />
+          <div class="list-group"*ngIf="!selected" style="position: fixed;width: 93%">
+            <a *ngFor="let user of pacients" class="list-group-item list-group-item-action" (click)="select(user)">{{user.name}} <small class="float-right">{{user.birthday |  date:'dd/MM/yyyy'}}</small></a>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="phone">Telefone</label>
+          <input type="text" id="phone" name="phone" [(ngModel)]="pacientPhone" class="form-control" autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="user">Atendente</label>
+          <select id="user" name="user" class="form-control">
+            <option [value]="user.id" *ngFor="let user of userService.getAttendants()">{{user.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary">Marcar</button>
+      </div>
+    </div>
+  </div>
+</div>

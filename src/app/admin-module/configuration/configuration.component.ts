@@ -25,6 +25,8 @@ export class ConfigurationComponent implements OnInit {
       workingDays: [this.configService.getConfig().workingDays, Validators.required]
     });
   }
+  // convenience getter for easy access to form fields
+  get f() { return this.registerForm.controls; }
 
   constructor(private formBuilder: FormBuilder,
     private alertService: AlertService,
@@ -37,8 +39,7 @@ export class ConfigurationComponent implements OnInit {
   }
 
   onSubmit() {
-    this.alertService.success('Registro efetuado com sucesso', true);
-    
+    this.submitted = true;
     if (this.registerForm.invalid) {
       return;
     }
@@ -46,6 +47,7 @@ export class ConfigurationComponent implements OnInit {
     console.log(configuration)
     this.configService.register(configuration);
     this.cleanForm();
+    this.submitted = false;
   }
 
 

@@ -56,6 +56,7 @@ export class PacientComponent implements OnInit {
   }
 
   toggle() {
+    this.submitted = false;
     this.show = !this.show;
     if (this.editing && !this.show) {
       this.cleanForm()
@@ -68,7 +69,7 @@ export class PacientComponent implements OnInit {
       name: ['', Validators.required],
       cpf: [''],
       birthday: [''],
-      phone: [],
+      phone: ['',Validators.required],
       email: [''],
       street: [],
       number: [],
@@ -88,7 +89,7 @@ export class PacientComponent implements OnInit {
       name: [pacient.name, Validators.required],
       cpf: [pacient.cpf],
       birthday: [pacient.birthday ? pacient.birthday.toISOString().split('T')[0] : ''],
-      phone: [pacient.phone],
+      phone: [pacient.phone, Validators.required],
       email: [pacient.email],
       street: [pacient.address ? pacient.address.street : ''],
       number: [pacient.address ? pacient.address.number : ''],
@@ -107,6 +108,7 @@ export class PacientComponent implements OnInit {
   }
 
   onSubmit() {
+    this.submitted = true;
     if (this.registerForm.invalid) {
       return;
     }

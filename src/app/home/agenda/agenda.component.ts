@@ -38,7 +38,7 @@ export class AgendaComponent implements OnInit {
     this.initDates();
     this.id = this.route.snapshot.params['id'];
     if(!this.id){
-      this.id = this.userService.getAll().length >0 ? this.userService.getAll()[0].id : null;
+      this.id = this.userService.getAttendants().length >0 ? this.userService.getAttendants()[0].id : null;
     }
 
   }

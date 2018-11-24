@@ -28,7 +28,8 @@
                     <span *ngIf="consult.user != null">{{consult.user.name}}</span>
                     <span *ngIf="consult.user == null">Vago</span>
                 </li> -->
-                <a href="#" *ngFor="let consult of day.events" [ngClass]="{'list-group-item-success': consult.user == null, 'list-group-item-danger': consult.user != null}" class="list-group-item list-group-item-action flex-column align-items-start">
+                <a [attr.data-toggle]="consult.pacient == null ? 'modal' : null" [attr.data-target]="consult.pacient == null ? '#exampleModal' : null"  *ngFor="let consult of day.events" [ngClass]="{'list-group-item-success': consult.user == null, 'list-group-item-danger': consult.user != null}"
+                    class="list-group-item list-group-item-action flex-column align-items-start">
                     <div class="d-flex w-100 justify-content-between">
                         <span class="badge badge-pill">{{consult.date | date: "HH:mm"}}</span>
                         <h6 class="mb-1" *ngIf="consult.user == null">Vago</h6>
@@ -42,3 +43,5 @@
         </div>
     </div>
 </div>
+
+<app-event-register></app-event-register>

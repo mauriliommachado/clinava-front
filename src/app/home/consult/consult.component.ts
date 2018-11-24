@@ -48,7 +48,7 @@ export class ConsultComponent implements OnInit {
   time: string;
 
   constructor(private formBuilder: FormBuilder, private userService: UserService, private configService: ConfigService
-    , private eventService: EventService, private pacientService:PacientService) {
+    , private eventService: EventService, private pacientService: PacientService) {
     this.config = this.configService.getConfig();
   }
 
@@ -62,6 +62,11 @@ export class ConsultComponent implements OnInit {
       this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (24 - this.indexDate.getHours())));
       this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (this.config.hourInit - this.indexDate.getHours())));
       this.indexDate.setMinutes(0);
+    }else if(this.indexDate.getMinutes() > this.config.interval){
+      this.indexDate.setTime(60 * 60 * 1000 + this.indexDate.getTime());
+      this.indexDate.setMinutes(0);
+    }else{
+      this.indexDate.setMinutes(30);
     }
     this.resetDate();
     this.cleanForm();
@@ -74,6 +79,7 @@ export class ConsultComponent implements OnInit {
   }
 
   toggle() {
+    this.submitted = false;
     this.show = !this.show;
     if (this.editing && !this.show) {
       this.cleanForm()
@@ -115,6 +121,7 @@ export class ConsultComponent implements OnInit {
   }
 
   onSubmit() {
+    this.submitted = true;
     if (this.registerForm.invalid) {
       return;
     }
@@ -136,6 +143,9 @@ export class ConsultComponent implements OnInit {
     this.cleanForm();
     this.indexDate = new Date();
   }
+
+  // convenience getter for easy access to form fields
+  get f() { return this.registerForm.controls; }
 
   addMinutes() {
     this.indexDate.setTime(this.indexDate.getTime() + (this.config.interval * 60 * 1000));

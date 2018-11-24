@@ -15,13 +15,30 @@ export class UserService {
         this.currentUser.name = "Maurílio Miranda Machado";
         this.currentUser.email = "mauriliommachado@gmail.com";
         this.currentUser.username = "mauriliommachado@gmail.com";
-        this.currentUser.role = new Array("Administrador");
+        this.currentUser.role = "attendant";
+        this.register(this.currentUser);
+        this.currentUser = new User();
+        this.currentUser.id = (this.getAll().length + 1).toString();
+        this.currentUser.name = "Diogo Peixoto";
+        this.currentUser.email = "diogo@gmail.com";
+        this.currentUser.username = "diogo@gmail.com";
+        this.currentUser.role = "user";
         this.register(this.currentUser);
     }
 
 
     getAll() {
         return this.users;
+        //return this.http.get<User[]>(`${environment.apiUrl}/users`);
+    }
+
+    getAttendants() {
+        return this.users.filter(u => u.role == "attendant");
+        //return this.http.get<User[]>(`${environment.apiUrl}/users`);
+    }
+
+    getUsers() {
+        return this.users.filter(u => u.role == "user");
         //return this.http.get<User[]>(`${environment.apiUrl}/users`);
     }
 

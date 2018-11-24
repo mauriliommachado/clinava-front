@@ -12,13 +12,22 @@ export class PacientService {
         let pacient = new Pacient();
         pacient.id = (this.pacients.length+1).toString();
         pacient.name = "Lucas Torres"
+        pacient.phone= "(24) 981478088"
+        pacient.birthday = new Date();
         this.register(pacient);
     }
 
-
+ 
     getAll() {
         return this.pacients;
         //return this.http.get<Pacient[]>(`${environment.apiUrl}/pacients`);
+    }
+
+    getByName(name: string){
+        if(!name || name == ""){
+            return;
+        }
+        return this.getAll().filter(p => p.name.toLowerCase().includes(name.toLowerCase()));
     }
 
     getById(id: string) {
