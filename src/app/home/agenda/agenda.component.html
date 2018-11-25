@@ -28,7 +28,7 @@
                     <span *ngIf="consult.user != null">{{consult.user.name}}</span>
                     <span *ngIf="consult.user == null">Vago</span>
                 </li> -->
-                <a [attr.data-toggle]="consult.pacient == null ? 'modal' : null" [attr.data-target]="consult.pacient == null ? '#exampleModal' : null"  *ngFor="let consult of day.events" [ngClass]="{'list-group-item-success': consult.user == null, 'list-group-item-danger': consult.user != null}"
+                <a *ngFor="let consult of day.events" (click)="show(consult.date)" [ngClass]="{'list-group-item-success': consult.user == null, 'list-group-item-danger': consult.user != null}"
                     class="list-group-item list-group-item-action flex-column align-items-start">
                     <div class="d-flex w-100 justify-content-between">
                         <span class="badge badge-pill">{{consult.date | date: "HH:mm"}}</span>
@@ -38,10 +38,9 @@
                     <p class="mb-1" *ngIf="consult.pacient != null">{{consult.pacient.name}}</p>
                     <p class="mb-1" *ngIf="consult.pacient == null">Horário vago</p>
                 </a>
-
             </ul>
         </div>
     </div>
 </div>
 
-<app-event-register></app-event-register>
+<app-event-register [date]="eventDate" [user]="id" [visible]="visible" (close)="onClose()"></app-event-register>

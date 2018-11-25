@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Event } from '../../_models/event'
-import { User, Config } from '../../_models';
+import { User, Config, Pacient } from '../../_models';
 import { ConfigService, EventService, UserService } from '../../_services';
 import { ActivatedRoute } from '@angular/router';
 
@@ -20,13 +20,19 @@ export class AgendaComponent implements OnInit {
   endDay: number;
   month: string;
   days: Day[] = [];
+  eventDate:Date = new Date();
   weekIndex: number;
   today: Date;
   id:string;
+  visible = false;
   docName:string = "Selecione um atendente";
 
   constructor(private userService: UserService, private configService: ConfigService, private eventService: EventService, private route: ActivatedRoute) {
     this.config = this.configService.getConfig();
+    this.id = this.route.snapshot.params['id'];
+    if(!this.id){
+      this.id = this.userService.getAttendants().length >   0 ? this.userService.getAttendants()[0].id : null;
+    }
     route.params.subscribe(val => {
       this.ngOnInit();
     });
@@ -36,11 +42,6 @@ export class AgendaComponent implements OnInit {
   ngOnInit() {
     this.weekIndex = 0;
     this.initDates();
-    this.id = this.route.snapshot.params['id'];
-    if(!this.id){
-      this.id = this.userService.getAttendants().length >0 ? this.userService.getAttendants()[0].id : null;
-    }
-
   }
 
   initDates() {
@@ -99,6 +100,16 @@ export class AgendaComponent implements OnInit {
   sub() {
     this.weekIndex = this.weekIndex - 1;
     this.initDates();
+  }
+
+  onClose(){
+    this.visible = false;
+    this.initDates();
+  }
+
+  show(date:Date){
+    this.eventDate = date;
+    this.visible = true;
   }
 
 }

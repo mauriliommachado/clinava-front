@@ -30,7 +30,10 @@ export class EventService {
     }
 
     register(event: Event) {
+        console.log("register called")
         this.events.push(event);
+        console.log(this.events)
+        console.log(this.getByTime(event.date,event.user.id ))
         //return this.http.post(`${environment.apiUrl}/events/register`, event);
     }
 

@@ -17,7 +17,6 @@ export class ConfigurationComponent implements OnInit {
 
 
   cleanForm() {
-    console.log(this.configService.config)
     this.registerForm = this.formBuilder.group({
       hourInit: [this.configService.getConfig().hourInit, Validators.required],
       hourEnd: [this.configService.getConfig().hourEnd, Validators.required],
@@ -44,7 +43,6 @@ export class ConfigurationComponent implements OnInit {
       return;
     }
     let configuration = <Config>this.registerForm.value;
-    console.log(configuration)
     this.configService.register(configuration);
     this.cleanForm();
     this.submitted = false;

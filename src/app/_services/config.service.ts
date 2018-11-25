@@ -11,7 +11,7 @@ export class ConfigService {
 
     constructor(private http: HttpClient) {
         this.config = this.config = new Config();
-        this.config.hourEnd = 18;
+        this.config.hourEnd = 10;
         this.config.hourInit = 8;
         this.config.interval = 30;
         this.config.workingDays =new Array("Segunda", "Terça", "Quarta", "Quinta", "Sexta");

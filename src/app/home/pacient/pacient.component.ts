@@ -127,7 +127,6 @@ export class PacientComponent implements OnInit {
     address.street = form.street;
     address.zip = form.zip;
     pacient.address = address;
-    console.log(pacient);
     if (this.editing) {
       pacient.id = this.currentPacient;
       this.pacientService.update(pacient);

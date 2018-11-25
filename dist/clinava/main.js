@@ -576,7 +576,7 @@ var ConfigService = /** @class */ (function () {
     function ConfigService(http) {
         this.http = http;
         this.config = this.config = new _models_config__WEBPACK_IMPORTED_MODULE_2__["Config"]();
-        this.config.hourEnd = 18;
+        this.config.hourEnd = 10;
         this.config.hourInit = 8;
         this.config.interval = 30;
         this.config.workingDays = new Array("Segunda", "Terça", "Quarta", "Quinta", "Sexta");
@@ -651,7 +651,10 @@ var EventService = /** @class */ (function () {
         //return this.http.get(`${environment.apiUrl}/events/` + id);
     };
     EventService.prototype.register = function (event) {
+        console.log("register called");
         this.events.push(event);
+        console.log(this.events);
+        console.log(this.getByTime(event.date, event.user.id));
         //return this.http.post(`${environment.apiUrl}/events/register`, event);
     };
     EventService.prototype.update = function (event) {
@@ -847,7 +850,6 @@ var UserService = /** @class */ (function () {
     };
     UserService.prototype.register = function (user) {
         this.users.push(user);
-        console.log(this.users);
         //return this.http.post(`${environment.apiUrl}/users/register`, user);
     };
     UserService.prototype.update = function (user) {
@@ -1086,7 +1088,6 @@ var ConfigurationComponent = /** @class */ (function () {
         this.submitted = false;
     }
     ConfigurationComponent.prototype.cleanForm = function () {
-        console.log(this.configService.config);
         this.registerForm = this.formBuilder.group({
             hourInit: [this.configService.getConfig().hourInit, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
             hourEnd: [this.configService.getConfig().hourEnd, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
@@ -1109,7 +1110,6 @@ var ConfigurationComponent = /** @class */ (function () {
             return;
         }
         var configuration = this.registerForm.value;
-        console.log(configuration);
         this.configService.register(configuration);
         this.cleanForm();
         this.submitted = false;
@@ -1533,7 +1533,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h4>Dr. {{docName}}</h4>\r\n<h6>{{initDay}}-{{endDay}} {{month}}</h6>\r\n\r\n<nav aria-label=\"Page navigation example\">\r\n    <ul class=\"pagination justify-content-center\">\r\n        <li class=\"page-item\">\r\n            <a class=\"page-link\" (click)=\"sub()\">Anterior</a>\r\n        </li>\r\n        <li class=\"page-item\">\r\n            <a class=\"page-link\" (click)=\"reset()\">Hoje</a>\r\n        </li>\r\n        <li class=\"page-item\">\r\n            <a class=\"page-link\" (click)=\"add()\">Próxima</a>\r\n        </li>\r\n    </ul>\r\n</nav>\r\n\r\n<div class=\"container\">\r\n    <div class=\"row no-gutters\">\r\n        <div *ngFor=\"let day of days\" class=\"col mr-1\">\r\n            <ul class=\"list-group\">\r\n                <li class=\"list-group-item active d-flex justify-content-between align-items-center\">\r\n                    {{day.header}}\r\n                </li>\r\n                <!-- <li *ngFor=\"let consult of day.events\" [ngClass]=\"{'list-group-item-success': consult.user == null, 'list-group-item-danger': consult.user != null}\"\r\n                    class=\"list-group-item  d-flex justify-content-between align-items-center\">\r\n                    <span class=\"badge badge-pill\">{{consult.date | date: \"HH:mm\"}}</span>\r\n                    <span *ngIf=\"consult.user != null\">{{consult.user.name}}</span>\r\n                    <span *ngIf=\"consult.user == null\">Vago</span>\r\n                </li> -->\r\n                <a [attr.data-toggle]=\"consult.pacient == null ? 'modal' : null\" [attr.data-target]=\"consult.pacient == null ? '#exampleModal' : null\"  *ngFor=\"let consult of day.events\" [ngClass]=\"{'list-group-item-success': consult.user == null, 'list-group-item-danger': consult.user != null}\"\r\n                    class=\"list-group-item list-group-item-action flex-column align-items-start\">\r\n                    <div class=\"d-flex w-100 justify-content-between\">\r\n                        <span class=\"badge badge-pill\">{{consult.date | date: \"HH:mm\"}}</span>\r\n                        <h6 class=\"mb-1\" *ngIf=\"consult.user == null\">Vago</h6>\r\n                        <h6 class=\"mb-1\" *ngIf=\"consult.user != null\">Consulta</h6>\r\n                    </div>\r\n                    <p class=\"mb-1\" *ngIf=\"consult.pacient != null\">{{consult.pacient.name}}</p>\r\n                    <p class=\"mb-1\" *ngIf=\"consult.pacient == null\">Horário vago</p>\r\n                </a>\r\n\r\n            </ul>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<app-event-register></app-event-register>"
+module.exports = "<h4>Dr. {{docName}}</h4>\r\n<h6>{{initDay}}-{{endDay}} {{month}}</h6>\r\n\r\n<nav aria-label=\"Page navigation example\">\r\n    <ul class=\"pagination justify-content-center\">\r\n        <li class=\"page-item\">\r\n            <a class=\"page-link\" (click)=\"sub()\">Anterior</a>\r\n        </li>\r\n        <li class=\"page-item\">\r\n            <a class=\"page-link\" (click)=\"reset()\">Hoje</a>\r\n        </li>\r\n        <li class=\"page-item\">\r\n            <a class=\"page-link\" (click)=\"add()\">Próxima</a>\r\n        </li>\r\n    </ul>\r\n</nav>\r\n\r\n<div class=\"container\">\r\n    <div class=\"row no-gutters\">\r\n        <div *ngFor=\"let day of days\" class=\"col mr-1\">\r\n            <ul class=\"list-group\">\r\n                <li class=\"list-group-item active d-flex justify-content-between align-items-center\">\r\n                    {{day.header}}\r\n                </li>\r\n                <!-- <li *ngFor=\"let consult of day.events\" [ngClass]=\"{'list-group-item-success': consult.user == null, 'list-group-item-danger': consult.user != null}\"\r\n                    class=\"list-group-item  d-flex justify-content-between align-items-center\">\r\n                    <span class=\"badge badge-pill\">{{consult.date | date: \"HH:mm\"}}</span>\r\n                    <span *ngIf=\"consult.user != null\">{{consult.user.name}}</span>\r\n                    <span *ngIf=\"consult.user == null\">Vago</span>\r\n                </li> -->\r\n                <a *ngFor=\"let consult of day.events\" (click)=\"show(consult.date)\" [ngClass]=\"{'list-group-item-success': consult.user == null, 'list-group-item-danger': consult.user != null}\"\r\n                    class=\"list-group-item list-group-item-action flex-column align-items-start\">\r\n                    <div class=\"d-flex w-100 justify-content-between\">\r\n                        <span class=\"badge badge-pill\">{{consult.date | date: \"HH:mm\"}}</span>\r\n                        <h6 class=\"mb-1\" *ngIf=\"consult.user == null\">Vago</h6>\r\n                        <h6 class=\"mb-1\" *ngIf=\"consult.user != null\">Consulta</h6>\r\n                    </div>\r\n                    <p class=\"mb-1\" *ngIf=\"consult.pacient != null\">{{consult.pacient.name}}</p>\r\n                    <p class=\"mb-1\" *ngIf=\"consult.pacient == null\">Horário vago</p>\r\n                </a>\r\n            </ul>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<app-event-register [date]=\"eventDate\" [user]=\"id\" [visible]=\"visible\" (close)=\"onClose()\"></app-event-register>"
 
 /***/ }),
 
@@ -1574,8 +1574,14 @@ var AgendaComponent = /** @class */ (function () {
         this.monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
             "Julho", "Agosto", "Setembro", "Outrubro", "Novembro", "Dezembro"];
         this.days = [];
+        this.eventDate = new Date();
+        this.visible = false;
         this.docName = "Selecione um atendente";
         this.config = this.configService.getConfig();
+        this.id = this.route.snapshot.params['id'];
+        if (!this.id) {
+            this.id = this.userService.getAttendants().length > 0 ? this.userService.getAttendants()[0].id : null;
+        }
         route.params.subscribe(function (val) {
             _this.ngOnInit();
         });
@@ -1583,10 +1589,6 @@ var AgendaComponent = /** @class */ (function () {
     AgendaComponent.prototype.ngOnInit = function () {
         this.weekIndex = 0;
         this.initDates();
-        this.id = this.route.snapshot.params['id'];
-        if (!this.id) {
-            this.id = this.userService.getAttendants().length > 0 ? this.userService.getAttendants()[0].id : null;
-        }
     };
     AgendaComponent.prototype.initDates = function () {
         if (!this.id) {
@@ -1641,6 +1643,14 @@ var AgendaComponent = /** @class */ (function () {
     AgendaComponent.prototype.sub = function () {
         this.weekIndex = this.weekIndex - 1;
         this.initDates();
+    };
+    AgendaComponent.prototype.onClose = function () {
+        this.visible = false;
+        this.initDates();
+    };
+    AgendaComponent.prototype.show = function (date) {
+        this.eventDate = date;
+        this.visible = true;
     };
     AgendaComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -1880,7 +1890,7 @@ var ConsultComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ""
+module.exports = ".modal-custom {\r\n/* Hidden by default */\r\n    position: fixed; /* Stay in place */\r\n    z-index: 10; /* Sit on top */\r\n    padding-top: 15%; /* Location of the box */\r\n    padding-left: 45%;\r\n    left: 0;\r\n    top: 0;\r\n    width: 100%; /* Full width */\r\n    height: 100%; /* Full height */\r\n    overflow: auto; /* Enable scroll if needed */\r\n    background-color: rgb(0,0,0); /* Fallback color */\r\n    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */\r\n}\r\n\r\n.auto-complete {\r\n    position: absolute; \r\n    width: 91%;\r\n}"
 
 /***/ }),
 
@@ -1891,7 +1901,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- Modal -->\n<div class=\"modal fade\" id=\"exampleModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"exampleModalLabel\" aria-hidden=\"true\">\n  <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <h5 class=\"modal-title\" id=\"exampleModalLabel\">Consulta Rápida</h5>\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n          <span aria-hidden=\"true\">&times;</span>\n        </button>\n      </div>\n      <div class=\"modal-body\">\n        <div class=\"form-group\" id=\"pacientDiv\">\n          <label for=\"pacient\">Paciente</label>\n          <input type=\"text\" (keyup)=\"onKey($event)\" [(ngModel)]=\"pacientName\" id=\"pacient\" name=\"pacient\" class=\"form-control\" autocomplete=\"off\" />\n          <div class=\"list-group\"*ngIf=\"!selected\" style=\"position: fixed;width: 93%\">\n            <a *ngFor=\"let user of pacients\" class=\"list-group-item list-group-item-action\" (click)=\"select(user)\">{{user.name}} <small class=\"float-right\">{{user.birthday |  date:'dd/MM/yyyy'}}</small></a>\n          </div>\n        </div>\n        <div class=\"form-group\">\n          <label for=\"phone\">Telefone</label>\n          <input type=\"text\" id=\"phone\" name=\"phone\" [(ngModel)]=\"pacientPhone\" class=\"form-control\" autocomplete=\"off\" />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"user\">Atendente</label>\n          <select id=\"user\" name=\"user\" class=\"form-control\">\n            <option [value]=\"user.id\" *ngFor=\"let user of userService.getAttendants()\">{{user.name}}</option>\n          </select>\n        </div>\n      </div>\n      <div class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Cancelar</button>\n        <button type=\"button\" class=\"btn btn-primary\">Marcar</button>\n      </div>\n    </div>\n  </div>\n</div>"
+module.exports = "<div class=\"modal-custom\" [hidden]=\"!visible\" (click)=\"hide($event)\" id=\"customModal\">\r\n<div class=\"card w-50\">\r\n  <h5 class=\"card-header\">Consulta Rápida</h5>\r\n  <div class=\"card-body\">\r\n    <div class=\"form-group\" id=\"pacientDiv\">\r\n      <label for=\"pacient\">Paciente</label>\r\n      <input type=\"text\" (keyup)=\"onKey($event)\" [(ngModel)]=\"pacientName\" id=\"pacient\" name=\"pacient\" class=\"form-control\"\r\n        autocomplete=\"off\" />\r\n      <div class=\"w-100\">\r\n        <div class=\"list-group auto-complete\" *ngIf=\"!selected\">\r\n          <a *ngFor=\"let user of pacients\" class=\"list-group-item list-group-item-action\" (click)=\"select(user)\">{{user.name}}\r\n            <small class=\"float-right\">{{user.birthday | date:'dd/MM/yyyy'}}</small></a>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label for=\"phone\">Telefone</label>\r\n      <input type=\"text\" id=\"phone\" name=\"phone\" [(ngModel)]=\"pacientPhone\" class=\"form-control\" autocomplete=\"off\" />\r\n    </div>\r\n  </div>\r\n  <div class=\"card-footer text-right\">\r\n    <button type=\"button\" class=\"btn btn-secondary\" id=\"close\" (click)=\"hide($event)\">Cancelar</button>\r\n    <button type=\"button\" class=\"btn btn-primary ml-3\" (click)=\"onSubmit()\">Marcar</button>\r\n  </div>\r\n</div>\r\n</div>"
 
 /***/ }),
 
@@ -1921,9 +1931,13 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var EventRegisterComponent = /** @class */ (function () {
-    function EventRegisterComponent(userService, pacientService) {
-        this.userService = userService;
+    function EventRegisterComponent(pacientService, configService, eventService, userService) {
         this.pacientService = pacientService;
+        this.configService = configService;
+        this.eventService = eventService;
+        this.userService = userService;
+        this.close = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
+        this.visible = false;
         this.pacients = [];
         this.pacient = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Pacient"]();
         this.selected = false;
@@ -1931,6 +1945,16 @@ var EventRegisterComponent = /** @class */ (function () {
         this.pacientPhone = "";
     }
     EventRegisterComponent.prototype.ngOnInit = function () {
+    };
+    EventRegisterComponent.prototype.hide = function (event) {
+        var elementId = event.target.id;
+        if (elementId == "customModal" || elementId == "close") {
+            this.visible = false;
+            this.closeModal();
+        }
+    };
+    EventRegisterComponent.prototype.closeModal = function () {
+        this.close.emit();
     };
     EventRegisterComponent.prototype.onKey = function (event) {
         this.selected = false;
@@ -1945,13 +1969,66 @@ var EventRegisterComponent = /** @class */ (function () {
         this.pacientName = pacient.name;
         this.pacientPhone = pacient.phone;
     };
+    EventRegisterComponent.prototype.onSubmit = function () {
+        if (this.selected) {
+            var event_1 = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Event"]();
+            event_1.pacient = this.pacient;
+            event_1.date = this.date;
+            event_1.duration = this.configService.getConfig().interval;
+            event_1.user = this.userService.getById(this.user);
+            this.eventService.register(event_1);
+            this.closeAndClean();
+        }
+        else if ((typeof this.pacientName != 'undefined' && this.pacientName) && (typeof this.pacientPhone != 'undefined' && this.pacientPhone)) {
+            var event_2 = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Event"]();
+            event_2.pacient = this.newPacient();
+            event_2.date = this.date;
+            event_2.duration = this.configService.getConfig().interval;
+            event_2.user = this.userService.getById(this.user);
+            this.eventService.register(event_2);
+            this.closeAndClean();
+        }
+    };
+    EventRegisterComponent.prototype.newPacient = function () {
+        var pacient = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Pacient"]();
+        pacient.name = this.pacientName;
+        pacient.phone = this.pacientPhone;
+        this.pacientService.register(pacient);
+        return pacient;
+    };
+    EventRegisterComponent.prototype.closeAndClean = function () {
+        this.closeModal();
+        this.pacient = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Pacient"]();
+        this.selected = false;
+        this.pacientName = "";
+        this.pacientPhone = "";
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
+        __metadata("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"])
+    ], EventRegisterComponent.prototype, "close", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Date)
+    ], EventRegisterComponent.prototype, "date", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", String)
+    ], EventRegisterComponent.prototype, "user", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], EventRegisterComponent.prototype, "visible", void 0);
     EventRegisterComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-event-register',
             template: __webpack_require__(/*! ./event-register.component.html */ "./src/app/home/event-register/event-register.component.html"),
             styles: [__webpack_require__(/*! ./event-register.component.css */ "./src/app/home/event-register/event-register.component.css")]
         }),
-        __metadata("design:paramtypes", [_services__WEBPACK_IMPORTED_MODULE_1__["UserService"], _services__WEBPACK_IMPORTED_MODULE_1__["PacientService"]])
+        __metadata("design:paramtypes", [_services__WEBPACK_IMPORTED_MODULE_1__["PacientService"],
+            _services__WEBPACK_IMPORTED_MODULE_1__["ConfigService"],
+            _services__WEBPACK_IMPORTED_MODULE_1__["EventService"],
+            _services__WEBPACK_IMPORTED_MODULE_1__["UserService"]])
     ], EventRegisterComponent);
     return EventRegisterComponent;
 }());
@@ -2270,7 +2347,6 @@ var PacientComponent = /** @class */ (function () {
         address.street = form.street;
         address.zip = form.zip;
         pacient.address = address;
-        console.log(pacient);
         if (this.editing) {
             pacient.id = this.currentPacient;
             this.pacientService.update(pacient);
