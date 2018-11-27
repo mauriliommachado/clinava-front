@@ -47,7 +47,6 @@ export class EventRegisterComponent implements OnInit {
   onKey(event: any) {
     this.selected = false;
     this.pacient = new Pacient();
-    console.log(event.target.value);
     this.pacients = this.pacientService.getByName(event.target.value);
   }
 

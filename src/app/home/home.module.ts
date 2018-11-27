@@ -11,12 +11,14 @@ import { PacientComponent } from './pacient/pacient.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Ng2CompleterModule } from "ng2-completer";
+import {NgxMaskModule} from 'ngx-mask';
 
 
 @NgModule({
   imports: [
     CommonModule, BrowserModule,
     ReactiveFormsModule,
+    NgxMaskModule.forChild(),
     HomeRoutingModule, HomeRoutingModule, FormsModule,Ng2CompleterModule
   ],
   declarations: [

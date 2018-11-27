@@ -18,6 +18,7 @@ import { IndexComponent } from './index/index.component';
 import { HomeRoutingModule } from './home/home-routing.module'; //<-- import
 import { HomeModule }     from './home/home.module'; //<-- import
 import { AdminModuleModule }     from './admin-module/admin-module.module'; //<-- import
+import {NgxMaskModule} from 'ngx-mask'
 
 @NgModule({
     imports: [
@@ -28,7 +29,8 @@ import { AdminModuleModule }     from './admin-module/admin-module.module'; //<-
         HomeModule,AdminModuleModule,
         HomeRoutingModule,
         BrowserModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        NgxMaskModule.forRoot()
     ],
     declarations: [
         AppComponent,
