@@ -19,13 +19,8 @@ export class EventService {
 
     getByTime(date: Date, interval: number, id: string) {
         //this should search in a range
-        return this.getAll().filter(e => e.user.id == id && 
-            e.date.getFullYear() == date.getFullYear() &&
-             e.date.getMonth() == date.getMonth() &&
-              e.date.getDate() == date.getDate() &&
-               e.date.getHours() == date.getHours() &&
-                e.date.getMinutes() >= date.getMinutes() &&
-                e.date.getMinutes() < (date.getMinutes() + interval));
+        let endDate = new Date(date.getTime() + interval * 60000);
+        return this.getAll().filter(e => e.user.id == id && e.date.getTime() >= date.getTime() && e.date.getTime() < endDate.getTime());
         //return this.http.get<Event[]>(`${environment.apiUrl}/events`);
     }
 
