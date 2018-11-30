@@ -20,23 +20,23 @@ export class AgendaComponent implements OnInit {
   endDay: number;
   month: string;
   days: Day[] = [];
-  eventDate:Date = new Date();
+  eventDate: Date = new Date();
   weekIndex: number;
   today: Date;
-  id:string;
+  id: string;
   visible = false;
-  docName:string = "Selecione um atendente";
+  docName: string = "Selecione um atendente";
 
   constructor(private userService: UserService, private configService: ConfigService, private eventService: EventService, private route: ActivatedRoute) {
     this.config = this.configService.getConfig();
     this.id = this.route.snapshot.params['id'];
-    if(!this.id){
-      this.id = this.userService.getAttendants().length >   0 ? this.userService.getAttendants()[0].id : null;
+    if (!this.id) {
+      this.id = this.userService.getAttendants().length > 0 ? this.userService.getAttendants()[0].id : null;
     }
     route.params.subscribe(val => {
       this.ngOnInit();
     });
-    
+
   }
 
   ngOnInit() {
@@ -45,7 +45,7 @@ export class AgendaComponent implements OnInit {
   }
 
   initDates() {
-    if(!this.id){
+    if (!this.id) {
       return;
     }
     this.docName = this.userService.getById(this.id).name;
@@ -61,7 +61,7 @@ export class AgendaComponent implements OnInit {
     this.endDay = this.today.getDate() + this.config.workingDays.length - 1;
     this.month = this.monthNames[this.today.getMonth()];
     let spots = (60 / this.config.interval) * (this.config.hourEnd - this.config.hourInit);
-    if(!this.id){
+    if (!this.id) {
       return;
     }
     for (let d = 0; d < this.config.workingDays.length; d++) {
@@ -73,13 +73,17 @@ export class AgendaComponent implements OnInit {
         event.date = new Date(this.today);
         event.date.setFullYear(this.today.getFullYear());
         event.date.setMonth(this.today.getMonth());
-        event.date.setDate(this.today.getDate()+d);
+        event.date.setDate(this.today.getDate() + d);
         event.date.setHours(this.config.hourInit);
         event.date.setMinutes(0);
         event.date.setTime(event.date.getTime() + this.config.interval * index * 60000);
-        let e = this.eventService.getByTime(event.date,this.config.interval, this.id);
-        if (e != null) {
-          event = e;
+        let e = this.eventService.getByTime(event.date, this.config.interval, this.id);
+        if (e.length != 0) {
+          e.forEach(element => {
+            event = element;
+            day.events.push(event);
+          });
+          continue;
         }
         day.events.push(event);
       }
@@ -102,12 +106,12 @@ export class AgendaComponent implements OnInit {
     this.initDates();
   }
 
-  onClose(){
+  onClose() {
     this.visible = false;
     this.initDates();
   }
 
-  show(date:Date){
+  show(date: Date) {
     this.eventDate = date;
     this.visible = true;
   }

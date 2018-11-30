@@ -19,7 +19,7 @@ export class EventService {
 
     getByTime(date: Date, interval: number, id: string) {
         //this should search in a range
-        return this.getAll().find(e => e.user.id == id && 
+        return this.getAll().filter(e => e.user.id == id && 
             e.date.getFullYear() == date.getFullYear() &&
              e.date.getMonth() == date.getMonth() &&
               e.date.getDate() == date.getDate() &&
