@@ -1,7 +1,6 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Event, User } from '../_models';
-import { useAnimation } from '@angular/animations';
 
 @Injectable()
 export class EventService {
@@ -18,9 +17,15 @@ export class EventService {
         //return this.http.get<Event[]>(`${environment.apiUrl}/events`);
     }
 
-    getByTime(date: Date, id: string) {
+    getByTime(date: Date, interval: number, id: string) {
         //this should search in a range
-        return this.getAll().find(e => e.user.id == id && e.date.getFullYear() == date.getFullYear() && e.date.getMonth() == date.getMonth() && e.date.getDate() == date.getDate() && e.date.getHours() == date.getHours() && e.date.getMinutes() == date.getMinutes());
+        return this.getAll().find(e => e.user.id == id && 
+            e.date.getFullYear() == date.getFullYear() &&
+             e.date.getMonth() == date.getMonth() &&
+              e.date.getDate() == date.getDate() &&
+               e.date.getHours() == date.getHours() &&
+                e.date.getMinutes() >= date.getMinutes() &&
+                e.date.getMinutes() < (date.getMinutes() + interval));
         //return this.http.get<Event[]>(`${environment.apiUrl}/events`);
     }
 
@@ -30,10 +35,7 @@ export class EventService {
     }
 
     register(event: Event) {
-        console.log("register called")
         this.events.push(event);
-        console.log(this.events)
-        console.log(this.getByTime(event.date,event.user.id ))
         //return this.http.post(`${environment.apiUrl}/events/register`, event);
     }
 

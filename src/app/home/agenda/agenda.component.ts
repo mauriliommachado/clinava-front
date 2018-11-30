@@ -77,7 +77,7 @@ export class AgendaComponent implements OnInit {
         event.date.setHours(this.config.hourInit);
         event.date.setMinutes(0);
         event.date.setTime(event.date.getTime() + this.config.interval * index * 60000);
-        let e = this.eventService.getByTime(event.date, this.id);
+        let e = this.eventService.getByTime(event.date,this.config.interval, this.id);
         if (e != null) {
           event = e;
         }
