@@ -5,6 +5,7 @@ import { ConfigService, EventService, UserService } from '../../_services';
 import { ActivatedRoute } from '@angular/router';
 
 
+
 @Component({
   selector: 'app-agenda',
   templateUrl: './agenda.component.html',
@@ -31,7 +32,11 @@ export class AgendaComponent implements OnInit {
     this.config = this.configService.getConfig();
     this.id = this.route.snapshot.params['id'];
     if (!this.id) {
-      this.id = this.userService.getAttendants().length > 0 ? this.userService.getAttendants()[0].id : null;
+      let users;
+      this.userService.getAttendants().subscribe(resp=>{
+        users = resp.filter(u => u.roles.filter(r => r.name == "attendant"));
+        this.id = users.length > 0 ? users[0].id : null;
+      });
     }
     route.params.subscribe(val => {
       this.ngOnInit();
@@ -48,7 +53,7 @@ export class AgendaComponent implements OnInit {
     if (!this.id) {
       return;
     }
-    this.docName = this.userService.getById(this.id).name;
+    this.userService.getById(this.id).subscribe(u=> this.docName = u.name);
     this.days = new Array();
     this.today = new Date();
     var weekInMilliseconds = 7 * 24 * 60 * 60 * 1000 * this.weekIndex;

@@ -13,11 +13,13 @@ export class HomeComponent implements OnInit {
     currentUser: User;
     users: User[] = [];
     title: String;
+    attendants;
 
     constructor(private userService: UserService) {
     }
 
     ngOnInit() {
+    this.userService.getAttendants().subscribe(u => this.attendants = u);
         //this.loadAllUsers();
     }
 

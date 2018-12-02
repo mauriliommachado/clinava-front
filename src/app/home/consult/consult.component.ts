@@ -46,6 +46,7 @@ export class ConsultComponent implements OnInit {
   indexDate: Date;
   date: string;
   time: string;
+  attendants;
 
   constructor(private formBuilder: FormBuilder, private userService: UserService, private configService: ConfigService
     , private eventService: EventService, private pacientService: PacientService) {
@@ -54,6 +55,7 @@ export class ConsultComponent implements OnInit {
 
 
   ngOnInit() {
+    this.userService.getAttendants().subscribe(resp => this.attendants = resp);
     this.indexDate = new Date();
     if ((this.indexDate.getHours()) < this.config.hourInit) {
       this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (this.config.hourInit - this.indexDate.getHours())));
@@ -62,15 +64,15 @@ export class ConsultComponent implements OnInit {
       this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (24 - this.indexDate.getHours())));
       this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (this.config.hourInit - this.indexDate.getHours())));
       this.indexDate.setMinutes(0);
-    }else if(this.indexDate.getMinutes() > this.config.interval){
+    } else if (this.indexDate.getMinutes() > this.config.interval) {
       this.indexDate.setTime(60 * 60 * 1000 + this.indexDate.getTime());
       this.indexDate.setMinutes(0);
-    }else{
+    } else {
       this.indexDate.setMinutes(30);
     }
     this.resetDate();
     this.cleanForm();
-    this.title = this.show ? 'Cancelar' : 'Cadastrar'
+    this.title = this.show ? 'Cancelar' : 'Cadastrar';
   }
 
 
@@ -84,7 +86,8 @@ export class ConsultComponent implements OnInit {
     if (this.editing && !this.show) {
       this.cleanForm()
     }
-    this.title = this.show ? 'Cancelar' : 'Cadastrar'
+    this.title = this.show ? 'Cancelar' : 'Cadastrar';
+    this.userService.getAttendants().subscribe(resp => this.attendants = resp);
   }
 
   cleanForm() {
@@ -129,19 +132,21 @@ export class ConsultComponent implements OnInit {
     event.date = new Date(this.registerForm.value.date);
     event.date.setHours(this.registerForm.value.time.split(':')[0]);
     event.date.setMinutes(this.registerForm.value.time.split(':')[1]);
-    event.user = this.userService.getById(this.registerForm.value.user);
-    event.pacient = this.pacientService.getById(this.registerForm.value.pacient);
-    if (this.editing) {
-      event.id = this.currentEvent;
-      this.eventService.update(event);
-      this.editing = false;
-    } else {
-      event.id = (this.eventService.getAll().length + 1).toString();
-      this.eventService.register(event);
-    }
-    this.toggle();
-    this.cleanForm();
-    this.indexDate = new Date();
+    this.userService.getById(this.registerForm.value.user).subscribe(user => {
+      event.user = user;
+      event.pacient = this.pacientService.getById(this.registerForm.value.pacient);
+      if (this.editing) {
+        event.id = this.currentEvent;
+        this.eventService.update(event);
+        this.editing = false;
+      } else {
+        event.id = (this.eventService.getAll().length + 1).toString();
+        this.eventService.register(event);
+      }
+      this.toggle();
+      this.cleanForm();
+      this.indexDate = new Date();
+    });
   }
 
   // convenience getter for easy access to form fields

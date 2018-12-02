@@ -64,17 +64,17 @@ export class EventRegisterComponent implements OnInit {
       event.pacient = this.pacient;
       event.date = this.date;
       event.duration = this.configService.getConfig().interval;
-      event.user = this.userService.getById(this.user);
-      this.eventService.register(event);
-      this.closeAndClean();
+      
     } else if ((typeof this.pacientName != 'undefined' && this.pacientName) && (typeof this.pacientPhone != 'undefined' && this.pacientPhone)) {
       let event = new Event();
       event.pacient = this.newPacient();
       event.date = this.date;
       event.duration = this.configService.getConfig().interval;
-      event.user = this.userService.getById(this.user);
-      this.eventService.register(event);
-      this.closeAndClean();
+      this.userService.getById(this.user).subscribe(user => {
+        event.user = user;
+        this.eventService.register(event);
+        this.closeAndClean();
+      });
     }
   }
 

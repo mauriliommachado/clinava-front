@@ -12,7 +12,7 @@
           Atalho Agenda
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a *ngFor="let user of userService.getAttendants()" class="dropdown-item" [routerLink]="['/home/agenda', user.id]">{{user.name}}</a>
+          <a *ngFor="let user of attendants" class="dropdown-item" [routerLink]="['/home/agenda', user.id]">{{user.name}}</a>
         </div>
       </div>
     </div>

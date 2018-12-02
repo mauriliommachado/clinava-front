@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from '../../_models';
-import { AlertService, UserService } from '../../_services';
+import { User, Contact, Role, Address } from '../../_models';
+import { AlertService, UserService, RoleService } from '../../_services';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import {
@@ -22,7 +22,7 @@ import {
         display: 'none',
         opacity: 0
       })),
-      state('block',   style({
+      state('block', style({
         display: 'block',
         opacity: 1
       })),
@@ -39,6 +39,15 @@ export class UserComponent implements OnInit {
   submitted = false;
   show = false;
   editing = false;
+  users;
+  roles;
+
+  constructor(private formBuilder: FormBuilder,
+    private alertService: AlertService,
+    private userService: UserService,
+    private rolesService: RoleService) {
+
+  }
 
   get stateList() {
     return this.show ? 'block' : 'none'
@@ -62,15 +71,17 @@ export class UserComponent implements OnInit {
       this.cleanForm()
     }
     this.title = this.show ? 'Cancelar' : 'Cadastrar'
+    this.userService.getAll().subscribe((res: any[]) => {
+      this.users = res;
+    });
   }
 
-  constructor(private formBuilder: FormBuilder,
-    private alertService: AlertService,
-    private userService: UserService) {
-
-  }
 
   ngOnInit() {
+    this.userService.getAll().subscribe((res: any[]) => {
+      this.users = res;
+    });
+    this.roles = this.rolesService.getAll();
     this.registerForm = this.formBuilder.group({
       name: ['', Validators.required],
       username: ['', Validators.required],
@@ -87,35 +98,53 @@ export class UserComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    
+
     if (this.registerForm.invalid) {
       return;
     }
-    let user = <User>this.registerForm.value;
+    let user = new User();
+    let u = <User>this.registerForm.value;
+    user.id = u.id;
+    user.address = null;
+    user.contacts = new Array<Contact>();
+    user.email = u.email;
+    user.name = u.name;
+    user.password = u.password;
+    user.roles = new Array<Role>();
+    let role = new Role();
+    role.id = 1;
+    role.name = "ROLE_ADMIN";
+    user.roles.push(role);
+    user.username = u.username;
     if (this.editing) {
       user.id = this.currentUser.id;
       this.userService.update(user);
       this.editing = false;
     } else {
-      user.id = (this.userService.getAll().length+1).toString();
-    this.userService.register(user);
+      this.userService.register(user);
     }
+    this.userService.getAll().subscribe((res: any[]) => {
+      this.users = res;
+    });
     this.toggle();
-    this.cleanForm();    
+    this.cleanForm();
   }
 
   edit(id: string) {
-    let user = this.userService.getById(id);
-    this.registerForm = this.formBuilder.group({
-      name: [user.name, Validators.required],
-      username: [user.username, Validators.required],
-      email: [user.email, Validators.required],
-      role: [user.role, Validators.required],
-      password: [user.password]
+    let user;
+    this.userService.getById(id).subscribe((res: User) => {
+      user = res;
+      this.registerForm = this.formBuilder.group({
+        name: [user.name, Validators.required],
+        username: [user.username, Validators.required],
+        email: [user.email, Validators.required],
+        role: [user.roles[0].id, Validators.required],
+        password: [user.password]
+      });
+      this.editing = true;
+      this.currentUser = user;
+      this.toggle();
     });
-    this.editing = true;
-    this.currentUser = user;
-    this.toggle();
   }
 
   delete(id: string) {
@@ -124,13 +153,13 @@ export class UserComponent implements OnInit {
 
 }
 
-import {Pipe, PipeTransform} from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({name: 'role'})
+@Pipe({ name: 'role' })
 export class RepeatPipe implements PipeTransform {
   transform(value: any) {
-    if(value == "user"){
-        return "Usuário";
+    if (value == "ROLE_ADMIN") {
+      return "Admin";
     }
     return "Atendente";
   }
