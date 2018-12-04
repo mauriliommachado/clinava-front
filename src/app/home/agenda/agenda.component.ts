@@ -30,7 +30,11 @@ export class AgendaComponent implements OnInit {
 
   constructor(private userService: UserService, private configService: ConfigService, private eventService: EventService, private route: ActivatedRoute) {
     this.config = this.configService.getConfig();
-    this.id = this.route.snapshot.params['id'];
+    this.route.params.subscribe( params => 
+      {
+         this.id = params["id"];
+         // your code continues here
+      });
     if (!this.id) {
       let users;
       this.userService.getAttendants().subscribe(resp=>{
