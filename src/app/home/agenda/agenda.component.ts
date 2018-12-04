@@ -26,6 +26,7 @@ export class AgendaComponent implements OnInit {
   today: Date;
   id: string;
   visible = false;
+  attendants;
   docName: string = "Selecione um atendente";
 
   constructor(private userService: UserService, private configService: ConfigService, private eventService: EventService, private route: ActivatedRoute) {
@@ -39,6 +40,7 @@ export class AgendaComponent implements OnInit {
       let users;
       this.userService.getAttendants().subscribe(resp=>{
         users = resp.filter(u => u.roles.filter(r => r.name == "attendant"));
+        this.attendants = users;
         this.id = users.length > 0 ? users[0].id : null;
       });
     }
@@ -57,7 +59,7 @@ export class AgendaComponent implements OnInit {
     if (!this.id) {
       return;
     }
-    this.userService.getById(this.id).subscribe(u=> this.docName = u.name);
+    this.userService.getById(this.id).subscribe(u=> this.docName = "Dr. " + u.name);
     this.days = new Array();
     this.today = new Date();
     var weekInMilliseconds = 7 * 24 * 60 * 60 * 1000 * this.weekIndex;
