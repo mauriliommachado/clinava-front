@@ -8,11 +8,7 @@ import { first } from 'rxjs/operators';
 @Injectable()
 export class UserService {
 
-    users: Array<User>;
-    currentUser: User;
-
     constructor(private http: HttpClient) {
-        this.users = new Array();
     }
 
 

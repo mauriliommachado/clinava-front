@@ -912,7 +912,6 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var UserService = /** @class */ (function () {
     function UserService(http) {
         this.http = http;
-        this.users = new Array();
     }
     UserService.prototype.getAll = function () {
         return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/users")
@@ -1303,18 +1302,18 @@ var UserComponent = /** @class */ (function () {
         var _this = this;
         this.userService.getAll().subscribe(function (res) {
             _this.users = res;
-            _this.rolesService.getAll().subscribe(function (res) {
-                _this.roles = res;
-                _this.registerForm = _this.formBuilder.group({
-                    name: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
-                    username: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
-                    email: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
-                    role: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
-                    password: ['']
-                });
-                _this.title = _this.show ? 'Cancelar' : 'Cadastrar';
-            });
         });
+        this.rolesService.getAll().subscribe(function (res) {
+            _this.roles = res;
+        });
+        this.registerForm = this.formBuilder.group({
+            name: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
+            username: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
+            email: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
+            role: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
+            password: ['']
+        });
+        this.title = this.show ? 'Cancelar' : 'Cadastrar';
     };
     Object.defineProperty(UserComponent.prototype, "f", {
         // convenience getter for easy access to form fields
