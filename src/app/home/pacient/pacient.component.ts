@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Pacient, Address } from '../../_models';
+import { Pacient, Address, Contact } from '../../_models';
 import { PacientService } from '../../_services';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -39,6 +39,7 @@ export class PacientComponent implements OnInit {
   submitted = false;
   show = false;
   editing = false;
+  pacients: Array<Pacient>;
 
   constructor(private formBuilder: FormBuilder, private pacientService: PacientService) {
 
@@ -46,6 +47,7 @@ export class PacientComponent implements OnInit {
 
 
   ngOnInit() {
+    this.pacientService.getAll().subscribe(resp => this.pacients = resp);
     this.cleanForm();
     this.title = this.show ? 'Cancelar' : 'Cadastrar'
   }
@@ -84,12 +86,13 @@ export class PacientComponent implements OnInit {
   get f() { return this.registerForm.controls; }
 
   edit(id: string) {
-    let pacient = this.pacientService.getById(id);
+    let pacient = new Pacient();
+    this.pacientService.getById(id).subscribe(resp => pacient = <Pacient>resp);
     this.registerForm = this.formBuilder.group({
       name: [pacient.name, Validators.required],
       cpf: [pacient.cpf],
       birthday: [pacient.birthday ? pacient.birthday.toISOString().split('T')[0] : ''],
-      phone: [pacient.phone, Validators.required],
+      phone: [pacient.contact[0].contact, Validators.required],
       email: [pacient.email],
       street: [pacient.address ? pacient.address.street : ''],
       number: [pacient.address ? pacient.address.number : ''],
@@ -116,7 +119,10 @@ export class PacientComponent implements OnInit {
     let form = this.registerForm.value;
     pacient.name=form.name;
     pacient.email = form.email;
-    pacient.phone = form.phone;
+    let phone = new Contact();
+    phone.contact = form.phone;
+    pacient.contact = new Array();
+    pacient.contact.push(phone);
     pacient.cpf = form.cpf;
     pacient.birthday = form.birthday;
     let address = new Address();
@@ -132,7 +138,6 @@ export class PacientComponent implements OnInit {
       this.pacientService.update(pacient);
       this.editing = false;
     } else {
-      pacient.id = (this.pacientService.getAll().length + 1).toString();
       this.pacientService.register(pacient);
     }
     this.toggle();

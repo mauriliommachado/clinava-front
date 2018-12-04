@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../_models';
 import { environment } from '../../environments/environment';
 import 'rxjs/add/operator/map';
-import { first } from 'rxjs/operators';
 
 @Injectable()
 export class UserService {
@@ -18,7 +17,7 @@ export class UserService {
     }
 
     getAttendants() {
-        return this.http.get<User[]>(`${environment.apiUrl}/users`).map(res => res);
+        return this.http.get<User[]>(`${environment.apiUrl}/users?role=ROLE_ADMIN`).map(res => res);
         //return this.users.filter(u => u.role == "attendant");
     }
 

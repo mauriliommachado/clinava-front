@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { PacientService, ConfigService, UserService, EventService } from '../../_services';
-import { Pacient, User, Event } from 'src/app/_models';
+import { Pacient, User, Event, Contact } from 'src/app/_models';
 
 
 
@@ -47,7 +47,7 @@ export class EventRegisterComponent implements OnInit {
   onKey(event: any) {
     this.selected = false;
     this.pacient = new Pacient();
-    this.pacients = this.pacientService.getByName(event.target.value);
+    this.pacientService.getByName(event.target.value).subscribe(resp => this.pacients = resp);
   }
 
   select(pacient: Pacient) {
@@ -55,7 +55,7 @@ export class EventRegisterComponent implements OnInit {
     this.selected = true;
     this.pacient = pacient;
     this.pacientName = pacient.name;
-    this.pacientPhone = pacient.phone;
+    this.pacientPhone = pacient.birthday.toLocaleDateString();
   }
 
   onSubmit() {
@@ -81,7 +81,10 @@ export class EventRegisterComponent implements OnInit {
   newPacient() {
     let pacient = new Pacient();
     pacient.name = this.pacientName;
-    pacient.phone = this.pacientPhone;
+    let phone = new Contact();
+    phone.contact = this.pacientPhone;
+    pacient.contact = new Array();
+    pacient.contact.push(phone);
     this.pacientService.register(pacient);
     return pacient;
   }

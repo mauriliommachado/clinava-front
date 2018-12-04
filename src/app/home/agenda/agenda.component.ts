@@ -39,7 +39,7 @@ export class AgendaComponent implements OnInit {
     if (!this.id) {
       let users;
       this.userService.getAttendants().subscribe(resp=>{
-        users = resp.filter(u => u.roles.filter(r => r.name == "attendant"));
+        users = resp;
         this.attendants = users;
         this.id = users.length > 0 ? users[0].id : null;
       });

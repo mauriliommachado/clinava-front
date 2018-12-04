@@ -49,6 +49,7 @@
         <div class="form-group">
             <label for="user">Atendente</label>
             <select formControlName="user" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.user.errors }">
+                <option selected>Selecionar</option>
                 <option [value]="user.id" *ngFor="let user of attendants">{{user.name}}</option>
             </select>
             <div *ngIf="submitted && f.user.errors" class="invalid-feedback">

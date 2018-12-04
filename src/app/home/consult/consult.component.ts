@@ -11,6 +11,7 @@ import {
   animate,
   transition
 } from '@angular/animations';
+import { Pacient } from 'src/app/_models';
 
 @Component({
   selector: 'app-consult',
@@ -134,18 +135,20 @@ export class ConsultComponent implements OnInit {
     event.date.setMinutes(this.registerForm.value.time.split(':')[1]);
     this.userService.getById(this.registerForm.value.user).subscribe(user => {
       event.user = user;
-      event.pacient = this.pacientService.getById(this.registerForm.value.pacient);
-      if (this.editing) {
-        event.id = this.currentEvent;
-        this.eventService.update(event);
-        this.editing = false;
-      } else {
-        event.id = (this.eventService.getAll().length + 1).toString();
-        this.eventService.register(event);
-      }
-      this.toggle();
-      this.cleanForm();
-      this.indexDate = new Date();
+      this.pacientService.getById(this.registerForm.value.pacient).subscribe(resp => {
+        event.pacient = <Pacient>resp;
+        if (this.editing) {
+          event.id = this.currentEvent;
+          this.eventService.update(event);
+          this.editing = false;
+        } else {
+          event.id = (this.eventService.getAll().length + 1).toString();
+          this.eventService.register(event);
+        }
+        this.toggle();
+        this.cleanForm();
+        this.indexDate = new Date();
+      });
     });
   }
 
