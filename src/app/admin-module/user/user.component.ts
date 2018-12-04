@@ -71,25 +71,24 @@ export class UserComponent implements OnInit {
       this.cleanForm()
     }
     this.title = this.show ? 'Cancelar' : 'Cadastrar'
-    this.userService.getAll().subscribe((res: any[]) => {
-      this.users = res;
-    });
   }
 
 
   ngOnInit() {
     this.userService.getAll().subscribe((res: any[]) => {
       this.users = res;
+      this.rolesService.getAll().subscribe((res: any[]) => {
+        this.roles = res;
+        this.registerForm = this.formBuilder.group({
+          name: ['', Validators.required],
+          username: ['', Validators.required],
+          email: ['', Validators.required],
+          role: ['', Validators.required],
+          password: ['']
+        });
+        this.title = this.show ? 'Cancelar' : 'Cadastrar'
+      });
     });
-    this.roles = this.rolesService.getAll();
-    this.registerForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      username: ['', Validators.required],
-      email: ['', Validators.required],
-      role: ['', Validators.required],
-      password: ['']
-    });
-    this.title = this.show ? 'Cancelar' : 'Cadastrar'
   }
 
 
@@ -118,16 +117,24 @@ export class UserComponent implements OnInit {
     user.username = u.username;
     if (this.editing) {
       user.id = this.currentUser.id;
-      this.userService.update(user);
+      this.userService.update(user).subscribe(resp => {
+        this.userService.getAll().subscribe((res: any[]) => {
+          this.users = res;
+          this.toggle();
+          this.cleanForm();
+        });
+      });
       this.editing = false;
     } else {
-      this.userService.register(user);
+      this.userService.register(user).subscribe(resp => {
+        this.userService.getAll().subscribe((res: any[]) => {
+          this.users = res;
+          this.toggle();
+          this.cleanForm();
+        });
+      });;
     }
-    this.userService.getAll().subscribe((res: any[]) => {
-      this.users = res;
-    });
-    this.toggle();
-    this.cleanForm();
+
   }
 
   edit(id: string) {
@@ -145,15 +152,21 @@ export class UserComponent implements OnInit {
       this.currentUser = user;
       this.toggle();
     });
+
   }
 
   delete(id: string) {
-    this.userService.delete(id);
+    this.userService.delete(id).subscribe(resp => {
+      this.userService.getAll().subscribe((res: any[]) => {
+        this.users = res;
+      });
+    });
   }
 
 }
 
 import { Pipe, PipeTransform } from '@angular/core';
+import { first } from 'rxjs/operators';
 
 @Pipe({ name: 'role' })
 export class RepeatPipe implements PipeTransform {

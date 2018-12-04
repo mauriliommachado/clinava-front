@@ -14,9 +14,6 @@ export class RoleService {
     }
 
     getAll() {
-        this.http.get<Role[]>(`${environment.apiUrl}/roles`).subscribe((res: any[]) => {
-            this.roles = res;
-        });;
-        return this.roles;
+        return this.http.get<Role[]>(`${environment.apiUrl}/roles`);
     }
 }

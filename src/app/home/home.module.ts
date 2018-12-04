@@ -13,7 +13,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Ng2CompleterModule } from "ng2-completer";
 import {NgxMaskModule} from 'ngx-mask';
 
-
 @NgModule({
   imports: [
     CommonModule, BrowserModule,
