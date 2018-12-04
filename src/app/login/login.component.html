@@ -6,7 +6,7 @@
         </div>
         <div class="card-body">
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-                    <alert></alert>
+                    
                 <div class="form-group">
                     <label for="username">Email</label>
                     <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { User, Contact, Role, Address } from '../../_models';
+import { User, Contact, Role } from '../../_models';
 import { AlertService, UserService, RoleService } from '../../_services';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -46,7 +46,6 @@ export class UserComponent implements OnInit {
     private alertService: AlertService,
     private userService: UserService,
     private rolesService: RoleService) {
-
   }
 
   get stateList() {
@@ -69,6 +68,9 @@ export class UserComponent implements OnInit {
     this.show = !this.show;
     if (this.editing && !this.show) {
       this.cleanForm()
+    }
+    if(this.editing){
+      this.editing = false;
     }
     this.title = this.show ? 'Cancelar' : 'Cadastrar'
   }
@@ -121,6 +123,7 @@ export class UserComponent implements OnInit {
           this.users = res;
           this.toggle();
           this.cleanForm();
+          this.alertService.success("Editado com sucesso");
         });
       });
       this.editing = false;
@@ -147,9 +150,9 @@ export class UserComponent implements OnInit {
         role: [user.roles[0].id, Validators.required],
         password: [user.password]
       });
-      this.editing = true;
       this.currentUser = user;
       this.toggle();
+      this.editing = true;
     });
 
   }
