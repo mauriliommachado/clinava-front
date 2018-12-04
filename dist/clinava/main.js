@@ -563,7 +563,7 @@ var AuthenticationService = /** @class */ (function () {
         this.http = http;
     }
     AuthenticationService.prototype.login = function (username, password) {
-        return this.http.post("http://localhost:8888/api/auth/signin", { username: username, password: password })
+        return this.http.post("https://clinava.herokuapp.com/api/auth/signin", { username: username, password: password })
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (response) {
             // login successful if there's a jwt token in the response
             if (response && response.accessToken) {
@@ -574,7 +574,7 @@ var AuthenticationService = /** @class */ (function () {
         }));
     };
     AuthenticationService.prototype.signin = function (user) {
-        return this.http.post("http://localhost:8888/api/auth/signup", user)
+        return this.http.post("https://clinava.herokuapp.com/api/auth/signup", user)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (response) {
             alert(response);
             return response;
@@ -2919,7 +2919,7 @@ __webpack_require__.r(__webpack_exports__);
 // The list of file replacements can be found in `angular.json`.
 var environment = {
     production: false,
-    apiUrl: 'http://localhost:8888/api'
+    apiUrl: 'https://clinava.herokuapp.com/api'
 };
 /*
  * In development mode, to ignore zone related error stack frames such as
