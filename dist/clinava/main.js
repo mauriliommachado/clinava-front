@@ -1704,7 +1704,10 @@ var AgendaComponent = /** @class */ (function () {
         this.visible = false;
         this.docName = "Selecione um atendente";
         this.config = this.configService.getConfig();
-        this.id = this.route.snapshot.params['id'];
+        this.route.params.subscribe(function (params) {
+            _this.id = params["id"];
+            // your code continues here
+        });
         if (!this.id) {
             var users_1;
             this.userService.getAttendants().subscribe(function (resp) {
