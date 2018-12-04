@@ -111,8 +111,7 @@ export class UserComponent implements OnInit {
     user.password = u.password;
     user.roles = new Array<Role>();
     let role = new Role();
-    role.id = 1;
-    role.name = "ROLE_ADMIN";
+    role.id = this.registerForm.value.role;
     user.roles.push(role);
     user.username = u.username;
     if (this.editing) {
@@ -171,9 +170,9 @@ import { first } from 'rxjs/operators';
 @Pipe({ name: 'role' })
 export class RepeatPipe implements PipeTransform {
   transform(value: any) {
-    if (value == "ROLE_ADMIN") {
-      return "Admin";
+    if (value[0].name == "ROLE_ADMIN") {
+      return "Atendente";
     }
-    return "Atendente";
+    return "Usuário";
   }
 }
