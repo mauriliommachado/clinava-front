@@ -263,11 +263,11 @@ var JwtInterceptor = /** @class */ (function () {
     }
     JwtInterceptor.prototype.intercept = function (request, next) {
         // add authorization header with jwt token if available
-        var currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        if (currentUser && currentUser.token) {
+        if (localStorage.getItem("currentUser")) {
             request = request.clone({
                 setHeaders: {
-                    Authorization: "Bearer " + currentUser.token
+                    Authorization: "Bearer " + JSON.parse(localStorage.getItem("currentUser")).accessToken,
+                    "Content-Type": "application/json"
                 }
             });
         }
@@ -323,6 +323,26 @@ var Config = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/_models/contact.ts":
+/*!************************************!*\
+  !*** ./src/app/_models/contact.ts ***!
+  \************************************/
+/*! exports provided: Contact */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Contact", function() { return Contact; });
+var Contact = /** @class */ (function () {
+    function Contact() {
+    }
+    return Contact;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/_models/event.ts":
 /*!**********************************!*\
   !*** ./src/app/_models/event.ts ***!
@@ -347,7 +367,7 @@ var Event = /** @class */ (function () {
 /*!**********************************!*\
   !*** ./src/app/_models/index.ts ***!
   \**********************************/
-/*! exports provided: Config, Event, User, Pacient, Address */
+/*! exports provided: Config, Event, User, Pacient, Address, Role, Contact */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -366,6 +386,14 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony import */ var _address__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./address */ "./src/app/_models/address.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Address", function() { return _address__WEBPACK_IMPORTED_MODULE_4__["Address"]; });
+
+/* harmony import */ var _roles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./roles */ "./src/app/_models/roles.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Role", function() { return _roles__WEBPACK_IMPORTED_MODULE_5__["Role"]; });
+
+/* harmony import */ var _contact__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./contact */ "./src/app/_models/contact.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Contact", function() { return _contact__WEBPACK_IMPORTED_MODULE_6__["Contact"]; });
+
+
 
 
 
@@ -390,6 +418,26 @@ var Pacient = /** @class */ (function () {
     function Pacient() {
     }
     return Pacient;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/_models/roles.ts":
+/*!**********************************!*\
+  !*** ./src/app/_models/roles.ts ***!
+  \**********************************/
+/*! exports provided: Role */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Role", function() { return Role; });
+var Role = /** @class */ (function () {
+    function Role() {
+    }
+    return Role;
 }());
 
 
@@ -515,7 +563,7 @@ var AuthenticationService = /** @class */ (function () {
         this.http = http;
     }
     AuthenticationService.prototype.login = function (username, password) {
-        return this.http.post("https://clinava.herokuapp.com/api/auth/signin", { username: username, password: password })
+        return this.http.post("http://localhost:8888/api/auth/signin", { username: username, password: password })
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (response) {
             // login successful if there's a jwt token in the response
             if (response && response.accessToken) {
@@ -526,7 +574,7 @@ var AuthenticationService = /** @class */ (function () {
         }));
     };
     AuthenticationService.prototype.signin = function (user) {
-        return this.http.post("https://clinava.herokuapp.com/api/auth/signup", user)
+        return this.http.post("http://localhost:8888/api/auth/signup", user)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (response) {
             alert(response);
             return response;
@@ -679,7 +727,7 @@ var EventService = /** @class */ (function () {
 /*!************************************!*\
   !*** ./src/app/_services/index.ts ***!
   \************************************/
-/*! exports provided: AlertService, AuthenticationService, UserService, EventService, ConfigService, PacientService */
+/*! exports provided: AlertService, AuthenticationService, UserService, EventService, ConfigService, PacientService, RoleService */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -701,6 +749,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony import */ var _pacient_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pacient.service */ "./src/app/_services/pacient.service.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "PacientService", function() { return _pacient_service__WEBPACK_IMPORTED_MODULE_5__["PacientService"]; });
+
+/* harmony import */ var _roles_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./roles.service */ "./src/app/_services/roles.service.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "RoleService", function() { return _roles_service__WEBPACK_IMPORTED_MODULE_6__["RoleService"]; });
+
 
 
 
@@ -786,19 +838,19 @@ var PacientService = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/_services/user.service.ts":
-/*!*******************************************!*\
-  !*** ./src/app/_services/user.service.ts ***!
-  \*******************************************/
-/*! exports provided: UserService */
+/***/ "./src/app/_services/roles.service.ts":
+/*!********************************************!*\
+  !*** ./src/app/_services/roles.service.ts ***!
+  \********************************************/
+/*! exports provided: RoleService */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UserService", function() { return UserService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RoleService", function() { return RoleService; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var _models__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../_models */ "./src/app/_models/index.ts");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../environments/environment */ "./src/environments/environment.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -811,53 +863,84 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+var RoleService = /** @class */ (function () {
+    function RoleService(http) {
+        this.http = http;
+        this.roles = new Array();
+    }
+    RoleService.prototype.getAll = function () {
+        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/roles");
+    };
+    RoleService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
+        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]])
+    ], RoleService);
+    return RoleService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/_services/user.service.ts":
+/*!*******************************************!*\
+  !*** ./src/app/_services/user.service.ts ***!
+  \*******************************************/
+/*! exports provided: UserService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UserService", function() { return UserService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var rxjs_add_operator_map__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/add/operator/map */ "./node_modules/rxjs-compat/_esm5/add/operator/map.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
 var UserService = /** @class */ (function () {
     function UserService(http) {
         this.http = http;
         this.users = new Array();
-        this.currentUser = new _models__WEBPACK_IMPORTED_MODULE_2__["User"]();
-        this.currentUser.id = (this.getAll().length + 1).toString();
-        this.currentUser.name = "Maurílio Miranda Machado";
-        this.currentUser.email = "mauriliommachado@gmail.com";
-        this.currentUser.username = "mauriliommachado@gmail.com";
-        this.currentUser.role = "attendant";
-        this.register(this.currentUser);
-        this.currentUser = new _models__WEBPACK_IMPORTED_MODULE_2__["User"]();
-        this.currentUser.id = (this.getAll().length + 1).toString();
-        this.currentUser.name = "Diogo Peixoto";
-        this.currentUser.email = "diogo@gmail.com";
-        this.currentUser.username = "diogo@gmail.com";
-        this.currentUser.role = "user";
-        this.register(this.currentUser);
     }
     UserService.prototype.getAll = function () {
-        return this.users;
-        //return this.http.get<User[]>(`${environment.apiUrl}/users`);
+        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/users")
+            .map(function (res) { return res; });
     };
     UserService.prototype.getAttendants = function () {
-        return this.users.filter(function (u) { return u.role == "attendant"; });
-        //return this.http.get<User[]>(`${environment.apiUrl}/users`);
+        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/users").map(function (res) { return res; });
+        //return this.users.filter(u => u.role == "attendant");
     };
     UserService.prototype.getUsers = function () {
-        return this.users.filter(function (u) { return u.role == "user"; });
+        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/users").map(function (res) { return res; });
+        //return this.users.filter(u => u.role == "user");
         //return this.http.get<User[]>(`${environment.apiUrl}/users`);
     };
     UserService.prototype.getById = function (id) {
-        return this.users.find(function (u) { return u.id == id; });
+        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/users/" + id).map(function (res) { return res; });
+        //return this.users.find(u => u.id == id);
         //return this.http.get(`${environment.apiUrl}/users/` + id);
     };
     UserService.prototype.register = function (user) {
-        this.users.push(user);
-        //return this.http.post(`${environment.apiUrl}/users/register`, user);
+        return this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/users/", user);
     };
     UserService.prototype.update = function (user) {
-        this.delete(user.id);
-        this.register(user);
-        //return this.http.put(`${environment.apiUrl}/users/` + user.id, user);
+        return this.http.put(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/users", user);
     };
     UserService.prototype.delete = function (id) {
-        this.users = this.users.filter(function (e) { return e.id !== id; });
-        //return this.http.delete(`${environment.apiUrl}/users/` + id);
+        //this.users = this.users.filter(e => e.id !== id);
+        return this.http.delete(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/users/" + id);
     };
     UserService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
@@ -1147,7 +1230,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h4>Usuários</h4>\n<button class=\"btn btn-primary btn-sm float-right mb-4\" (click)=\"toggle()\">{{title}}</button>\n<br>\n<div id=\"new\" [@popOverState]=\"stateList\">\n  <form [formGroup]=\"registerForm\" (ngSubmit)=\"onSubmit()\">\n    <div class=\"form-group\">\n      <label for=\"name\">Nome Completo</label>\n      <input type=\"text\" formControlName=\"name\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.name.errors }\" />\n      <div *ngIf=\"submitted && f.name.errors\" class=\"invalid-feedback\">\n        <div *ngIf=\"f.name.errors.required\">Obrigatório</div>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"username\">Usuário</label>\n      <input type=\"text\" formControlName=\"username\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.username.errors }\" />\n      <div *ngIf=\"submitted && f.username.errors\" class=\"invalid-feedback\">\n        <div *ngIf=\"f.username.errors.required\">Obrigatório</div>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"email\">Email</label>\n      <input type=\"text\" formControlName=\"email\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.email.errors }\" />\n      <div *ngIf=\"submitted && f.email.errors\" class=\"invalid-feedback\">\n        <div *ngIf=\"f.email.errors.required\">Obrigatório</div>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"role\">Acesso</label>\n      <select formControlName=\"role\" class=\"form-control\"  [ngClass]=\"{ 'is-invalid': submitted && f.role.errors }\">\n        <option value=\"user\">Usuário</option>\n        <option value=\"attendant\">Atendente</option>\n      </select>\n      <div *ngIf=\"submitted && f.role.errors\" class=\"invalid-feedback\">\n          <div *ngIf=\"f.role.errors.required\">Obrigatório</div>\n        </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"password\">Password</label>\n      <input type=\"password\" formControlName=\"password\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.password.errors }\" />\n      <div *ngIf=\"submitted && f.password.errors\" class=\"invalid-feedback\">\n        <div *ngIf=\"f.password.errors.required\">Obrigatório</div>\n        <div *ngIf=\"f.password.errors.minlength\">A senha tem que ter no mínimo 6 caracteres</div>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <button [disabled]=\"loading\" class=\"btn btn-primary\">Salvar</button>\n      <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\n    </div>\n  </form>\n</div>\n\n<div id=\"list\">\n  <table class=\"table table-striped table-sm\">\n    <thead>\n      <tr>\n        <th scope=\"col\">#</th>\n        <th scope=\"col\">Nome</th>\n        <th scope=\"col\">Email</th>\n        <th scope=\"col\">Acesso</th>\n        <th scope=\"col\"></th>\n        <th scope=\"col\"></th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr *ngFor=\"let user of userService.getAll()\">\n        <th scope=\"row\">{{ user.id }}</th>\n        <td>{{ user.name }}</td>\n        <td>{{ user.email }}</td>\n        <td>{{ user.role | role}}</td>\n        <td>\n          <a class=\"btn btn-info btn-sm\" (click)=\"edit(user.id)\">\n            <i class=\"far fa-edit\"></i></a></td>\n        <td>\n          <a class=\"btn btn-danger btn-sm\" (click)=\"delete(user.id)\">\n            <i class=\"far fa-trash-alt\"></i></a></td>\n      </tr>\n    </tbody>\n  </table>\n</div>"
+module.exports = "<h4>Usuários</h4>\n<button class=\"btn btn-primary btn-sm float-right mb-4\" (click)=\"toggle()\">{{title}}</button>\n<br>\n<div id=\"new\" [@popOverState]=\"stateList\">\n  <form [formGroup]=\"registerForm\" (ngSubmit)=\"onSubmit()\">\n    <div class=\"form-group\">\n      <label for=\"name\">Nome Completo</label>\n      <input type=\"text\" formControlName=\"name\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.name.errors }\" />\n      <div *ngIf=\"submitted && f.name.errors\" class=\"invalid-feedback\">\n        <div *ngIf=\"f.name.errors.required\">Obrigatório</div>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"username\">Usuário</label>\n      <input type=\"text\" formControlName=\"username\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.username.errors }\" />\n      <div *ngIf=\"submitted && f.username.errors\" class=\"invalid-feedback\">\n        <div *ngIf=\"f.username.errors.required\">Obrigatório</div>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"email\">Email</label>\n      <input type=\"text\" formControlName=\"email\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.email.errors }\" />\n      <div *ngIf=\"submitted && f.email.errors\" class=\"invalid-feedback\">\n        <div *ngIf=\"f.email.errors.required\">Obrigatório</div>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"role\">Acesso</label>\n      <select formControlName=\"role\" class=\"form-control\"  [ngClass]=\"{ 'is-invalid': submitted && f.role.errors }\">\n        <option *ngFor=\"let user of roles\" value=\"user.id\">{{user.name}}</option>\n      </select>\n      <div *ngIf=\"submitted && f.role.errors\" class=\"invalid-feedback\">\n          <div *ngIf=\"f.role.errors.required\">Obrigatório</div>\n        </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"password\">Password</label>\n      <input type=\"password\" formControlName=\"password\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.password.errors }\" />\n      <div *ngIf=\"submitted && f.password.errors\" class=\"invalid-feedback\">\n        <div *ngIf=\"f.password.errors.required\">Obrigatório</div>\n        <div *ngIf=\"f.password.errors.minlength\">A senha tem que ter no mínimo 6 caracteres</div>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <button [disabled]=\"loading\" class=\"btn btn-primary\">Salvar</button>\n      <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\n    </div>\n  </form>\n</div>\n\n<div id=\"list\">\n  <table class=\"table table-striped table-sm\">\n    <thead>\n      <tr>\n        <th scope=\"col\">#</th>\n        <th scope=\"col\">Nome</th>\n        <th scope=\"col\">Email</th>\n        <th scope=\"col\">Acesso</th>\n        <th scope=\"col\"></th>\n        <th scope=\"col\"></th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr *ngFor=\"let user of users\">\n        <th scope=\"row\">{{ user.id }}</th>\n        <td>{{ user.name }}</td>\n        <td>{{ user.email }}</td>\n        <td>{{ user.role | role}}</td>\n        <td>\n          <a class=\"btn btn-info btn-sm\" (click)=\"edit(user.id)\">\n            <i class=\"far fa-edit\"></i></a></td>\n        <td>\n          <a class=\"btn btn-danger btn-sm\" (click)=\"delete(user.id)\">\n            <i class=\"far fa-trash-alt\"></i></a></td>\n      </tr>\n    </tbody>\n  </table>\n</div>"
 
 /***/ }),
 
@@ -1163,9 +1246,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UserComponent", function() { return UserComponent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RepeatPipe", function() { return RepeatPipe; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../_services */ "./src/app/_services/index.ts");
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
-/* harmony import */ var _angular_animations__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/animations */ "./node_modules/@angular/animations/fesm5/animations.js");
+/* harmony import */ var _models__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../_models */ "./src/app/_models/index.ts");
+/* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../_services */ "./src/app/_services/index.ts");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var _angular_animations__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/animations */ "./node_modules/@angular/animations/fesm5/animations.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1179,11 +1263,13 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var UserComponent = /** @class */ (function () {
-    function UserComponent(formBuilder, alertService, userService) {
+    function UserComponent(formBuilder, alertService, userService, rolesService) {
         this.formBuilder = formBuilder;
         this.alertService = alertService;
         this.userService = userService;
+        this.rolesService = rolesService;
         this.loading = false;
         this.submitted = false;
         this.show = false;
@@ -1198,10 +1284,10 @@ var UserComponent = /** @class */ (function () {
     });
     UserComponent.prototype.cleanForm = function () {
         this.registerForm = this.formBuilder.group({
-            name: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            username: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            email: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            role: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+            name: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
+            username: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
+            email: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
+            role: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
             password: ['']
         });
     };
@@ -1214,14 +1300,21 @@ var UserComponent = /** @class */ (function () {
         this.title = this.show ? 'Cancelar' : 'Cadastrar';
     };
     UserComponent.prototype.ngOnInit = function () {
-        this.registerForm = this.formBuilder.group({
-            name: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            username: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            email: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            role: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            password: ['']
+        var _this = this;
+        this.userService.getAll().subscribe(function (res) {
+            _this.users = res;
+            _this.rolesService.getAll().subscribe(function (res) {
+                _this.roles = res;
+                _this.registerForm = _this.formBuilder.group({
+                    name: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
+                    username: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
+                    email: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
+                    role: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
+                    password: ['']
+                });
+                _this.title = _this.show ? 'Cancelar' : 'Cadastrar';
+            });
         });
-        this.title = this.show ? 'Cancelar' : 'Cadastrar';
     };
     Object.defineProperty(UserComponent.prototype, "f", {
         // convenience getter for easy access to form fields
@@ -1230,38 +1323,71 @@ var UserComponent = /** @class */ (function () {
         configurable: true
     });
     UserComponent.prototype.onSubmit = function () {
+        var _this = this;
         this.submitted = true;
         if (this.registerForm.invalid) {
             return;
         }
-        var user = this.registerForm.value;
+        var user = new _models__WEBPACK_IMPORTED_MODULE_1__["User"]();
+        var u = this.registerForm.value;
+        user.id = u.id;
+        user.address = null;
+        user.contacts = new Array();
+        user.email = u.email;
+        user.name = u.name;
+        user.password = u.password;
+        user.roles = new Array();
+        var role = new _models__WEBPACK_IMPORTED_MODULE_1__["Role"]();
+        role.id = 1;
+        role.name = "ROLE_ADMIN";
+        user.roles.push(role);
+        user.username = u.username;
         if (this.editing) {
             user.id = this.currentUser.id;
-            this.userService.update(user);
+            this.userService.update(user).subscribe(function (resp) {
+                _this.userService.getAll().subscribe(function (res) {
+                    _this.users = res;
+                    _this.toggle();
+                    _this.cleanForm();
+                });
+            });
             this.editing = false;
         }
         else {
-            user.id = (this.userService.getAll().length + 1).toString();
-            this.userService.register(user);
+            this.userService.register(user).subscribe(function (resp) {
+                _this.userService.getAll().subscribe(function (res) {
+                    _this.users = res;
+                    _this.toggle();
+                    _this.cleanForm();
+                });
+            });
+            ;
         }
-        this.toggle();
-        this.cleanForm();
     };
     UserComponent.prototype.edit = function (id) {
-        var user = this.userService.getById(id);
-        this.registerForm = this.formBuilder.group({
-            name: [user.name, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            username: [user.username, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            email: [user.email, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            role: [user.role, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            password: [user.password]
+        var _this = this;
+        var user;
+        this.userService.getById(id).subscribe(function (res) {
+            user = res;
+            _this.registerForm = _this.formBuilder.group({
+                name: [user.name, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
+                username: [user.username, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
+                email: [user.email, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
+                role: [user.roles[0].id, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
+                password: [user.password]
+            });
+            _this.editing = true;
+            _this.currentUser = user;
+            _this.toggle();
         });
-        this.editing = true;
-        this.currentUser = user;
-        this.toggle();
     };
     UserComponent.prototype.delete = function (id) {
-        this.userService.delete(id);
+        var _this = this;
+        this.userService.delete(id).subscribe(function (resp) {
+            _this.userService.getAll().subscribe(function (res) {
+                _this.users = res;
+            });
+        });
     };
     UserComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -1269,23 +1395,24 @@ var UserComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./user.component.html */ "./src/app/admin-module/user/user.component.html"),
             styles: [__webpack_require__(/*! ./user.component.css */ "./src/app/admin-module/user/user.component.css")],
             animations: [
-                Object(_angular_animations__WEBPACK_IMPORTED_MODULE_3__["trigger"])('popOverState', [
-                    Object(_angular_animations__WEBPACK_IMPORTED_MODULE_3__["state"])('none', Object(_angular_animations__WEBPACK_IMPORTED_MODULE_3__["style"])({
+                Object(_angular_animations__WEBPACK_IMPORTED_MODULE_4__["trigger"])('popOverState', [
+                    Object(_angular_animations__WEBPACK_IMPORTED_MODULE_4__["state"])('none', Object(_angular_animations__WEBPACK_IMPORTED_MODULE_4__["style"])({
                         display: 'none',
                         opacity: 0
                     })),
-                    Object(_angular_animations__WEBPACK_IMPORTED_MODULE_3__["state"])('block', Object(_angular_animations__WEBPACK_IMPORTED_MODULE_3__["style"])({
+                    Object(_angular_animations__WEBPACK_IMPORTED_MODULE_4__["state"])('block', Object(_angular_animations__WEBPACK_IMPORTED_MODULE_4__["style"])({
                         display: 'block',
                         opacity: 1
                     })),
-                    Object(_angular_animations__WEBPACK_IMPORTED_MODULE_3__["transition"])('block => none', Object(_angular_animations__WEBPACK_IMPORTED_MODULE_3__["animate"])('300ms ease-out')),
-                    Object(_angular_animations__WEBPACK_IMPORTED_MODULE_3__["transition"])('none => block', Object(_angular_animations__WEBPACK_IMPORTED_MODULE_3__["animate"])('300ms ease-in'))
+                    Object(_angular_animations__WEBPACK_IMPORTED_MODULE_4__["transition"])('block => none', Object(_angular_animations__WEBPACK_IMPORTED_MODULE_4__["animate"])('300ms ease-out')),
+                    Object(_angular_animations__WEBPACK_IMPORTED_MODULE_4__["transition"])('none => block', Object(_angular_animations__WEBPACK_IMPORTED_MODULE_4__["animate"])('300ms ease-in'))
                 ])
             ]
         }),
-        __metadata("design:paramtypes", [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormBuilder"],
-            _services__WEBPACK_IMPORTED_MODULE_1__["AlertService"],
-            _services__WEBPACK_IMPORTED_MODULE_1__["UserService"]])
+        __metadata("design:paramtypes", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormBuilder"],
+            _services__WEBPACK_IMPORTED_MODULE_2__["AlertService"],
+            _services__WEBPACK_IMPORTED_MODULE_2__["UserService"],
+            _services__WEBPACK_IMPORTED_MODULE_2__["RoleService"]])
     ], UserComponent);
     return UserComponent;
 }());
@@ -1295,8 +1422,8 @@ var RepeatPipe = /** @class */ (function () {
     function RepeatPipe() {
     }
     RepeatPipe.prototype.transform = function (value) {
-        if (value == "user") {
-            return "Usuário";
+        if (value == "ROLE_ADMIN") {
+            return "Admin";
         }
         return "Atendente";
     };
@@ -1382,6 +1509,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _home_home_routing_module__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./home/home-routing.module */ "./src/app/home/home-routing.module.ts");
 /* harmony import */ var _home_home_module__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./home/home.module */ "./src/app/home/home.module.ts");
 /* harmony import */ var _admin_module_admin_module_module__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./admin-module/admin-module.module */ "./src/app/admin-module/admin-module.module.ts");
+/* harmony import */ var ngx_mask__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ngx-mask */ "./node_modules/ngx-mask/fesm5/ngx-mask.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1405,6 +1533,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
  //<-- import
  //<-- import
  //<-- import
+
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -1418,7 +1547,8 @@ var AppModule = /** @class */ (function () {
                 _home_home_module__WEBPACK_IMPORTED_MODULE_15__["HomeModule"], _admin_module_admin_module_module__WEBPACK_IMPORTED_MODULE_16__["AdminModuleModule"],
                 _home_home_routing_module__WEBPACK_IMPORTED_MODULE_14__["HomeRoutingModule"],
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
-                _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_4__["BrowserAnimationsModule"]
+                _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_4__["BrowserAnimationsModule"],
+                ngx_mask__WEBPACK_IMPORTED_MODULE_17__["NgxMaskModule"].forRoot()
             ],
             declarations: [
                 _app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"],
@@ -1432,7 +1562,7 @@ var AppModule = /** @class */ (function () {
                 _services__WEBPACK_IMPORTED_MODULE_10__["AuthenticationService"],
                 _services__WEBPACK_IMPORTED_MODULE_10__["UserService"],
                 _services__WEBPACK_IMPORTED_MODULE_10__["EventService"],
-                _services__WEBPACK_IMPORTED_MODULE_10__["ConfigService"], _services__WEBPACK_IMPORTED_MODULE_10__["PacientService"],
+                _services__WEBPACK_IMPORTED_MODULE_10__["ConfigService"], _services__WEBPACK_IMPORTED_MODULE_10__["PacientService"], _services__WEBPACK_IMPORTED_MODULE_10__["RoleService"],
                 { provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HTTP_INTERCEPTORS"], useClass: _helpers__WEBPACK_IMPORTED_MODULE_9__["JwtInterceptor"], multi: true },
                 { provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HTTP_INTERCEPTORS"], useClass: _helpers__WEBPACK_IMPORTED_MODULE_9__["ErrorInterceptor"], multi: true },
             ],
@@ -1578,7 +1708,11 @@ var AgendaComponent = /** @class */ (function () {
         this.config = this.configService.getConfig();
         this.id = this.route.snapshot.params['id'];
         if (!this.id) {
-            this.id = this.userService.getAttendants().length > 0 ? this.userService.getAttendants()[0].id : null;
+            var users_1;
+            this.userService.getAttendants().subscribe(function (resp) {
+                users_1 = resp.filter(function (u) { return u.roles.filter(function (r) { return r.name == "attendant"; }); });
+                _this.id = users_1.length > 0 ? users_1[0].id : null;
+            });
         }
         route.params.subscribe(function (val) {
             _this.ngOnInit();
@@ -1589,10 +1723,11 @@ var AgendaComponent = /** @class */ (function () {
         this.initDates();
     };
     AgendaComponent.prototype.initDates = function () {
+        var _this = this;
         if (!this.id) {
             return;
         }
-        this.docName = this.userService.getById(this.id).name;
+        this.userService.getById(this.id).subscribe(function (u) { return _this.docName = u.name; });
         this.days = new Array();
         this.today = new Date();
         var weekInMilliseconds = 7 * 24 * 60 * 60 * 1000 * this.weekIndex;
@@ -1701,7 +1836,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h4>Consulta</h4>\n<button class=\"btn btn-primary btn-sm float-right mb-4\" (click)=\"toggle()\">{{title}}</button>\n<br>\n<div id=\"new\" [@popOverState]=\"stateList\">\n    <form [formGroup]=\"registerForm\" (ngSubmit)=\"onSubmit()\">\n        <div class=\"form-row\">\n            <div class=\"form-group col-md-6\">\n                <label for=\"date\">Data</label>\n                <input type=\"date\" formControlName=\"date\" class=\"form-control\" [ngModel]=\"date\" [ngClass]=\"{ 'is-invalid': submitted && f.date.errors }\" />\n                <div *ngIf=\"submitted && f.date.errors\" class=\"invalid-feedback\">\n                    <div *ngIf=\"f.date.errors.required\">Obrigatório</div>\n                </div>\n            </div>\n            <div class=\"form-group col-md-6\">\n                <label for=\"time\">Hora</label>\n                <div class=\"input-group mb-2\">\n                    <div class=\"input-group-prepend\">\n                        <button class=\"input-\n                        group-text\" (click)=\"subMinutes()\">-</button>\n                    </div>\n                    <input type=\"time\" formControlName=\"time\" [ngModel]=\"time\" [ngClass]=\"{ 'is-invalid': submitted && f.time.errors }\"\n                        class=\"form-control\" id=\"time\">\n                    <div class=\"input-group-prepend\">\n                        <button class=\"input-group-text\" (click)=\"addMinutes()\">+</button>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"user\">Paciente</label>\n            <select formControlName=\"pacient\" class=\"form-control\"  [ngClass]=\"{ 'is-invalid': submitted && f.pacient.errors }\">\n                <option [value]=\"pacient.id\" *ngFor=\"let pacient of pacientService.getAll()\">{{pacient.name}}</option>\n            </select>\n            <div *ngIf=\"submitted && f.pacient.errors\" class=\"invalid-feedback\">\n                <div *ngIf=\"f.pacient.errors.required\">Obrigatório</div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"duration\">Duração</label>\n            <input type=\"number\" formControlName=\"duration\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.duration.errors }\" />\n            <div *ngIf=\"submitted && f.duration.errors\" class=\"invalid-feedback\">\n                <div *ngIf=\"f.duration.errors.required\">Duração tem que ser preenchida</div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"obs\">Observação</label>\n            <input type=\"text\" formControlName=\"obs\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.obs.errors }\" />\n        </div>\n        <div class=\"form-group\">\n            <label for=\"user\">Atendente</label>\n            <select formControlName=\"user\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.user.errors }\">\n                <option [value]=\"user.id\" *ngFor=\"let user of userService.getAttendants()\">{{user.name}}</option>\n            </select>\n            <div *ngIf=\"submitted && f.user.errors\" class=\"invalid-feedback\">\n                <div *ngIf=\"f.user.errors.required\">Obrigatório</div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <button [disabled]=\"loading\" class=\"btn btn-primary  btn-sm\">Salvar</button>\n            <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\n        </div>\n    </form>\n</div>\n<div id=\"list\">\n    <table class=\"table table-striped table-sm\">\n        <thead>\n            <tr>\n                <th scope=\"col\">Data</th>\n                <th scope=\"col\">Paciente</th>\n                <th scope=\"col\">Observação</th>\n                <th scope=\"col\">Atendente</th>\n                <th scope=\"col\"></th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr *ngFor=\"let event of eventService.getAll()\">\n                <td>{{ event.date | date:'dd/MM/yy - HH:mm' }}</td>\n                <td>{{ event.pacient.name }}</td>\n                <td>{{ event.obs }}</td>\n                <td>{{ event.user.name }}</td>\n                <td>\n                    <a class=\"btn btn-info btn-sm\" (click)=\"edit(event.id)\">\n                        <i class=\"far fa-edit\"></i></a>\n                    <a class=\"btn btn-danger btn-sm ml-1\" (click)=\"delete(event.id)\">\n                        <i class=\"far fa-trash-alt\"></i></a></td>\n            </tr>\n        </tbody>\n    </table>\n</div>"
+module.exports = "<h4>Consulta</h4>\n<button class=\"btn btn-primary btn-sm float-right mb-4\" (click)=\"toggle()\">{{title}}</button>\n<br>\n<div id=\"new\" [@popOverState]=\"stateList\">\n    <form [formGroup]=\"registerForm\" (ngSubmit)=\"onSubmit()\">\n        <div class=\"form-row\">\n            <div class=\"form-group col-md-6\">\n                <label for=\"date\">Data</label>\n                <input type=\"date\" formControlName=\"date\" class=\"form-control\" [ngModel]=\"date\" [ngClass]=\"{ 'is-invalid': submitted && f.date.errors }\" />\n                <div *ngIf=\"submitted && f.date.errors\" class=\"invalid-feedback\">\n                    <div *ngIf=\"f.date.errors.required\">Obrigatório</div>\n                </div>\n            </div>\n            <div class=\"form-group col-md-6\">\n                <label for=\"time\">Hora</label>\n                <div class=\"input-group mb-2\">\n                    <div class=\"input-group-prepend\">\n                        <button class=\"input-\n                        group-text\" (click)=\"subMinutes()\">-</button>\n                    </div>\n                    <input type=\"time\" formControlName=\"time\" [ngModel]=\"time\" [ngClass]=\"{ 'is-invalid': submitted && f.time.errors }\"\n                        class=\"form-control\" id=\"time\">\n                    <div class=\"input-group-prepend\">\n                        <button class=\"input-group-text\" (click)=\"addMinutes()\">+</button>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"user\">Paciente</label>\n            <select formControlName=\"pacient\" class=\"form-control\"  [ngClass]=\"{ 'is-invalid': submitted && f.pacient.errors }\">\n                <option [value]=\"pacient.id\" *ngFor=\"let pacient of pacientService.getAll()\">{{pacient.name}}</option>\n            </select>\n            <div *ngIf=\"submitted && f.pacient.errors\" class=\"invalid-feedback\">\n                <div *ngIf=\"f.pacient.errors.required\">Obrigatório</div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"duration\">Duração</label>\n            <input type=\"number\" formControlName=\"duration\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.duration.errors }\" />\n            <div *ngIf=\"submitted && f.duration.errors\" class=\"invalid-feedback\">\n                <div *ngIf=\"f.duration.errors.required\">Duração tem que ser preenchida</div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"obs\">Observação</label>\n            <input type=\"text\" formControlName=\"obs\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.obs.errors }\" />\n        </div>\n        <div class=\"form-group\">\n            <label for=\"user\">Atendente</label>\n            <select formControlName=\"user\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.user.errors }\">\n                <option [value]=\"user.id\" *ngFor=\"let user of attendants\">{{user.name}}</option>\n            </select>\n            <div *ngIf=\"submitted && f.user.errors\" class=\"invalid-feedback\">\n                <div *ngIf=\"f.user.errors.required\">Obrigatório</div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <button [disabled]=\"loading\" class=\"btn btn-primary  btn-sm\">Salvar</button>\n            <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\n        </div>\n    </form>\n</div>\n<div id=\"list\">\n    <table class=\"table table-striped table-sm\">\n        <thead>\n            <tr>\n                <th scope=\"col\">Data</th>\n                <th scope=\"col\">Paciente</th>\n                <th scope=\"col\">Observação</th>\n                <th scope=\"col\">Atendente</th>\n                <th scope=\"col\"></th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr *ngFor=\"let event of eventService.getAll()\">\n                <td>{{ event.date | date:'dd/MM/yy - HH:mm' }}</td>\n                <td>{{ event.pacient.name }}</td>\n                <td>{{ event.obs }}</td>\n                <td>{{ event.user.name }}</td>\n                <td>\n                    <a class=\"btn btn-info btn-sm\" (click)=\"edit(event.id)\">\n                        <i class=\"far fa-edit\"></i></a>\n                    <a class=\"btn btn-danger btn-sm ml-1\" (click)=\"delete(event.id)\">\n                        <i class=\"far fa-trash-alt\"></i></a></td>\n            </tr>\n        </tbody>\n    </table>\n</div>"
 
 /***/ }),
 
@@ -1746,6 +1881,8 @@ var ConsultComponent = /** @class */ (function () {
         this.config = this.configService.getConfig();
     }
     ConsultComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.userService.getAttendants().subscribe(function (resp) { return _this.attendants = resp; });
         this.indexDate = new Date();
         if ((this.indexDate.getHours()) < this.config.hourInit) {
             this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (this.config.hourInit - this.indexDate.getHours())));
@@ -1775,12 +1912,14 @@ var ConsultComponent = /** @class */ (function () {
         configurable: true
     });
     ConsultComponent.prototype.toggle = function () {
+        var _this = this;
         this.submitted = false;
         this.show = !this.show;
         if (this.editing && !this.show) {
             this.cleanForm();
         }
         this.title = this.show ? 'Cancelar' : 'Cadastrar';
+        this.userService.getAttendants().subscribe(function (resp) { return _this.attendants = resp; });
     };
     ConsultComponent.prototype.cleanForm = function () {
         this.registerForm = this.formBuilder.group({
@@ -1813,6 +1952,7 @@ var ConsultComponent = /** @class */ (function () {
         this.eventService.delete(id);
     };
     ConsultComponent.prototype.onSubmit = function () {
+        var _this = this;
         this.submitted = true;
         if (this.registerForm.invalid) {
             return;
@@ -1821,20 +1961,22 @@ var ConsultComponent = /** @class */ (function () {
         event.date = new Date(this.registerForm.value.date);
         event.date.setHours(this.registerForm.value.time.split(':')[0]);
         event.date.setMinutes(this.registerForm.value.time.split(':')[1]);
-        event.user = this.userService.getById(this.registerForm.value.user);
-        event.pacient = this.pacientService.getById(this.registerForm.value.pacient);
-        if (this.editing) {
-            event.id = this.currentEvent;
-            this.eventService.update(event);
-            this.editing = false;
-        }
-        else {
-            event.id = (this.eventService.getAll().length + 1).toString();
-            this.eventService.register(event);
-        }
-        this.toggle();
-        this.cleanForm();
-        this.indexDate = new Date();
+        this.userService.getById(this.registerForm.value.user).subscribe(function (user) {
+            event.user = user;
+            event.pacient = _this.pacientService.getById(_this.registerForm.value.pacient);
+            if (_this.editing) {
+                event.id = _this.currentEvent;
+                _this.eventService.update(event);
+                _this.editing = false;
+            }
+            else {
+                event.id = (_this.eventService.getAll().length + 1).toString();
+                _this.eventService.register(event);
+            }
+            _this.toggle();
+            _this.cleanForm();
+            _this.indexDate = new Date();
+        });
     };
     Object.defineProperty(ConsultComponent.prototype, "f", {
         // convenience getter for easy access to form fields
@@ -1912,7 +2054,7 @@ module.exports = ".modal-custom {\n/* Hidden by default */\n    position: fixed;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"modal-custom\" [hidden]=\"!visible\" (click)=\"hide($event)\" id=\"customModal\">\n<div class=\"card w-50\">\n  <h5 class=\"card-header\">Consulta Rápida</h5>\n  <div class=\"card-body\">\n    <div class=\"form-group\" id=\"pacientDiv\">\n      <label for=\"pacient\">Paciente</label>\n      <input type=\"text\" (keyup)=\"onKey($event)\" [(ngModel)]=\"pacientName\" id=\"pacient\" name=\"pacient\" class=\"form-control\"\n        autocomplete=\"off\" />\n      <div class=\"w-100\">\n        <div class=\"list-group auto-complete\" *ngIf=\"!selected\">\n          <a *ngFor=\"let user of pacients\" class=\"list-group-item list-group-item-action\" (click)=\"select(user)\">{{user.name}}\n            <small class=\"float-right\">{{user.birthday | date:'dd/MM/yyyy'}}</small></a>\n        </div>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"phone\">Telefone</label>\n      <input type=\"text\" id=\"phone\" name=\"phone\" [(ngModel)]=\"pacientPhone\" class=\"form-control\" autocomplete=\"off\" />\n    </div>\n  </div>\n  <div class=\"card-footer text-right\">\n    <button type=\"button\" class=\"btn btn-secondary\" id=\"close\" (click)=\"hide($event)\">Cancelar</button>\n    <button type=\"button\" class=\"btn btn-primary ml-3\" (click)=\"onSubmit()\">Marcar</button>\n  </div>\n</div>\n</div>"
+module.exports = "<div class=\"modal-custom\" [hidden]=\"!visible\" (click)=\"hide($event)\" id=\"customModal\">\n<div class=\"card w-50\">\n  <h5 class=\"card-header\">Consulta Rápida</h5>\n  <div class=\"card-body\">\n    <div class=\"form-group\" id=\"pacientDiv\">\n      <label for=\"pacient\">Paciente</label>\n      <input type=\"text\" (keyup)=\"onKey($event)\" [(ngModel)]=\"pacientName\" id=\"pacient\" name=\"pacient\" class=\"form-control\"\n        autocomplete=\"off\" />\n      <div class=\"w-100\">\n        <div class=\"list-group auto-complete\" *ngIf=\"!selected\">\n          <a *ngFor=\"let user of pacients\" class=\"list-group-item list-group-item-action\" (click)=\"select(user)\">{{user.name}}\n            <small class=\"float-right\">{{user.birthday | date:'dd/MM/yyyy'}}</small></a>\n        </div>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"phone\">Telefone</label>\n      <input type=\"text\" id=\"phone\" name=\"phone\" mask=\"(00)0 0000-0000\" [(ngModel)]=\"pacientPhone\" class=\"form-control\" autocomplete=\"off\" />\n    </div>\n  </div>\n  <div class=\"card-footer text-right\">\n    <button type=\"button\" class=\"btn btn-secondary\" id=\"close\" (click)=\"hide($event)\">Cancelar</button>\n    <button type=\"button\" class=\"btn btn-primary ml-3\" (click)=\"onSubmit()\">Marcar</button>\n  </div>\n</div>\n</div>"
 
 /***/ }),
 
@@ -1970,7 +2112,6 @@ var EventRegisterComponent = /** @class */ (function () {
     EventRegisterComponent.prototype.onKey = function (event) {
         this.selected = false;
         this.pacient = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Pacient"]();
-        console.log(event.target.value);
         this.pacients = this.pacientService.getByName(event.target.value);
     };
     EventRegisterComponent.prototype.select = function (pacient) {
@@ -1981,23 +2122,23 @@ var EventRegisterComponent = /** @class */ (function () {
         this.pacientPhone = pacient.phone;
     };
     EventRegisterComponent.prototype.onSubmit = function () {
+        var _this = this;
         if (this.selected) {
             var event_1 = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Event"]();
             event_1.pacient = this.pacient;
             event_1.date = this.date;
             event_1.duration = this.configService.getConfig().interval;
-            event_1.user = this.userService.getById(this.user);
-            this.eventService.register(event_1);
-            this.closeAndClean();
         }
         else if ((typeof this.pacientName != 'undefined' && this.pacientName) && (typeof this.pacientPhone != 'undefined' && this.pacientPhone)) {
             var event_2 = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Event"]();
             event_2.pacient = this.newPacient();
             event_2.date = this.date;
             event_2.duration = this.configService.getConfig().interval;
-            event_2.user = this.userService.getById(this.user);
-            this.eventService.register(event_2);
-            this.closeAndClean();
+            this.userService.getById(this.user).subscribe(function (user) {
+                event_2.user = user;
+                _this.eventService.register(event_2);
+                _this.closeAndClean();
+            });
         }
     };
     EventRegisterComponent.prototype.newPacient = function () {
@@ -2103,7 +2244,7 @@ module.exports = "body {\n    font-size: .875rem;\n  }\n  \n  .feather {\n    wi
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom\">\n    <h1 class=\"h2\">Recepção</h1>\n    <div class=\"btn-toolbar mb-2 mb-md-0\">\n  \n      <div class=\"btn-group mr-2\">\n        <button class=\"btn btn-sm btn-outline-secondary\" routerLink=\"/home/consult\">Nova Consulta</button>\n        <button class=\"btn btn-sm btn-outline-primary\" routerLink=\"/home/pacient\">Cadastro Cliente</button>\n      </div>\n      <div class=\"dropdown dropleft\">\n        <button class=\"btn btn-secondary btn-outline-secondary dropdown-toggle\" type=\"button\" id=\"dropdownMenuButton\"\n          data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n          Atalho Agenda\n        </button>\n        <div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenuButton\">\n          <a *ngFor=\"let user of userService.getAttendants()\" class=\"dropdown-item\" [routerLink]=\"['/home/agenda', user.id]\">{{user.name}}</a>\n        </div>\n      </div>\n    </div>\n  </div>\n<router-outlet></router-outlet>\n"
+module.exports = "<div class=\"d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom\">\n    <h1 class=\"h2\">Recepção</h1>\n    <div class=\"btn-toolbar mb-2 mb-md-0\">\n  \n      <div class=\"btn-group mr-2\">\n        <button class=\"btn btn-sm btn-outline-secondary\" routerLink=\"/home/consult\">Nova Consulta</button>\n        <button class=\"btn btn-sm btn-outline-primary\" routerLink=\"/home/pacient\">Cadastro Cliente</button>\n      </div>\n      <div class=\"dropdown dropleft\">\n        <button class=\"btn btn-secondary btn-outline-secondary dropdown-toggle\" type=\"button\" id=\"dropdownMenuButton\"\n          data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n          Atalho Agenda\n        </button>\n        <div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenuButton\">\n          <a *ngFor=\"let user of attendants\" class=\"dropdown-item\" [routerLink]=\"['/home/agenda', user.id]\">{{user.name}}</a>\n        </div>\n      </div>\n    </div>\n  </div>\n<router-outlet></router-outlet>\n"
 
 /***/ }),
 
@@ -2136,6 +2277,8 @@ var HomeComponent = /** @class */ (function () {
         this.users = [];
     }
     HomeComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.userService.getAttendants().subscribe(function (u) { return _this.attendants = u; });
         //this.loadAllUsers();
     };
     HomeComponent = __decorate([
@@ -2174,12 +2317,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 /* harmony import */ var ng2_completer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ng2-completer */ "./node_modules/ng2-completer/esm5/ng2-completer.js");
+/* harmony import */ var ngx_mask__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ngx-mask */ "./node_modules/ngx-mask/fesm5/ngx-mask.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -2200,6 +2345,7 @@ var HomeModule = /** @class */ (function () {
             imports: [
                 _angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"], _angular_platform_browser__WEBPACK_IMPORTED_MODULE_9__["BrowserModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_10__["ReactiveFormsModule"],
+                ngx_mask__WEBPACK_IMPORTED_MODULE_12__["NgxMaskModule"].forChild(),
                 _home_routing_module__WEBPACK_IMPORTED_MODULE_3__["HomeRoutingModule"], _home_routing_module__WEBPACK_IMPORTED_MODULE_3__["HomeRoutingModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_10__["FormsModule"], ng2_completer__WEBPACK_IMPORTED_MODULE_11__["Ng2CompleterModule"]
             ],
             declarations: [
@@ -2234,7 +2380,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h4>Pacientes</h4>\n<div id=\"new\" [@popOverState]=\"stateList\">\n    <form [formGroup]=\"registerForm\" (ngSubmit)=\"onSubmit()\">\n        <div class=\"form-row\">\n            <div class=\"form-group col-md-6\">\n                <label for=\"name\">Nome Completo</label>\n                <input type=\"text\" class=\"form-control\" id=\"name\" name=\"name\" formControlName=\"name\" placeholder=\"Nome Completo\" [ngClass]=\"{ 'is-invalid': submitted && f.name.errors }\">\n                <div *ngIf=\"submitted && f.name.errors\" class=\"invalid-feedback\">\n                    <div *ngIf=\"f.name.errors.required\">Obrigatório</div>\n                </div>\n            </div>\n            <div class=\"form-group col-md-3\">\n                <label for=\"cpf\">CPF</label>\n                <input type=\"text\" class=\"form-control\" id=\"cpf\" name=\"cpf\" formControlName=\"cpf\" placeholder=\"CPF\">\n            </div>\n            <div class=\"form-group col-md-3\">\n                <label for=\"birthday\">Data de Nascimento</label>\n                <input id=\"birthday\" name=\"birthday\" placeholder=\"DD/MM/AAAA\" formControlName=\"birthday\" class=\"form-control\"\n                    type=\"date\">\n            </div>\n        </div>\n        <div class=\"form-row\">\n            <div class=\"form-group col-md-6\">\n                <label for=\"phone\">Telefone</label>\n                <input type=\"text\" class=\"form-control\" id=\"phone\" name=\"phone\" formControlName=\"phone\" placeholder=\"Telefone\" [ngClass]=\"{ 'is-invalid': submitted && f.phone.errors }\">\n                <div *ngIf=\"submitted && f.phone.errors\" class=\"invalid-feedback\">\n                    <div *ngIf=\"f.phone.errors.required\">Obrigatório</div>\n                </div>\n            </div>\n            <div class=\"form-group col-md-6\">\n                <label for=\"email\">Email</label>\n                <input type=\"email\" class=\"form-control\" id=\"email\" name=\"email\" formControlName=\"email\" placeholder=\"Email\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <div>\n                <h6>Endereço</h6>\n            </div>\n            <div class=\"form-row\">\n                <div class=\"form-group col-md-3\">\n                    <label for=\"street\">Rua</label>\n                    <input type=\"text\" class=\"form-control\" id=\"street\" name=\"street\" formControlName=\"street\">\n                </div>\n                <div class=\"form-group col-md-1\">\n                    <label for=\"number\">Número</label>\n                    <input type=\"text\" class=\"form-control\" id=\"number\" name=\"number\" formControlName=\"number\">\n                </div>\n                <div class=\"form-group col-md-2\">\n                    <label for=\"complement\">Complemento</label>\n                    <input type=\"text\" class=\"form-control\" id=\"complement\" name=\"complement\" formControlName=\"complement\">\n                </div>\n                <div class=\"form-group col-md-2\">\n                    <label for=\"city\">Cidade</label>\n                    <input type=\"text\" class=\"form-control\" id=\"city\" name=\"city\" formControlName=\"city\">\n                </div>\n                <div class=\"form-group col-md-2\">\n                    <label for=\"state\">Estado</label>\n                    <select id=\"state\" class=\"form-control\" name=\"state\" formControlName=\"state\">\n                        <option selected value=\"1\">Rio de Janeiro</option>\n                        <option value=\"2\">São Paulo</option>\n                    </select>\n                </div>\n                <div class=\"form-group col-md-2\">\n                    <label for=\"zip\">CEP</label>\n                    <input type=\"text\" class=\"form-control\" id=\"zip\" name=\"zip\" formControlName=\"zip\">\n                </div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <button [disabled]=\"loading\" class=\"btn btn-success btn-sm\">Salvar</button>\n            <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\n        </div>\n    </form>\n</div>\n<button class=\"btn btn-primary btn-sm mb-3 float-right\" (click)=\"toggle()\">{{title}}</button>\n<div id=\"list\">\n    <table class=\"table table-striped table-sm\">\n        <thead>\n            <tr>\n                <th scope=\"col\">Nome</th>\n                <th scope=\"col\">CPF</th>\n                <th scope=\"col\">Email</th>\n                <th scope=\"col\"></th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr *ngFor=\"let pacient of pacientService.getAll()\">\n                <td>{{ pacient.name }} </td>\n                <td>{{ pacient.cpf }}</td>\n                <td>{{ pacient.email }}</td>\n                <td>\n                    <a class=\"btn btn-info btn-sm\" (click)=\"edit(pacient.id)\">\n                        <i class=\"far fa-edit\"></i></a>\n                    <a class=\"btn btn-danger btn-sm ml-1\" (click)=\"delete(pacient.id)\">\n                        <i class=\"far fa-trash-alt\"></i></a></td>\n            </tr>\n        </tbody>\n    </table>\n</div>"
+module.exports = "<h4>Pacientes</h4>\n<div id=\"new\" [@popOverState]=\"stateList\">\n    <form [formGroup]=\"registerForm\" (ngSubmit)=\"onSubmit()\">\n        <div class=\"form-row\">\n            <div class=\"form-group col-md-6\">\n                <label for=\"name\">Nome Completo</label>\n                <input type=\"text\" class=\"form-control\" id=\"name\" name=\"name\" formControlName=\"name\" placeholder=\"Nome Completo\" [ngClass]=\"{ 'is-invalid': submitted && f.name.errors }\">\n                <div *ngIf=\"submitted && f.name.errors\" class=\"invalid-feedback\">\n                    <div *ngIf=\"f.name.errors.required\">Obrigatório</div>\n                </div>\n            </div>\n            <div class=\"form-group col-md-3\">\n                <label for=\"cpf\">CPF</label>\n                <input type=\"text\" class=\"form-control\" id=\"cpf\" name=\"cpf\" formControlName=\"cpf\" placeholder=\"CPF\">\n            </div>\n            <div class=\"form-group col-md-3\">\n                <label for=\"birthday\">Data de Nascimento</label>\n                <input id=\"birthday\" name=\"birthday\" placeholder=\"DD/MM/AAAA\" formControlName=\"birthday\" class=\"form-control\"\n                    type=\"date\">\n            </div>\n        </div>\n        <div class=\"form-row\">\n            <div class=\"form-group col-md-6\">\n                <label for=\"phone\">Telefone</label>\n                <input type=\"text\" class=\"form-control\" id=\"phone\" name=\"phone\" mask=\"(00)0 0000-0000\" formControlName=\"phone\" placeholder=\"Telefone\" [ngClass]=\"{ 'is-invalid': submitted && f.phone.errors }\">\n                <div *ngIf=\"submitted && f.phone.errors\" class=\"invalid-feedback\">\n                    <div *ngIf=\"f.phone.errors.required\">Obrigatório</div>\n                </div>\n            </div>\n            <div class=\"form-group col-md-6\">\n                <label for=\"email\">Email</label>\n                <input type=\"email\" class=\"form-control\" id=\"email\" name=\"email\" formControlName=\"email\" placeholder=\"Email\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <div>\n                <h6>Endereço</h6>\n            </div>\n            <div class=\"form-row\">\n                <div class=\"form-group col-md-3\">\n                    <label for=\"street\">Rua</label>\n                    <input type=\"text\" class=\"form-control\" id=\"street\" name=\"street\" formControlName=\"street\">\n                </div>\n                <div class=\"form-group col-md-1\">\n                    <label for=\"number\">Número</label>\n                    <input type=\"text\" class=\"form-control\" id=\"number\" name=\"number\" formControlName=\"number\">\n                </div>\n                <div class=\"form-group col-md-2\">\n                    <label for=\"complement\">Complemento</label>\n                    <input type=\"text\" class=\"form-control\" id=\"complement\" name=\"complement\" formControlName=\"complement\">\n                </div>\n                <div class=\"form-group col-md-2\">\n                    <label for=\"city\">Cidade</label>\n                    <input type=\"text\" class=\"form-control\" id=\"city\" name=\"city\" formControlName=\"city\">\n                </div>\n                <div class=\"form-group col-md-2\">\n                    <label for=\"state\">Estado</label>\n                    <select id=\"state\" class=\"form-control\" name=\"state\" formControlName=\"state\">\n                        <option selected value=\"1\">Rio de Janeiro</option>\n                        <option value=\"2\">São Paulo</option>\n                    </select>\n                </div>\n                <div class=\"form-group col-md-2\">\n                    <label for=\"zip\">CEP</label>\n                    <input type=\"text\" class=\"form-control\" id=\"zip\" name=\"zip\" formControlName=\"zip\">\n                </div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <button [disabled]=\"loading\" class=\"btn btn-success btn-sm\">Salvar</button>\n            <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\n        </div>\n    </form>\n</div>\n<button class=\"btn btn-primary btn-sm mb-3 float-right\" (click)=\"toggle()\">{{title}}</button>\n<div id=\"list\">\n    <table class=\"table table-striped table-sm\">\n        <thead>\n            <tr>\n                <th scope=\"col\">Nome</th>\n                <th scope=\"col\">CPF</th>\n                <th scope=\"col\">Email</th>\n                <th scope=\"col\"></th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr *ngFor=\"let pacient of pacientService.getAll()\">\n                <td>{{ pacient.name }} </td>\n                <td>{{ pacient.cpf }}</td>\n                <td>{{ pacient.email }}</td>\n                <td>\n                    <a class=\"btn btn-info btn-sm\" (click)=\"edit(pacient.id)\">\n                        <i class=\"far fa-edit\"></i></a>\n                    <a class=\"btn btn-danger btn-sm ml-1\" (click)=\"delete(pacient.id)\">\n                        <i class=\"far fa-trash-alt\"></i></a></td>\n            </tr>\n        </tbody>\n    </table>\n</div>"
 
 /***/ }),
 
@@ -2628,6 +2774,7 @@ var LoginComponent = /** @class */ (function () {
             .subscribe(function (data) {
             _this.router.navigate([_this.returnUrl]);
         }, function (error) {
+            console.log(error);
             _this.alertService.error("Usuário ou senha incorretos");
             _this.loading = false;
         });
@@ -2772,7 +2919,7 @@ __webpack_require__.r(__webpack_exports__);
 // The list of file replacements can be found in `angular.json`.
 var environment = {
     production: false,
-    apiUrl: 'http://localhost:4000'
+    apiUrl: 'http://localhost:8888/api'
 };
 /*
  * In development mode, to ignore zone related error stack frames such as
