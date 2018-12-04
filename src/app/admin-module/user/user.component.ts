@@ -77,18 +77,18 @@ export class UserComponent implements OnInit {
   ngOnInit() {
     this.userService.getAll().subscribe((res: any[]) => {
       this.users = res;
-      this.rolesService.getAll().subscribe((res: any[]) => {
-        this.roles = res;
-        this.registerForm = this.formBuilder.group({
-          name: ['', Validators.required],
-          username: ['', Validators.required],
-          email: ['', Validators.required],
-          role: ['', Validators.required],
-          password: ['']
-        });
-        this.title = this.show ? 'Cancelar' : 'Cadastrar'
-      });
     });
+    this.rolesService.getAll().subscribe((res: any[]) => {
+      this.roles = res;
+    });
+    this.registerForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      username: ['', Validators.required],
+      email: ['', Validators.required],
+      role: ['', Validators.required],
+      password: ['']
+    });
+    this.title = this.show ? 'Cancelar' : 'Cadastrar';
   }
 
 
