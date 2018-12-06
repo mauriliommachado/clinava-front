@@ -1,9 +1,9 @@
-﻿import {User, Pacient} from "./";
+﻿import {User, Patient} from "./";
 
 export class Event {
     id: string;
     user: User;
-    pacient: Pacient;
+    patient: Patient;
     date: Date;
     obs: string;
     duration: number;

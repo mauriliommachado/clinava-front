@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Patient, Address } from '../../_models';
+import { Patient, Address, Contact } from '../../_models';
 import { PatientService } from '../../_services';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -30,9 +30,9 @@ import {
     ])
   ]
 })
-export class PacientComponent implements OnInit {
+export class PatientComponent implements OnInit {
 
-  currentPacient: string;
+  currentPatient: string;
   title: String;
   registerForm: FormGroup;
   loading = false;
@@ -41,13 +41,13 @@ export class PacientComponent implements OnInit {
   editing = false;
   patients: Array<Patient>;
 
-  constructor(private formBuilder: FormBuilder, private pacientService: PatientService) {
+  constructor(private formBuilder: FormBuilder, private patientService: PatientService) {
 
   }
 
 
   ngOnInit() {
-    this.pacientService.getAll().subscribe(resp => this.patients = resp);
+    this.patientService.getAll().subscribe(resp => this.patients = resp);
     this.cleanForm();
     this.title = this.show ? 'Cancelar' : 'Cadastrar'
   }
@@ -62,6 +62,9 @@ export class PacientComponent implements OnInit {
     this.show = !this.show;
     if (this.editing && !this.show) {
       this.cleanForm()
+    }
+    if(this.editing){
+      this.editing = false;
     }
     this.title = this.show ? 'Cancelar' : 'Cadastrar'
   }
@@ -86,28 +89,31 @@ export class PacientComponent implements OnInit {
   get f() { return this.registerForm.controls; }
 
   edit(id: string) {
-    let pacient = new Patient();
-    this.pacientService.getById(id).subscribe(resp => pacient = <Patient>resp);
-    this.registerForm = this.formBuilder.group({
-      name: [pacient.name, Validators.required],
-      cpf: [pacient.cpf],
-      birthday: [pacient.birthday ? pacient.birthday.toISOString().split('T')[0] : ''],
-      phone: [pacient.phone, Validators.required],
-      email: [pacient.email],
-      street: [pacient.address ? pacient.address.street : ''],
-      number: [pacient.address ? pacient.address.number : ''],
-      complement: [pacient.address ? pacient.address.complement : ''],
-      city: [pacient.address ? pacient.address.city : ''],
-      state: [pacient.address ? pacient.address.state : ''],
-      zip: [pacient.address ? pacient.address.zip : '']
+    let patient = new Patient();
+    this.patientService.getById(id).subscribe(resp => {patient = <Patient>resp
+      this.registerForm = this.formBuilder.group({
+        name: [patient.name, Validators.required],
+        cpf: [patient.cpf],
+        birthday: [patient.birthday ? patient.birthday.toISOString().split('T')[0] : ''],
+        phone: ['', Validators.required],
+        email: [patient.email],
+        street: [patient.address ? patient.address.street : ''],
+        number: [patient.address ? patient.address.number : ''],
+        complement: [patient.address ? patient.address.complement : ''],
+        city: [patient.address ? patient.address.city : ''],
+        state: [patient.address ? patient.address.state : ''],
+        zip: [patient.address ? patient.address.zip : '']
+      });
+      this.currentPatient = id;
+      this.toggle();
+      this.editing = true;
     });
-    this.editing = true;
-    this.currentPacient = id;
-    this.toggle();
   }
 
   delete(id: string) {
-    this.pacientService.delete(id);
+    this.patientService.delete(id).subscribe(resp=> {
+      this.patientService.getAll().subscribe(resp => this.patients = resp);
+    });
   }
 
   onSubmit() {
@@ -131,11 +137,15 @@ export class PacientComponent implements OnInit {
     address.zip = form.zip;
     patient.address = address;
     if (this.editing) {
-      patient.id = this.currentPacient;
-      this.pacientService.update(patient);
+      patient.id = this.currentPatient;
+      this.patientService.update(patient).subscribe(r=> {
+        this.patientService.getAll().subscribe(resp => this.patients = resp);
+      });
       this.editing = false;
     } else {
-      this.pacientService.register(patient);
+      this.patientService.register(patient).subscribe(r=> {
+        this.patientService.getAll().subscribe(resp => this.patients = resp);
+      });
     }
     this.toggle();
     this.cleanForm();

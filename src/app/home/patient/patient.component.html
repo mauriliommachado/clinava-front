@@ -1,4 +1,4 @@
-<h4>Pacientes</h4>
+<h4>Patientes</h4>
 <div id="new" [@popOverState]="stateList">
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="form-row">
@@ -84,14 +84,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let pacient of pacients">
-                <td>{{ pacient.name }} </td>
-                <td>{{ pacient.cpf }}</td>
-                <td>{{ pacient.email }}</td>
+            <tr *ngFor="let patient of patients">
+                <td>{{ patient.name }} </td>
+                <td>{{ patient.cpf }}</td>
+                <td>{{ patient.email }}</td>
                 <td>
-                    <a class="btn btn-info btn-sm" (click)="edit(pacient.id)">
+                    <a class="btn btn-info btn-sm" (click)="edit(patient.id)">
                         <i class="far fa-edit"></i></a>
-                    <a class="btn btn-danger btn-sm ml-1" (click)="delete(pacient.id)">
+                    <a class="btn btn-danger btn-sm ml-1" (click)="delete(patient.id)">
                         <i class="far fa-trash-alt"></i></a></td>
             </tr>
         </tbody>

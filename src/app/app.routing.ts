@@ -7,7 +7,7 @@ import { AuthGuard } from './_guards';
 import { HomeComponent } from './home/home.component';
 import { ConsultComponent } from './home/consult/consult.component'
 import { AgendaComponent } from './home/agenda/agenda.component';
-import { PacientComponent } from './home/pacient/pacient.component';
+import { PatientComponent } from './home/patient/patient.component';
 import { UserComponent } from './admin-module/user/user.component';
 import { ConfigurationComponent } from './admin-module/configuration/configuration.component';
 import { AdminComponent } from './admin-module/admin.component';
@@ -22,7 +22,7 @@ const appRoutes: Routes = [
             {path: 'agenda', component: AgendaComponent},
             {path: 'agenda/:id', component: AgendaComponent},
             {path: 'consult', component: ConsultComponent},
-            {path: 'pacient', component: PacientComponent}
+            {path: 'patient', component: PatientComponent}
           ]}
         ]
     },{

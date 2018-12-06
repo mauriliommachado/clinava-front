@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Event } from '../../_models/event';
 import { Config } from '../../_models/config';
-import { UserService, ConfigService, EventService, PacientService } from '../../_services';
+import { UserService, ConfigService, EventService, PatientService } from '../../_services';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import {
@@ -11,7 +11,7 @@ import {
   animate,
   transition
 } from '@angular/animations';
-import { Pacient } from 'src/app/_models';
+import { Patient } from 'src/app/_models';
 
 @Component({
   selector: 'app-consult',
@@ -50,7 +50,7 @@ export class ConsultComponent implements OnInit {
   attendants;
 
   constructor(private formBuilder: FormBuilder, private userService: UserService, private configService: ConfigService
-    , private eventService: EventService, private pacientService: PacientService) {
+    , private eventService: EventService, private patientService: PatientService) {
     this.config = this.configService.getConfig();
   }
 
@@ -94,7 +94,7 @@ export class ConsultComponent implements OnInit {
   cleanForm() {
     this.registerForm = this.formBuilder.group({
       user: ['', Validators.required],
-      pacient: ['', Validators.required],
+      patient: ['', Validators.required],
       duration: [this.config.interval, Validators.required],
       date: [this.date, Validators.required],
       obs: [],
@@ -109,7 +109,7 @@ export class ConsultComponent implements OnInit {
     let time = (sHour.length == 1 ? ("0" + sHour) : sHour) + ":" + (sMinute.length == 1 ? ("0" + sMinute) : sMinute);
     this.registerForm = this.formBuilder.group({
       user: [event.user.id, Validators.required],
-      pacient: [event.pacient.id, Validators.required],
+      patient: [event.patient.id, Validators.required],
       duration: [event.duration, Validators.required],
       date: [event.date.toISOString().split('T')[0], Validators.required],
       obs: [event.obs],
@@ -135,8 +135,8 @@ export class ConsultComponent implements OnInit {
     event.date.setMinutes(this.registerForm.value.time.split(':')[1]);
     this.userService.getById(this.registerForm.value.user).subscribe(user => {
       event.user = user;
-      this.pacientService.getById(this.registerForm.value.pacient).subscribe(resp => {
-        event.pacient = <Pacient>resp;
+      this.patientService.getById(this.registerForm.value.patient).subscribe(resp => {
+        event.patient = <Patient>resp;
         if (this.editing) {
           event.id = this.currentEvent;
           this.eventService.update(event);

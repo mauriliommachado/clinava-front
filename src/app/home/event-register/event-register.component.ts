@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { PacientService, ConfigService, UserService, EventService } from '../../_services';
-import { Pacient, User, Event, Contact } from 'src/app/_models';
+import { PatientService, ConfigService, UserService, EventService } from '../../_services';
+import { Patient, User, Event, Contact } from 'src/app/_models';
 
 
 
@@ -15,13 +15,13 @@ export class EventRegisterComponent implements OnInit {
   @Input() user: string;
   @Input() visible = false;
 
-  pacients: Pacient[] = [];
-  pacient: Pacient = new Pacient();
+  patients: Patient[] = [];
+  patient: Patient = new Patient();
   selected = false;
-  pacientName: string = "";
-  pacientPhone: string = "";
+  patientName: string = "";
+  patientPhone: string = "";
 
-  constructor(private pacientService: PacientService,
+  constructor(private patientService: PatientService,
     private configService: ConfigService,
     private eventService: EventService,
     private userService: UserService) {
@@ -46,28 +46,28 @@ export class EventRegisterComponent implements OnInit {
 
   onKey(event: any) {
     this.selected = false;
-    this.pacient = new Pacient();
-    this.pacientService.getByName(event.target.value).subscribe(resp => this.pacients = resp);
+    this.patient = new Patient();
+    this.patientService.getByName(event.target.value).subscribe(resp => this.patients = resp);
   }
 
-  select(pacient: Pacient) {
-    this.pacientName = "";
+  select(patient: Patient) {
+    this.patientName = "";
     this.selected = true;
-    this.pacient = pacient;
-    this.pacientName = pacient.name;
-    this.pacientPhone = pacient.birthday.toLocaleDateString();
+    this.patient = patient;
+    this.patientName = patient.name;
+    this.patientPhone = patient.birthday.toLocaleDateString();
   }
 
   onSubmit() {
     if (this.selected) {
       let event = new Event();
-      event.pacient = this.pacient;
+      event.patient = this.patient;
       event.date = this.date;
       event.duration = this.configService.getConfig().interval;
       
-    } else if ((typeof this.pacientName != 'undefined' && this.pacientName) && (typeof this.pacientPhone != 'undefined' && this.pacientPhone)) {
+    } else if ((typeof this.patientName != 'undefined' && this.patientName) && (typeof this.patientPhone != 'undefined' && this.patientPhone)) {
       let event = new Event();
-      event.pacient = this.newPacient();
+      event.patient = this.newPatient();
       event.date = this.date;
       event.duration = this.configService.getConfig().interval;
       this.userService.getById(this.user).subscribe(user => {
@@ -78,22 +78,19 @@ export class EventRegisterComponent implements OnInit {
     }
   }
 
-  newPacient() {
-    let pacient = new Pacient();
-    pacient.name = this.pacientName;
-    let phone = new Contact();
-    phone.contact = this.pacientPhone;
-    pacient.contact = new Array();
-    pacient.contact.push(phone);
-    this.pacientService.register(pacient);
-    return pacient;
+  newPatient() {
+    let patient = new Patient();
+    patient.name = this.patientName;
+    patient.phone = this.patientPhone;
+    this.patientService.register(patient);
+    return patient;
   }
 
   closeAndClean() {
     this.closeModal();
-    this.pacient = new Pacient();
+    this.patient = new Patient();
     this.selected = false;
-    this.pacientName = "";
-    this.pacientPhone = "";
+    this.patientName = "";
+    this.patientPhone = "";
   }
 }

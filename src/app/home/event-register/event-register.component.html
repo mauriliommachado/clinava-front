@@ -2,20 +2,20 @@
 <div class="card w-50">
   <h5 class="card-header">Consulta Rápida</h5>
   <div class="card-body">
-    <div class="form-group" id="pacientDiv">
-      <label for="pacient">Paciente</label>
-      <input type="text" (keyup)="onKey($event)" [(ngModel)]="pacientName" id="pacient" name="pacient" class="form-control"
+    <div class="form-group" id="patientDiv">
+      <label for="patient">Patiente</label>
+      <input type="text" (keyup)="onKey($event)" [(ngModel)]="patientName" id="patient" name="patient" class="form-control"
         autocomplete="off" />
       <div class="w-100">
         <div class="list-group auto-complete" *ngIf="!selected">
-          <a *ngFor="let user of pacients" class="list-group-item list-group-item-action" (click)="select(user)">{{user.name}}
+          <a *ngFor="let user of patients" class="list-group-item list-group-item-action" (click)="select(user)">{{user.name}}
             <small class="float-right">{{user.birthday | date:'dd/MM/yyyy'}}</small></a>
         </div>
       </div>
     </div>
     <div class="form-group">
       <label for="phone">Telefone</label>
-      <input type="text" id="phone" name="phone" mask="(00)0 0000-0000" [(ngModel)]="pacientPhone" class="form-control" autocomplete="off" />
+      <input type="text" id="phone" name="phone" mask="(00)0 0000-0000" [(ngModel)]="patientPhone" class="form-control" autocomplete="off" />
     </div>
   </div>
   <div class="card-footer text-right">

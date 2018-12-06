@@ -27,12 +27,12 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="user">Paciente</label>
-            <select formControlName="pacient" class="form-control"  [ngClass]="{ 'is-invalid': submitted && f.pacient.errors }">
-                <option [value]="pacient.id" *ngFor="let pacient of pacientService.getAll()">{{pacient.name}}</option>
+            <label for="user">Patiente</label>
+            <select formControlName="patient" class="form-control"  [ngClass]="{ 'is-invalid': submitted && f.patient.errors }">
+                <option [value]="patient.id" *ngFor="let patient of patientService.getAll()">{{patient.name}}</option>
             </select>
-            <div *ngIf="submitted && f.pacient.errors" class="invalid-feedback">
-                <div *ngIf="f.pacient.errors.required">Obrigatório</div>
+            <div *ngIf="submitted && f.patient.errors" class="invalid-feedback">
+                <div *ngIf="f.patient.errors.required">Obrigatório</div>
             </div>
         </div>
         <div class="form-group">
@@ -67,7 +67,7 @@
         <thead>
             <tr>
                 <th scope="col">Data</th>
-                <th scope="col">Paciente</th>
+                <th scope="col">Patiente</th>
                 <th scope="col">Observação</th>
                 <th scope="col">Atendente</th>
                 <th scope="col"></th>
@@ -76,7 +76,7 @@
         <tbody>
             <tr *ngFor="let event of eventService.getAll()">
                 <td>{{ event.date | date:'dd/MM/yy - HH:mm' }}</td>
-                <td>{{ event.pacient.name }}</td>
+                <td>{{ event.patient.name }}</td>
                 <td>{{ event.obs }}</td>
                 <td>{{ event.user.name }}</td>
                 <td>

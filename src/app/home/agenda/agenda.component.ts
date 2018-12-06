@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Event } from '../../_models/event'
-import { User, Config, Pacient } from '../../_models';
+import { User, Config, Patient } from '../../_models';
 import { ConfigService, EventService, UserService } from '../../_services';
 import { ActivatedRoute } from '@angular/router';
 
