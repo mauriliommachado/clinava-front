@@ -48,6 +48,8 @@ export class ConsultComponent implements OnInit {
   date: string;
   time: string;
   attendants;
+  patients;
+  events;
 
   constructor(private formBuilder: FormBuilder, private userService: UserService, private configService: ConfigService
     , private eventService: EventService, private patientService: PatientService) {
@@ -57,6 +59,8 @@ export class ConsultComponent implements OnInit {
 
   ngOnInit() {
     this.userService.getAttendants().subscribe(resp => this.attendants = resp);
+    this.patientService.getAll().subscribe(resp => this.patients = resp);
+    this.eventService.getAll().subscribe(resp => this.events = resp);
     this.indexDate = new Date();
     if ((this.indexDate.getHours()) < this.config.hourInit) {
       this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (this.config.hourInit - this.indexDate.getHours())));
@@ -103,21 +107,23 @@ export class ConsultComponent implements OnInit {
   }
 
   edit(id: string) {
-    let event = this.eventService.getById(id);
-    let sHour: string = event.date.getHours().toLocaleString();
-    let sMinute: string = event.date.getMinutes().toLocaleString();
-    let time = (sHour.length == 1 ? ("0" + sHour) : sHour) + ":" + (sMinute.length == 1 ? ("0" + sMinute) : sMinute);
-    this.registerForm = this.formBuilder.group({
-      user: [event.user.id, Validators.required],
-      patient: [event.patient.id, Validators.required],
-      duration: [event.duration, Validators.required],
-      date: [event.date.toISOString().split('T')[0], Validators.required],
-      obs: [event.obs],
-      time: [time, Validators.required]
+    this.eventService.getById(id).subscribe(resp => {
+      let event = <Event>resp;
+      let sHour: string = event.date.getHours().toLocaleString();
+      let sMinute: string = event.date.getMinutes().toLocaleString();
+      let time = (sHour.length == 1 ? ("0" + sHour) : sHour) + ":" + (sMinute.length == 1 ? ("0" + sMinute) : sMinute);
+      this.registerForm = this.formBuilder.group({
+        user: [event.user.id, Validators.required],
+        patient: [event.patient.id, Validators.required],
+        duration: [event.duration, Validators.required],
+        date: [event.date.toISOString().split('T')[0], Validators.required],
+        obs: [event.obs],
+        time: [time, Validators.required]
+      });
+      this.editing = true;
+      this.currentEvent = id;
+      this.toggle();
     });
-    this.editing = true;
-    this.currentEvent = id;
-    this.toggle();
   }
 
   delete(id: string) {
@@ -142,8 +148,7 @@ export class ConsultComponent implements OnInit {
           this.eventService.update(event);
           this.editing = false;
         } else {
-          event.id = (this.eventService.getAll().length + 1).toString();
-          this.eventService.register(event);
+          this.eventService.register(event).subscribe(resp=> resp);
         }
         this.toggle();
         this.cleanForm();

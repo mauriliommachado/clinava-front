@@ -22,7 +22,7 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="phone">Telefone</label>
-                <input type="text" class="form-control" id="phone" name="phone" mask="(00)0 0000-0000" formControlName="phone" placeholder="Telefone" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }">
+                <input type="text" class="form-control" id="phone" name="phone" formControlName="phone" placeholder="Telefone" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }">
                 <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
                     <div *ngIf="f.phone.errors.required">Obrigatório</div>
                 </div>
@@ -36,6 +36,7 @@
             <div>
                 <h6>Endereço</h6>
             </div>
+            <input type="text" class="d-none" id="id" name="cpf" formControlName="addressId" placeholder="CPF">
             <div class="form-row">
                 <div class="form-group col-md-3">
                     <label for="street">Rua</label>

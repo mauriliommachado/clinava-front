@@ -367,7 +367,7 @@ var Event = /** @class */ (function () {
 /*!**********************************!*\
   !*** ./src/app/_models/index.ts ***!
   \**********************************/
-/*! exports provided: Config, Event, User, Pacient, Address, Role, Contact */
+/*! exports provided: Config, Event, User, Patient, Address, Role, Contact */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -381,8 +381,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _event__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./event */ "./src/app/_models/event.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Event", function() { return _event__WEBPACK_IMPORTED_MODULE_2__["Event"]; });
 
-/* harmony import */ var _pacient__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pacient */ "./src/app/_models/pacient.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Pacient", function() { return _pacient__WEBPACK_IMPORTED_MODULE_3__["Pacient"]; });
+/* harmony import */ var _patient__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./patient */ "./src/app/_models/patient.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Patient", function() { return _patient__WEBPACK_IMPORTED_MODULE_3__["Patient"]; });
 
 /* harmony import */ var _address__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./address */ "./src/app/_models/address.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Address", function() { return _address__WEBPACK_IMPORTED_MODULE_4__["Address"]; });
@@ -404,20 +404,20 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/app/_models/pacient.ts":
+/***/ "./src/app/_models/patient.ts":
 /*!************************************!*\
-  !*** ./src/app/_models/pacient.ts ***!
+  !*** ./src/app/_models/patient.ts ***!
   \************************************/
-/*! exports provided: Pacient */
+/*! exports provided: Patient */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Pacient", function() { return Pacient; });
-var Pacient = /** @class */ (function () {
-    function Pacient() {
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Patient", function() { return Patient; });
+var Patient = /** @class */ (function () {
+    function Patient() {
     }
-    return Pacient;
+    return Patient;
 }());
 
 
@@ -563,7 +563,7 @@ var AuthenticationService = /** @class */ (function () {
         this.http = http;
     }
     AuthenticationService.prototype.login = function (username, password) {
-        return this.http.post("https://clinava.herokuapp.com/api/auth/signin", { username: username, password: password })
+        return this.http.post("http://localhost:8888/api/auth/signin", { username: username, password: password })
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (response) {
             // login successful if there's a jwt token in the response
             if (response && response.accessToken) {
@@ -574,7 +574,7 @@ var AuthenticationService = /** @class */ (function () {
         }));
     };
     AuthenticationService.prototype.signin = function (user) {
-        return this.http.post("https://clinava.herokuapp.com/api/auth/signup", user)
+        return this.http.post("http://localhost:8888/api/auth/signup", user)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (response) {
             alert(response);
             return response;
@@ -669,6 +669,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventService", function() { return EventService; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../environments/environment */ "./src/environments/environment.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -680,37 +681,31 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 
+
 var EventService = /** @class */ (function () {
     function EventService(http) {
         this.http = http;
-        this.events = new Array();
     }
     EventService.prototype.getAll = function () {
-        return this.events.sort(function (n1, n2) { return n1.date.getTime() - n2.date.getTime(); });
-        //return this.http.get<Event[]>(`${environment.apiUrl}/events`);
+        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/events");
     };
     EventService.prototype.getByTime = function (date, interval, id) {
         //this should search in a range
         var endDate = new Date(date.getTime() + interval * 60000);
-        return this.getAll().filter(function (e) { return e.user.id == id && e.date.getTime() >= date.getTime() && e.date.getTime() < endDate.getTime(); });
-        //return this.http.get<Event[]>(`${environment.apiUrl}/events`);
+        return new Array().filter(function (e) { return e.user.id == id && e.date.getTime() >= date.getTime() && e.date.getTime() < endDate.getTime(); });
+        //return this.http.get<Event[]>(`${environment.apiUrl}/events?userId=` + id + '&startTime=' + date.getTime() + '&startTime=' + date.getTime());
     };
     EventService.prototype.getById = function (id) {
-        return this.events.find(function (u) { return u.id == id; });
-        //return this.http.get(`${environment.apiUrl}/events/` + id);
+        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/events/" + id);
     };
     EventService.prototype.register = function (event) {
-        this.events.push(event);
-        //return this.http.post(`${environment.apiUrl}/events/register`, event);
+        return this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/events", event).map(function (resp) { return resp; });
     };
     EventService.prototype.update = function (event) {
-        this.delete(event.id);
-        this.register(event);
-        //return this.http.put(`${environment.apiUrl}/events/` + event.id, event);
+        return this.http.put(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/events/" + event.id, event).map(function (resp) { return resp; });
     };
     EventService.prototype.delete = function (id) {
-        this.events = this.events.filter(function (e) { return e.id !== id; });
-        //return this.http.delete(`${environment.apiUrl}/events/` + id);
+        return this.http.delete(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/events/" + id).map(function (resp) { return resp; });
     };
     EventService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
@@ -727,7 +722,7 @@ var EventService = /** @class */ (function () {
 /*!************************************!*\
   !*** ./src/app/_services/index.ts ***!
   \************************************/
-/*! exports provided: AlertService, AuthenticationService, UserService, EventService, ConfigService, PacientService, RoleService */
+/*! exports provided: AlertService, AuthenticationService, UserService, EventService, ConfigService, PatientService, RoleService */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -747,8 +742,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _config_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./config.service */ "./src/app/_services/config.service.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ConfigService", function() { return _config_service__WEBPACK_IMPORTED_MODULE_4__["ConfigService"]; });
 
-/* harmony import */ var _pacient_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pacient.service */ "./src/app/_services/pacient.service.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "PacientService", function() { return _pacient_service__WEBPACK_IMPORTED_MODULE_5__["PacientService"]; });
+/* harmony import */ var _patient_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./patient.service */ "./src/app/_services/patient.service.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "PatientService", function() { return _patient_service__WEBPACK_IMPORTED_MODULE_5__["PatientService"]; });
 
 /* harmony import */ var _roles_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./roles.service */ "./src/app/_services/roles.service.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "RoleService", function() { return _roles_service__WEBPACK_IMPORTED_MODULE_6__["RoleService"]; });
@@ -764,19 +759,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/app/_services/pacient.service.ts":
+/***/ "./src/app/_services/patient.service.ts":
 /*!**********************************************!*\
-  !*** ./src/app/_services/pacient.service.ts ***!
+  !*** ./src/app/_services/patient.service.ts ***!
   \**********************************************/
-/*! exports provided: PacientService */
+/*! exports provided: PatientService */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PacientService", function() { return PacientService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PatientService", function() { return PatientService; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var _models__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../_models */ "./src/app/_models/index.ts");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../environments/environment */ "./src/environments/environment.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -789,49 +784,36 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-var PacientService = /** @class */ (function () {
-    function PacientService(http) {
+var PatientService = /** @class */ (function () {
+    function PatientService(http) {
         this.http = http;
-        this.pacients = new Array();
-        var pacient = new _models__WEBPACK_IMPORTED_MODULE_2__["Pacient"]();
-        pacient.id = (this.pacients.length + 1).toString();
-        pacient.name = "Lucas Torres";
-        pacient.phone = "(24) 981478088";
-        pacient.birthday = new Date();
-        this.register(pacient);
     }
-    PacientService.prototype.getAll = function () {
-        return this.pacients;
-        //return this.http.get<Pacient[]>(`${environment.apiUrl}/pacients`);
+    PatientService.prototype.getAll = function () {
+        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/patients");
     };
-    PacientService.prototype.getByName = function (name) {
+    PatientService.prototype.getByName = function (name) {
         if (!name || name == "") {
             return;
         }
-        return this.getAll().filter(function (p) { return p.name.toLowerCase().includes(name.toLowerCase()); });
+        return this.getAll(); //.filter(p => p.name.toLowerCase().includes(name.toLowerCase()));
     };
-    PacientService.prototype.getById = function (id) {
-        return this.pacients.find(function (u) { return u.id == id; });
-        //return this.http.get(`${environment.apiUrl}/pacients/` + id);
+    PatientService.prototype.getById = function (id) {
+        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/patients/" + id);
     };
-    PacientService.prototype.register = function (pacient) {
-        this.pacients.push(pacient);
-        //return this.http.post(`${environment.apiUrl}/pacients/register`, pacient);
+    PatientService.prototype.register = function (patient) {
+        return this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/patients/", patient).map(function (resp) { return resp; });
     };
-    PacientService.prototype.update = function (pacient) {
-        this.delete(pacient.id);
-        this.register(pacient);
-        //return this.http.put(`${environment.apiUrl}/pacients/` + pacient.id, pacient);
+    PatientService.prototype.update = function (patient) {
+        return this.http.put(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/patients/" + patient.id, patient).map(function (resp) { return resp; });
     };
-    PacientService.prototype.delete = function (id) {
-        this.pacients = this.pacients.filter(function (e) { return e.id !== id; });
-        //return this.http.delete(`${environment.apiUrl}/pacients/` + id);
+    PatientService.prototype.delete = function (id) {
+        return this.http.delete(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/patients/" + id).map(function (resp) { return resp; });
     };
-    PacientService = __decorate([
+    PatientService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
         __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]])
-    ], PacientService);
-    return PacientService;
+    ], PatientService);
+    return PatientService;
 }());
 
 
@@ -918,7 +900,7 @@ var UserService = /** @class */ (function () {
             .map(function (res) { return res; });
     };
     UserService.prototype.getAttendants = function () {
-        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/users").map(function (res) { return res; });
+        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/users?role=ROLE_ADMIN").map(function (res) { return res; });
         //return this.users.filter(u => u.role == "attendant");
     };
     UserService.prototype.getUsers = function () {
@@ -1053,7 +1035,7 @@ var AdminModuleModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "body {\n    font-size: .875rem;\n  }\n  \n  .feather {\n    width: 16px;\n    height: 16px;\n    vertical-align: text-bottom;\n  }\n  \n  /*\n   * Sidebar\n   */\n  \n  .sidebar {\n    position: fixed;\n    top: 0;\n    bottom: 0;\n    left: 0;\n    z-index: 100; /* Behind the navbar */\n    padding: 48px 0 0; /* Height of navbar */\n    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);\n  }\n  \n  .sidebar-sticky {\n    position: relative;\n    top: 0;\n    height: calc(100vh - 48px);\n    padding-top: .5rem;\n    overflow-x: hidden;\n    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */\n  }\n  \n  @supports ((position: -webkit-sticky) or (position: sticky)) {\n    .sidebar-sticky {\n      position: -webkit-sticky;\n      position: sticky;\n    }\n  }\n  \n  .sidebar .nav-link {\n    font-weight: 500;\n    color: #333;\n  }\n  \n  .sidebar .nav-link .feather {\n    margin-right: 4px;\n    color: #999;\n  }\n  \n  .sidebar .nav-link.active {\n    color: #007bff;\n  }\n  \n  .sidebar .nav-link:hover .feather,\n  .sidebar .nav-link.active .feather {\n    color: inherit;\n  }\n  \n  .sidebar-heading {\n    font-size: .75rem;\n    text-transform: uppercase;\n  }\n  \n  /*\n   * Content\n   */\n  \n  [role=\"main\"] {\n    padding-top: 48px; /* Space for fixed navbar */\n  }\n  \n  /*\n   * Navbar\n   */\n  \n  .navbar-brand {\n    padding-top: .75rem;\n    padding-bottom: .75rem;\n    font-size: 1rem;\n    background-color: rgba(0, 0, 0, .25);\n    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);\n  }\n  \n  .navbar .form-control {\n    padding: .75rem 1rem;\n    border-width: 0;\n    border-radius: 0;\n  }\n  \n  .form-control-dark {\n    color: #fff;\n    background-color: rgba(255, 255, 255, .1);\n    border-color: rgba(255, 255, 255, .1);\n  }\n  \n  .form-control-dark:focus {\n    border-color: transparent;\n    box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);\n  }\n  "
+module.exports = "body {\r\n    font-size: .875rem;\r\n  }\r\n  \r\n  .feather {\r\n    width: 16px;\r\n    height: 16px;\r\n    vertical-align: text-bottom;\r\n  }\r\n  \r\n  /*\r\n   * Sidebar\r\n   */\r\n  \r\n  .sidebar {\r\n    position: fixed;\r\n    top: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    z-index: 100; /* Behind the navbar */\r\n    padding: 48px 0 0; /* Height of navbar */\r\n    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);\r\n  }\r\n  \r\n  .sidebar-sticky {\r\n    position: relative;\r\n    top: 0;\r\n    height: calc(100vh - 48px);\r\n    padding-top: .5rem;\r\n    overflow-x: hidden;\r\n    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */\r\n  }\r\n  \r\n  @supports ((position: -webkit-sticky) or (position: sticky)) {\r\n    .sidebar-sticky {\r\n      position: -webkit-sticky;\r\n      position: sticky;\r\n    }\r\n  }\r\n  \r\n  .sidebar .nav-link {\r\n    font-weight: 500;\r\n    color: #333;\r\n  }\r\n  \r\n  .sidebar .nav-link .feather {\r\n    margin-right: 4px;\r\n    color: #999;\r\n  }\r\n  \r\n  .sidebar .nav-link.active {\r\n    color: #007bff;\r\n  }\r\n  \r\n  .sidebar .nav-link:hover .feather,\r\n  .sidebar .nav-link.active .feather {\r\n    color: inherit;\r\n  }\r\n  \r\n  .sidebar-heading {\r\n    font-size: .75rem;\r\n    text-transform: uppercase;\r\n  }\r\n  \r\n  /*\r\n   * Content\r\n   */\r\n  \r\n  [role=\"main\"] {\r\n    padding-top: 48px; /* Space for fixed navbar */\r\n  }\r\n  \r\n  /*\r\n   * Navbar\r\n   */\r\n  \r\n  .navbar-brand {\r\n    padding-top: .75rem;\r\n    padding-bottom: .75rem;\r\n    font-size: 1rem;\r\n    background-color: rgba(0, 0, 0, .25);\r\n    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);\r\n  }\r\n  \r\n  .navbar .form-control {\r\n    padding: .75rem 1rem;\r\n    border-width: 0;\r\n    border-radius: 0;\r\n  }\r\n  \r\n  .form-control-dark {\r\n    color: #fff;\r\n    background-color: rgba(255, 255, 255, .1);\r\n    border-color: rgba(255, 255, 255, .1);\r\n  }\r\n  \r\n  .form-control-dark:focus {\r\n    border-color: transparent;\r\n    box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);\r\n  }\r\n  "
 
 /***/ }),
 
@@ -1064,7 +1046,7 @@ module.exports = "body {\n    font-size: .875rem;\n  }\n  \n  .feather {\n    wi
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom\">\n  <h1 class=\"h2\">Administração</h1>\n  <div class=\"btn-toolbar mb-2 mb-md-0\">\n\n    <div class=\"btn-group mr-2\">\n      <button class=\"btn btn-sm btn-outline-secondary\" routerLink=\"/admin/user\">Usuários</button>\n    </div>\n  </div>\n</div>\n<router-outlet></router-outlet>\n\n"
+module.exports = "\r\n<div class=\"d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom\">\r\n  <h1 class=\"h2\">Administração</h1>\r\n  <div class=\"btn-toolbar mb-2 mb-md-0\">\r\n\r\n    <div class=\"btn-group mr-2\">\r\n      <button class=\"btn btn-sm btn-outline-secondary\" routerLink=\"/admin/user\">Usuários</button>\r\n    </div>\r\n  </div>\r\n</div>\r\n<router-outlet></router-outlet>\r\n\r\n"
 
 /***/ }),
 
@@ -1130,7 +1112,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h4>Configurações</h4>\n<br>\n<div id=\"new\">\n  <form [formGroup]=\"registerForm\" (ngSubmit)=\"onSubmit()\">\n    <div class=\"form-group\">\n      <label for=\"hourInit\">Abertura de Horário de Atendimento</label>\n      <input type=\"number\" formControlName=\"hourInit\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.hourInit.errors }\" />\n      <div *ngIf=\"submitted && f.hourInit.errors\" class=\"invalid-feedback\">\n        <div *ngIf=\"f.hourInit.errors.required\">Obrigatório</div>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"hourEnd\">Fechamento de Horário de Atendimento</label>\n      <input type=\"number\" formControlName=\"hourEnd\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.hourEnd.errors }\" />\n      <div *ngIf=\"submitted && f.hourEnd.errors\" class=\"invalid-feedback\">\n        <div *ngIf=\"f.hourEnd.errors.required\">Obrigatório</div>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"interval\">Intervalo de Atendimentos (Minutos)</label>\n      <input type=\"number\" formControlName=\"interval\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.interval.errors }\" />\n      <div *ngIf=\"submitted && f.interval.errors\" class=\"invalid-feedback\">\n        <div *ngIf=\"f.interval.errors.required\">Obrigatório</div>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"workingDays\">Dias de trabalhados (Selecione dias diferentes usando a tecla CTRL)</label>\n      <select multiple class=\"form-control\" id=\"workingDays\" size=\"7\" formControlName=\"workingDays\">\n        <option value=\"Domingo\">Domingo</option>\n        <option value=\"Segunda\">Segunda</option>\n        <option value=\"Terça\">Terça</option>\n        <option value=\"Quarta\">Quarta</option>\n        <option value=\"Quinta\">Quinta</option>\n        <option value=\"Sexta\">Sexta</option>\n        <option value=\"Sabado\">Sabado</option>\n      </select>\n      <div *ngIf=\"submitted && f.workingDays.errors\" class=\"invalid-feedback\">\n        <div *ngIf=\"f.workingDays.errors.required\">Obrigatório</div>\n      </div>\n    </div>\n    \n    <div class=\"form-group\">\n      <button [disabled]=\"loading\" class=\"btn btn-primary\">Salvar</button>\n      <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\n    </div>\n  </form>\n</div>"
+module.exports = "<h4>Configurações</h4>\r\n<br>\r\n<div id=\"new\">\r\n  <form [formGroup]=\"registerForm\" (ngSubmit)=\"onSubmit()\">\r\n    <div class=\"form-group\">\r\n      <label for=\"hourInit\">Abertura de Horário de Atendimento</label>\r\n      <input type=\"number\" formControlName=\"hourInit\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.hourInit.errors }\" />\r\n      <div *ngIf=\"submitted && f.hourInit.errors\" class=\"invalid-feedback\">\r\n        <div *ngIf=\"f.hourInit.errors.required\">Obrigatório</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label for=\"hourEnd\">Fechamento de Horário de Atendimento</label>\r\n      <input type=\"number\" formControlName=\"hourEnd\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.hourEnd.errors }\" />\r\n      <div *ngIf=\"submitted && f.hourEnd.errors\" class=\"invalid-feedback\">\r\n        <div *ngIf=\"f.hourEnd.errors.required\">Obrigatório</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label for=\"interval\">Intervalo de Atendimentos (Minutos)</label>\r\n      <input type=\"number\" formControlName=\"interval\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.interval.errors }\" />\r\n      <div *ngIf=\"submitted && f.interval.errors\" class=\"invalid-feedback\">\r\n        <div *ngIf=\"f.interval.errors.required\">Obrigatório</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label for=\"workingDays\">Dias de trabalhados (Selecione dias diferentes usando a tecla CTRL)</label>\r\n      <select multiple class=\"form-control\" id=\"workingDays\" size=\"7\" formControlName=\"workingDays\">\r\n        <option value=\"Domingo\">Domingo</option>\r\n        <option value=\"Segunda\">Segunda</option>\r\n        <option value=\"Terça\">Terça</option>\r\n        <option value=\"Quarta\">Quarta</option>\r\n        <option value=\"Quinta\">Quinta</option>\r\n        <option value=\"Sexta\">Sexta</option>\r\n        <option value=\"Sabado\">Sabado</option>\r\n      </select>\r\n      <div *ngIf=\"submitted && f.workingDays.errors\" class=\"invalid-feedback\">\r\n        <div *ngIf=\"f.workingDays.errors.required\">Obrigatório</div>\r\n      </div>\r\n    </div>\r\n    \r\n    <div class=\"form-group\">\r\n      <button [disabled]=\"loading\" class=\"btn btn-primary\">Salvar</button>\r\n      <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\r\n    </div>\r\n  </form>\r\n</div>"
 
 /***/ }),
 
@@ -1229,7 +1211,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h4>Usuários</h4>\n<button class=\"btn btn-primary btn-sm float-right mb-4\" (click)=\"toggle()\">{{title}}</button>\n<br>\n<div id=\"new\" [@popOverState]=\"stateList\">\n  <form [formGroup]=\"registerForm\" (ngSubmit)=\"onSubmit()\">\n    <div class=\"form-group\">\n      <label for=\"name\">Nome Completo</label>\n      <input type=\"text\" formControlName=\"name\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.name.errors }\" />\n      <div *ngIf=\"submitted && f.name.errors\" class=\"invalid-feedback\">\n        <div *ngIf=\"f.name.errors.required\">Obrigatório</div>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"username\">Usuário</label>\n      <input type=\"text\" formControlName=\"username\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.username.errors }\" />\n      <div *ngIf=\"submitted && f.username.errors\" class=\"invalid-feedback\">\n        <div *ngIf=\"f.username.errors.required\">Obrigatório</div>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"email\">Email</label>\n      <input type=\"text\" formControlName=\"email\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.email.errors }\" />\n      <div *ngIf=\"submitted && f.email.errors\" class=\"invalid-feedback\">\n        <div *ngIf=\"f.email.errors.required\">Obrigatório</div>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"role\">Acesso</label>\n      <select formControlName=\"role\" class=\"form-control\"  [ngClass]=\"{ 'is-invalid': submitted && f.role.errors }\">\n        <option *ngFor=\"let role of roles\" [value]=\"role.id\">{{role.name}}</option>\n      </select>\n      <div *ngIf=\"submitted && f.role.errors\" class=\"invalid-feedback\">\n          <div *ngIf=\"f.role.errors.required\">Obrigatório</div>\n        </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"password\">Password</label>\n      <input type=\"password\" formControlName=\"password\" [readonly]=\"editing\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.password.errors }\" />\n      <div *ngIf=\"submitted && f.password.errors\" class=\"invalid-feedback\">\n        <div *ngIf=\"f.password.errors.required\">Obrigatório</div>\n        <div *ngIf=\"f.password.errors.minlength\">A senha tem que ter no mínimo 6 caracteres</div>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <button [disabled]=\"loading\" class=\"btn btn-primary\">Salvar</button>\n      <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\n    </div>\n  </form>\n</div>\n\n<div id=\"list\">\n  <table class=\"table table-striped table-sm\">\n    <thead>\n      <tr>\n        <th scope=\"col\">#</th>\n        <th scope=\"col\">Nome</th>\n        <th scope=\"col\">Email</th>\n        <th scope=\"col\">Acesso</th>\n        <th scope=\"col\"></th>\n        <th scope=\"col\"></th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr *ngFor=\"let user of users\">\n        <th scope=\"row\">{{ user.id }}</th>\n        <td>{{ user.name }}</td>\n        <td>{{ user.email }}</td>\n        <td>{{ user.roles | role }}</td>\n        <td>\n          <a class=\"btn btn-info btn-sm\" (click)=\"edit(user.id)\">\n            <i class=\"far fa-edit\"></i></a></td>\n        <td>\n          <a class=\"btn btn-danger btn-sm\" (click)=\"delete(user.id)\">\n            <i class=\"far fa-trash-alt\"></i></a></td>\n      </tr>\n    </tbody>\n  </table>\n</div>\n"
+module.exports = "<h4>Usuários</h4>\r\n<button class=\"btn btn-primary btn-sm float-right mb-4\" (click)=\"toggle()\">{{title}}</button>\r\n<br>\r\n<div id=\"new\" [@popOverState]=\"stateList\">\r\n  <form [formGroup]=\"registerForm\" (ngSubmit)=\"onSubmit()\">\r\n    <div class=\"form-group\">\r\n      <label for=\"name\">Nome Completo</label>\r\n      <input type=\"text\" formControlName=\"name\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.name.errors }\" />\r\n      <div *ngIf=\"submitted && f.name.errors\" class=\"invalid-feedback\">\r\n        <div *ngIf=\"f.name.errors.required\">Obrigatório</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label for=\"username\">Usuário</label>\r\n      <input type=\"text\" formControlName=\"username\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.username.errors }\" />\r\n      <div *ngIf=\"submitted && f.username.errors\" class=\"invalid-feedback\">\r\n        <div *ngIf=\"f.username.errors.required\">Obrigatório</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label for=\"email\">Email</label>\r\n      <input type=\"text\" formControlName=\"email\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.email.errors }\" />\r\n      <div *ngIf=\"submitted && f.email.errors\" class=\"invalid-feedback\">\r\n        <div *ngIf=\"f.email.errors.required\">Obrigatório</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label for=\"role\">Acesso</label>\r\n      <select formControlName=\"role\" class=\"form-control\"  [ngClass]=\"{ 'is-invalid': submitted && f.role.errors }\">\r\n        <option *ngFor=\"let role of roles\" [value]=\"role.id\">{{role.name}}</option>\r\n      </select>\r\n      <div *ngIf=\"submitted && f.role.errors\" class=\"invalid-feedback\">\r\n          <div *ngIf=\"f.role.errors.required\">Obrigatório</div>\r\n        </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label for=\"password\">Password</label>\r\n      <input type=\"password\" formControlName=\"password\" [readonly]=\"editing\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.password.errors }\" />\r\n      <div *ngIf=\"submitted && f.password.errors\" class=\"invalid-feedback\">\r\n        <div *ngIf=\"f.password.errors.required\">Obrigatório</div>\r\n        <div *ngIf=\"f.password.errors.minlength\">A senha tem que ter no mínimo 6 caracteres</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <button [disabled]=\"loading\" class=\"btn btn-primary\">Salvar</button>\r\n      <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\r\n    </div>\r\n  </form>\r\n</div>\r\n\r\n<div id=\"list\">\r\n  <table class=\"table table-striped table-sm\">\r\n    <thead>\r\n      <tr>\r\n        <th scope=\"col\">#</th>\r\n        <th scope=\"col\">Nome</th>\r\n        <th scope=\"col\">Email</th>\r\n        <th scope=\"col\">Acesso</th>\r\n        <th scope=\"col\"></th>\r\n        <th scope=\"col\"></th>\r\n      </tr>\r\n    </thead>\r\n    <tbody>\r\n      <tr *ngFor=\"let user of users\">\r\n        <th scope=\"row\">{{ user.id }}</th>\r\n        <td>{{ user.name }}</td>\r\n        <td>{{ user.email }}</td>\r\n        <td>{{ user.roles | role }}</td>\r\n        <td>\r\n          <a class=\"btn btn-info btn-sm\" (click)=\"edit(user.id)\">\r\n            <i class=\"far fa-edit\"></i></a></td>\r\n        <td>\r\n          <a class=\"btn btn-danger btn-sm\" (click)=\"delete(user.id)\">\r\n            <i class=\"far fa-trash-alt\"></i></a></td>\r\n      </tr>\r\n    </tbody>\r\n  </table>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -1446,7 +1428,7 @@ var RepeatPipe = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<router-outlet></router-outlet>"
+module.exports = "\r\n<router-outlet></router-outlet>"
 
 /***/ }),
 
@@ -1564,7 +1546,7 @@ var AppModule = /** @class */ (function () {
                 _services__WEBPACK_IMPORTED_MODULE_10__["AuthenticationService"],
                 _services__WEBPACK_IMPORTED_MODULE_10__["UserService"],
                 _services__WEBPACK_IMPORTED_MODULE_10__["EventService"],
-                _services__WEBPACK_IMPORTED_MODULE_10__["ConfigService"], _services__WEBPACK_IMPORTED_MODULE_10__["PacientService"], _services__WEBPACK_IMPORTED_MODULE_10__["RoleService"],
+                _services__WEBPACK_IMPORTED_MODULE_10__["ConfigService"], _services__WEBPACK_IMPORTED_MODULE_10__["PatientService"], _services__WEBPACK_IMPORTED_MODULE_10__["RoleService"],
                 { provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HTTP_INTERCEPTORS"], useClass: _helpers__WEBPACK_IMPORTED_MODULE_9__["JwtInterceptor"], multi: true },
                 { provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HTTP_INTERCEPTORS"], useClass: _helpers__WEBPACK_IMPORTED_MODULE_9__["ErrorInterceptor"], multi: true },
             ],
@@ -1596,7 +1578,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _home_home_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./home/home.component */ "./src/app/home/home.component.ts");
 /* harmony import */ var _home_consult_consult_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./home/consult/consult.component */ "./src/app/home/consult/consult.component.ts");
 /* harmony import */ var _home_agenda_agenda_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./home/agenda/agenda.component */ "./src/app/home/agenda/agenda.component.ts");
-/* harmony import */ var _home_pacient_pacient_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./home/pacient/pacient.component */ "./src/app/home/pacient/pacient.component.ts");
+/* harmony import */ var _home_patient_patient_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./home/patient/patient.component */ "./src/app/home/patient/patient.component.ts");
 /* harmony import */ var _admin_module_user_user_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./admin-module/user/user.component */ "./src/app/admin-module/user/user.component.ts");
 /* harmony import */ var _admin_module_configuration_configuration_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./admin-module/configuration/configuration.component */ "./src/app/admin-module/configuration/configuration.component.ts");
 /* harmony import */ var _admin_module_admin_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./admin-module/admin.component */ "./src/app/admin-module/admin.component.ts");
@@ -1622,7 +1604,7 @@ var appRoutes = [
                     { path: 'agenda', component: _home_agenda_agenda_component__WEBPACK_IMPORTED_MODULE_7__["AgendaComponent"] },
                     { path: 'agenda/:id', component: _home_agenda_agenda_component__WEBPACK_IMPORTED_MODULE_7__["AgendaComponent"] },
                     { path: 'consult', component: _home_consult_consult_component__WEBPACK_IMPORTED_MODULE_6__["ConsultComponent"] },
-                    { path: 'pacient', component: _home_pacient_pacient_component__WEBPACK_IMPORTED_MODULE_8__["PacientComponent"] }
+                    { path: 'patient', component: _home_patient_patient_component__WEBPACK_IMPORTED_MODULE_8__["PatientComponent"] }
                 ] }
         ]
     }, {
@@ -1663,7 +1645,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h4>{{docName}}</h4>\n<h6 *ngIf=\"docName != 'Selecione um atendente'\">{{initDay}}-{{endDay}} {{month}}</h6>\n<div class=\"list-group\" *ngIf=\"docName == 'Selecione um atendente'\">\n<a *ngFor=\"let user of attendants\" class=\"list-group-item\" [routerLink]=\"['/home/agenda', user.id]\">{{user.name}}</a>\n</div>\n<nav aria-label=\"Page navigation example\">\n    <ul class=\"pagination justify-content-center\">\n        <li class=\"page-item\">\n            <a class=\"page-link\" (click)=\"sub()\">Anterior</a>\n        </li>\n        <li class=\"page-item\">\n            <a class=\"page-link\" (click)=\"reset()\">Hoje</a>\n        </li>\n        <li class=\"page-item\">\n            <a class=\"page-link\" (click)=\"add()\">Próxima</a>\n        </li>\n    </ul>\n</nav>\n\n<div class=\"container\">\n    <div class=\"row no-gutters\">\n        <div *ngFor=\"let day of days\" class=\"col mr-1\">\n            <ul class=\"list-group\">\n                <li class=\"list-group-item active d-flex justify-content-between align-items-center\">\n                    {{day.header}}\n                </li>\n                <!-- <li *ngFor=\"let consult of day.events\" [ngClass]=\"{'list-group-item-success': consult.user == null, 'list-group-item-danger': consult.user != null}\"\n                    class=\"list-group-item  d-flex justify-content-between align-items-center\">\n                    <span class=\"badge badge-pill\">{{consult.date | date: \"HH:mm\"}}</span>\n                    <span *ngIf=\"consult.user != null\">{{consult.user.name}}</span>\n                    <span *ngIf=\"consult.user == null\">Vago</span>\n                </li> -->\n                <a *ngFor=\"let consult of day.events\" (click)=\"show(consult.date)\" [ngClass]=\"{'list-group-item-success': consult.user == null, 'list-group-item-danger': consult.user != null}\"\n                    class=\"list-group-item list-group-item-action flex-column align-items-start\">\n                    <div class=\"d-flex w-100 justify-content-between\">\n                        <span class=\"badge badge-pill\">{{consult.date | date: \"HH:mm\"}}</span>\n                        <h6 class=\"mb-1\" *ngIf=\"consult.user == null\">Vago</h6>\n                        <h6 class=\"mb-1\" *ngIf=\"consult.user != null\">Consulta</h6>\n                    </div>\n                    <p class=\"mb-1\" *ngIf=\"consult.pacient != null\">{{consult.pacient.name}}</p>\n                    <p class=\"mb-1\" *ngIf=\"consult.pacient == null\">Horário vago</p>\n                </a>\n            </ul>\n        </div>\n    </div>\n</div>\n\n<app-event-register [date]=\"eventDate\" [user]=\"id\" [visible]=\"visible\" (close)=\"onClose()\"></app-event-register>"
+module.exports = "<h4>{{docName}}</h4>\r\n<h6 *ngIf=\"docName != 'Selecione um atendente'\">{{initDay}}-{{endDay}} {{month}}</h6>\r\n<div class=\"list-group\" *ngIf=\"docName == 'Selecione um atendente'\">\r\n<a *ngFor=\"let user of attendants\" class=\"list-group-item\" [routerLink]=\"['/home/agenda', user.id]\">{{user.name}}</a>\r\n</div>\r\n<nav aria-label=\"Page navigation example\">\r\n    <ul class=\"pagination justify-content-center\">\r\n        <li class=\"page-item\">\r\n            <a class=\"page-link\" (click)=\"sub()\">Anterior</a>\r\n        </li>\r\n        <li class=\"page-item\">\r\n            <a class=\"page-link\" (click)=\"reset()\">Hoje</a>\r\n        </li>\r\n        <li class=\"page-item\">\r\n            <a class=\"page-link\" (click)=\"add()\">Próxima</a>\r\n        </li>\r\n    </ul>\r\n</nav>\r\n\r\n<div class=\"container\">\r\n    <div class=\"row no-gutters\">\r\n        <div *ngFor=\"let day of days\" class=\"col mr-1\">\r\n            <ul class=\"list-group\">\r\n                <li class=\"list-group-item active d-flex justify-content-between align-items-center\">\r\n                    {{day.header}}\r\n                </li>\r\n                <!-- <li *ngFor=\"let consult of day.events\" [ngClass]=\"{'list-group-item-success': consult.user == null, 'list-group-item-danger': consult.user != null}\"\r\n                    class=\"list-group-item  d-flex justify-content-between align-items-center\">\r\n                    <span class=\"badge badge-pill\">{{consult.date | date: \"HH:mm\"}}</span>\r\n                    <span *ngIf=\"consult.user != null\">{{consult.user.name}}</span>\r\n                    <span *ngIf=\"consult.user == null\">Vago</span>\r\n                </li> -->\r\n                <a *ngFor=\"let consult of day.events\" (click)=\"show(consult.date)\" [ngClass]=\"{'list-group-item-success': consult.user == null, 'list-group-item-danger': consult.user != null}\"\r\n                    class=\"list-group-item list-group-item-action flex-column align-items-start\">\r\n                    <div class=\"d-flex w-100 justify-content-between\">\r\n                        <span class=\"badge badge-pill\">{{consult.date | date: \"HH:mm\"}}</span>\r\n                        <h6 class=\"mb-1\" *ngIf=\"consult.user == null\">Vago</h6>\r\n                        <h6 class=\"mb-1\" *ngIf=\"consult.user != null\">Consulta</h6>\r\n                    </div>\r\n                    <p class=\"mb-1\" *ngIf=\"consult.patient != null\">{{consult.patient.name}}</p>\r\n                    <p class=\"mb-1\" *ngIf=\"consult.patient == null\">Horário vago</p>\r\n                </a>\r\n            </ul>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<app-event-register [date]=\"eventDate\" [user]=\"id\" [visible]=\"visible\" (close)=\"onClose()\"></app-event-register>"
 
 /***/ }),
 
@@ -1715,7 +1697,7 @@ var AgendaComponent = /** @class */ (function () {
         if (!this.id) {
             var users_1;
             this.userService.getAttendants().subscribe(function (resp) {
-                users_1 = resp.filter(function (u) { return u.roles.filter(function (r) { return r.name == "attendant"; }); });
+                users_1 = resp;
                 _this.attendants = users_1;
                 _this.id = users_1.length > 0 ? users_1[0].id : null;
             });
@@ -1842,7 +1824,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h4>Consulta</h4>\n<button class=\"btn btn-primary btn-sm float-right mb-4\" (click)=\"toggle()\">{{title}}</button>\n<br>\n<div id=\"new\" [@popOverState]=\"stateList\">\n    <form [formGroup]=\"registerForm\" (ngSubmit)=\"onSubmit()\">\n        <div class=\"form-row\">\n            <div class=\"form-group col-md-6\">\n                <label for=\"date\">Data</label>\n                <input type=\"date\" formControlName=\"date\" class=\"form-control\" [ngModel]=\"date\" [ngClass]=\"{ 'is-invalid': submitted && f.date.errors }\" />\n                <div *ngIf=\"submitted && f.date.errors\" class=\"invalid-feedback\">\n                    <div *ngIf=\"f.date.errors.required\">Obrigatório</div>\n                </div>\n            </div>\n            <div class=\"form-group col-md-6\">\n                <label for=\"time\">Hora</label>\n                <div class=\"input-group mb-2\">\n                    <div class=\"input-group-prepend\">\n                        <button class=\"input-\n                        group-text\" (click)=\"subMinutes()\">-</button>\n                    </div>\n                    <input type=\"time\" formControlName=\"time\" [ngModel]=\"time\" [ngClass]=\"{ 'is-invalid': submitted && f.time.errors }\"\n                        class=\"form-control\" id=\"time\">\n                    <div class=\"input-group-prepend\">\n                        <button class=\"input-group-text\" (click)=\"addMinutes()\">+</button>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"user\">Paciente</label>\n            <select formControlName=\"pacient\" class=\"form-control\"  [ngClass]=\"{ 'is-invalid': submitted && f.pacient.errors }\">\n                <option [value]=\"pacient.id\" *ngFor=\"let pacient of pacientService.getAll()\">{{pacient.name}}</option>\n            </select>\n            <div *ngIf=\"submitted && f.pacient.errors\" class=\"invalid-feedback\">\n                <div *ngIf=\"f.pacient.errors.required\">Obrigatório</div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"duration\">Duração</label>\n            <input type=\"number\" formControlName=\"duration\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.duration.errors }\" />\n            <div *ngIf=\"submitted && f.duration.errors\" class=\"invalid-feedback\">\n                <div *ngIf=\"f.duration.errors.required\">Duração tem que ser preenchida</div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <label for=\"obs\">Observação</label>\n            <input type=\"text\" formControlName=\"obs\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.obs.errors }\" />\n        </div>\n        <div class=\"form-group\">\n            <label for=\"user\">Atendente</label>\n            <select formControlName=\"user\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.user.errors }\">\n                <option [value]=\"user.id\" *ngFor=\"let user of attendants\">{{user.name}}</option>\n            </select>\n            <div *ngIf=\"submitted && f.user.errors\" class=\"invalid-feedback\">\n                <div *ngIf=\"f.user.errors.required\">Obrigatório</div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <button [disabled]=\"loading\" class=\"btn btn-primary  btn-sm\">Salvar</button>\n            <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\n        </div>\n    </form>\n</div>\n<div id=\"list\">\n    <table class=\"table table-striped table-sm\">\n        <thead>\n            <tr>\n                <th scope=\"col\">Data</th>\n                <th scope=\"col\">Paciente</th>\n                <th scope=\"col\">Observação</th>\n                <th scope=\"col\">Atendente</th>\n                <th scope=\"col\"></th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr *ngFor=\"let event of eventService.getAll()\">\n                <td>{{ event.date | date:'dd/MM/yy - HH:mm' }}</td>\n                <td>{{ event.pacient.name }}</td>\n                <td>{{ event.obs }}</td>\n                <td>{{ event.user.name }}</td>\n                <td>\n                    <a class=\"btn btn-info btn-sm\" (click)=\"edit(event.id)\">\n                        <i class=\"far fa-edit\"></i></a>\n                    <a class=\"btn btn-danger btn-sm ml-1\" (click)=\"delete(event.id)\">\n                        <i class=\"far fa-trash-alt\"></i></a></td>\n            </tr>\n        </tbody>\n    </table>\n</div>"
+module.exports = "<h4>Consulta</h4>\r\n<button class=\"btn btn-primary btn-sm float-right mb-4\" (click)=\"toggle()\">{{title}}</button>\r\n<br>\r\n<div id=\"new\" [@popOverState]=\"stateList\">\r\n    <form [formGroup]=\"registerForm\" (ngSubmit)=\"onSubmit()\">\r\n        <div class=\"form-row\">\r\n            <div class=\"form-group col-md-6\">\r\n                <label for=\"date\">Data</label>\r\n                <input type=\"date\" formControlName=\"date\" class=\"form-control\" [ngModel]=\"date\" [ngClass]=\"{ 'is-invalid': submitted && f.date.errors }\" />\r\n                <div *ngIf=\"submitted && f.date.errors\" class=\"invalid-feedback\">\r\n                    <div *ngIf=\"f.date.errors.required\">Obrigatório</div>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group col-md-6\">\r\n                <label for=\"time\">Hora</label>\r\n                <div class=\"input-group mb-2\">\r\n                    <div class=\"input-group-prepend\">\r\n                        <button class=\"input-\r\n                        group-text\" (click)=\"subMinutes()\">-</button>\r\n                    </div>\r\n                    <input type=\"time\" formControlName=\"time\" [ngModel]=\"time\" [ngClass]=\"{ 'is-invalid': submitted && f.time.errors }\"\r\n                        class=\"form-control\" id=\"time\">\r\n                    <div class=\"input-group-prepend\">\r\n                        <button class=\"input-group-text\" (click)=\"addMinutes()\">+</button>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class=\"form-group\">\r\n            <label for=\"user\">Patiente</label>\r\n            <select formControlName=\"patient\" class=\"form-control\"  [ngClass]=\"{ 'is-invalid': submitted && f.patient.errors }\">\r\n                <option [value]=\"patient.id\" *ngFor=\"let patient of patients\">{{patient.name}}</option>\r\n            </select>\r\n            <div *ngIf=\"submitted && f.patient.errors\" class=\"invalid-feedback\">\r\n                <div *ngIf=\"f.patient.errors.required\">Obrigatório</div>\r\n            </div>\r\n        </div>\r\n        <div class=\"form-group\">\r\n            <label for=\"duration\">Duração</label>\r\n            <input type=\"number\" formControlName=\"duration\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.duration.errors }\" />\r\n            <div *ngIf=\"submitted && f.duration.errors\" class=\"invalid-feedback\">\r\n                <div *ngIf=\"f.duration.errors.required\">Duração tem que ser preenchida</div>\r\n            </div>\r\n        </div>\r\n        <div class=\"form-group\">\r\n            <label for=\"obs\">Observação</label>\r\n            <input type=\"text\" formControlName=\"obs\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.obs.errors }\" />\r\n        </div>\r\n        <div class=\"form-group\">\r\n            <label for=\"user\">Atendente</label>\r\n            <select formControlName=\"user\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.user.errors }\">\r\n                <option selected>Selecionar</option>\r\n                <option [value]=\"user.id\" *ngFor=\"let user of attendants\">{{user.name}}</option>\r\n            </select>\r\n            <div *ngIf=\"submitted && f.user.errors\" class=\"invalid-feedback\">\r\n                <div *ngIf=\"f.user.errors.required\">Obrigatório</div>\r\n            </div>\r\n        </div>\r\n        <div class=\"form-group\">\r\n            <button [disabled]=\"loading\" class=\"btn btn-primary  btn-sm\">Salvar</button>\r\n            <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\r\n        </div>\r\n    </form>\r\n</div>\r\n<div id=\"list\">\r\n    <table class=\"table table-striped table-sm\">\r\n        <thead>\r\n            <tr>\r\n                <th scope=\"col\">Data</th>\r\n                <th scope=\"col\">Patiente</th>\r\n                <th scope=\"col\">Observação</th>\r\n                <th scope=\"col\">Atendente</th>\r\n                <th scope=\"col\"></th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            <tr *ngFor=\"let event of events\">\r\n                <td>{{ event.date | date:'dd/MM/yy - HH:mm' }}</td>\r\n                <td>{{ event.patient.name }}</td>\r\n                <td>{{ event.obs }}</td>\r\n                <td>{{ event.user.name }}</td>\r\n                <td>\r\n                    <a class=\"btn btn-info btn-sm\" (click)=\"edit(event.id)\">\r\n                        <i class=\"far fa-edit\"></i></a>\r\n                    <a class=\"btn btn-danger btn-sm ml-1\" (click)=\"delete(event.id)\">\r\n                        <i class=\"far fa-trash-alt\"></i></a></td>\r\n            </tr>\r\n        </tbody>\r\n    </table>\r\n</div>"
 
 /***/ }),
 
@@ -1874,12 +1856,12 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var ConsultComponent = /** @class */ (function () {
-    function ConsultComponent(formBuilder, userService, configService, eventService, pacientService) {
+    function ConsultComponent(formBuilder, userService, configService, eventService, patientService) {
         this.formBuilder = formBuilder;
         this.userService = userService;
         this.configService = configService;
         this.eventService = eventService;
-        this.pacientService = pacientService;
+        this.patientService = patientService;
         this.loading = false;
         this.submitted = false;
         this.show = false;
@@ -1889,6 +1871,8 @@ var ConsultComponent = /** @class */ (function () {
     ConsultComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.userService.getAttendants().subscribe(function (resp) { return _this.attendants = resp; });
+        this.patientService.getAll().subscribe(function (resp) { return _this.patients = resp; });
+        this.eventService.getAll().subscribe(function (resp) { return _this.events = resp; });
         this.indexDate = new Date();
         if ((this.indexDate.getHours()) < this.config.hourInit) {
             this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (this.config.hourInit - this.indexDate.getHours())));
@@ -1930,7 +1914,7 @@ var ConsultComponent = /** @class */ (function () {
     ConsultComponent.prototype.cleanForm = function () {
         this.registerForm = this.formBuilder.group({
             user: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            pacient: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+            patient: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
             duration: [this.config.interval, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
             date: [this.date, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
             obs: [],
@@ -1938,21 +1922,24 @@ var ConsultComponent = /** @class */ (function () {
         });
     };
     ConsultComponent.prototype.edit = function (id) {
-        var event = this.eventService.getById(id);
-        var sHour = event.date.getHours().toLocaleString();
-        var sMinute = event.date.getMinutes().toLocaleString();
-        var time = (sHour.length == 1 ? ("0" + sHour) : sHour) + ":" + (sMinute.length == 1 ? ("0" + sMinute) : sMinute);
-        this.registerForm = this.formBuilder.group({
-            user: [event.user.id, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            pacient: [event.pacient.id, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            duration: [event.duration, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            date: [event.date.toISOString().split('T')[0], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            obs: [event.obs],
-            time: [time, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required]
+        var _this = this;
+        this.eventService.getById(id).subscribe(function (resp) {
+            var event = resp;
+            var sHour = event.date.getHours().toLocaleString();
+            var sMinute = event.date.getMinutes().toLocaleString();
+            var time = (sHour.length == 1 ? ("0" + sHour) : sHour) + ":" + (sMinute.length == 1 ? ("0" + sMinute) : sMinute);
+            _this.registerForm = _this.formBuilder.group({
+                user: [event.user.id, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+                patient: [event.patient.id, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+                duration: [event.duration, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+                date: [event.date.toISOString().split('T')[0], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+                obs: [event.obs],
+                time: [time, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required]
+            });
+            _this.editing = true;
+            _this.currentEvent = id;
+            _this.toggle();
         });
-        this.editing = true;
-        this.currentEvent = id;
-        this.toggle();
     };
     ConsultComponent.prototype.delete = function (id) {
         this.eventService.delete(id);
@@ -1969,19 +1956,20 @@ var ConsultComponent = /** @class */ (function () {
         event.date.setMinutes(this.registerForm.value.time.split(':')[1]);
         this.userService.getById(this.registerForm.value.user).subscribe(function (user) {
             event.user = user;
-            event.pacient = _this.pacientService.getById(_this.registerForm.value.pacient);
-            if (_this.editing) {
-                event.id = _this.currentEvent;
-                _this.eventService.update(event);
-                _this.editing = false;
-            }
-            else {
-                event.id = (_this.eventService.getAll().length + 1).toString();
-                _this.eventService.register(event);
-            }
-            _this.toggle();
-            _this.cleanForm();
-            _this.indexDate = new Date();
+            _this.patientService.getById(_this.registerForm.value.patient).subscribe(function (resp) {
+                event.patient = resp;
+                if (_this.editing) {
+                    event.id = _this.currentEvent;
+                    _this.eventService.update(event);
+                    _this.editing = false;
+                }
+                else {
+                    _this.eventService.register(event).subscribe(function (resp) { return resp; });
+                }
+                _this.toggle();
+                _this.cleanForm();
+                _this.indexDate = new Date();
+            });
         });
     };
     Object.defineProperty(ConsultComponent.prototype, "f", {
@@ -2033,7 +2021,7 @@ var ConsultComponent = /** @class */ (function () {
             ]
         }),
         __metadata("design:paramtypes", [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormBuilder"], _services__WEBPACK_IMPORTED_MODULE_1__["UserService"], _services__WEBPACK_IMPORTED_MODULE_1__["ConfigService"],
-            _services__WEBPACK_IMPORTED_MODULE_1__["EventService"], _services__WEBPACK_IMPORTED_MODULE_1__["PacientService"]])
+            _services__WEBPACK_IMPORTED_MODULE_1__["EventService"], _services__WEBPACK_IMPORTED_MODULE_1__["PatientService"]])
     ], ConsultComponent);
     return ConsultComponent;
 }());
@@ -2049,7 +2037,7 @@ var ConsultComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".modal-custom {\n/* Hidden by default */\n    position: fixed; /* Stay in place */\n    z-index: 10; /* Sit on top */\n    padding-top: 15%; /* Location of the box */\n    padding-left: 45%;\n    left: 0;\n    top: 0;\n    width: 100%; /* Full width */\n    height: 100%; /* Full height */\n    overflow: auto; /* Enable scroll if needed */\n    background-color: rgb(0,0,0); /* Fallback color */\n    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */\n}\n\n.auto-complete {\n    position: absolute; \n    width: 91%;\n}"
+module.exports = ".modal-custom {\r\n/* Hidden by default */\r\n    position: fixed; /* Stay in place */\r\n    z-index: 10; /* Sit on top */\r\n    padding-top: 15%; /* Location of the box */\r\n    padding-left: 45%;\r\n    left: 0;\r\n    top: 0;\r\n    width: 100%; /* Full width */\r\n    height: 100%; /* Full height */\r\n    overflow: auto; /* Enable scroll if needed */\r\n    background-color: rgb(0,0,0); /* Fallback color */\r\n    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */\r\n}\r\n\r\n.auto-complete {\r\n    position: absolute; \r\n    width: 91%;\r\n}"
 
 /***/ }),
 
@@ -2060,7 +2048,7 @@ module.exports = ".modal-custom {\n/* Hidden by default */\n    position: fixed;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"modal-custom\" [hidden]=\"!visible\" (click)=\"hide($event)\" id=\"customModal\">\n<div class=\"card w-50\">\n  <h5 class=\"card-header\">Consulta Rápida</h5>\n  <div class=\"card-body\">\n    <div class=\"form-group\" id=\"pacientDiv\">\n      <label for=\"pacient\">Paciente</label>\n      <input type=\"text\" (keyup)=\"onKey($event)\" [(ngModel)]=\"pacientName\" id=\"pacient\" name=\"pacient\" class=\"form-control\"\n        autocomplete=\"off\" />\n      <div class=\"w-100\">\n        <div class=\"list-group auto-complete\" *ngIf=\"!selected\">\n          <a *ngFor=\"let user of pacients\" class=\"list-group-item list-group-item-action\" (click)=\"select(user)\">{{user.name}}\n            <small class=\"float-right\">{{user.birthday | date:'dd/MM/yyyy'}}</small></a>\n        </div>\n      </div>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"phone\">Telefone</label>\n      <input type=\"text\" id=\"phone\" name=\"phone\" mask=\"(00)0 0000-0000\" [(ngModel)]=\"pacientPhone\" class=\"form-control\" autocomplete=\"off\" />\n    </div>\n  </div>\n  <div class=\"card-footer text-right\">\n    <button type=\"button\" class=\"btn btn-secondary\" id=\"close\" (click)=\"hide($event)\">Cancelar</button>\n    <button type=\"button\" class=\"btn btn-primary ml-3\" (click)=\"onSubmit()\">Marcar</button>\n  </div>\n</div>\n</div>"
+module.exports = "<div class=\"modal-custom\" [hidden]=\"!visible\" (click)=\"hide($event)\" id=\"customModal\">\r\n<div class=\"card w-50\">\r\n  <h5 class=\"card-header\">Consulta Rápida</h5>\r\n  <div class=\"card-body\">\r\n    <div class=\"form-group\" id=\"patientDiv\">\r\n      <label for=\"patient\">Patiente</label>\r\n      <input type=\"text\" (keyup)=\"onKey($event)\" [(ngModel)]=\"patientName\" id=\"patient\" name=\"patient\" class=\"form-control\"\r\n        autocomplete=\"off\" />\r\n      <div class=\"w-100\">\r\n        <div class=\"list-group auto-complete\" *ngIf=\"!selected\">\r\n          <a *ngFor=\"let user of patients\" class=\"list-group-item list-group-item-action\" (click)=\"select(user)\">{{user.name}}\r\n            <small class=\"float-right\">{{user.birthday | date:'dd/MM/yyyy'}}</small></a>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label for=\"phone\">Telefone</label>\r\n      <input type=\"text\" id=\"phone\" name=\"phone\" mask=\"(00)0 0000-0000\" [(ngModel)]=\"patientPhone\" class=\"form-control\" autocomplete=\"off\" />\r\n    </div>\r\n  </div>\r\n  <div class=\"card-footer text-right\">\r\n    <button type=\"button\" class=\"btn btn-secondary\" id=\"close\" (click)=\"hide($event)\">Cancelar</button>\r\n    <button type=\"button\" class=\"btn btn-primary ml-3\" (click)=\"onSubmit()\">Marcar</button>\r\n  </div>\r\n</div>\r\n</div>"
 
 /***/ }),
 
@@ -2090,18 +2078,18 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var EventRegisterComponent = /** @class */ (function () {
-    function EventRegisterComponent(pacientService, configService, eventService, userService) {
-        this.pacientService = pacientService;
+    function EventRegisterComponent(patientService, configService, eventService, userService) {
+        this.patientService = patientService;
         this.configService = configService;
         this.eventService = eventService;
         this.userService = userService;
         this.close = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.visible = false;
-        this.pacients = [];
-        this.pacient = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Pacient"]();
+        this.patients = [];
+        this.patient = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Patient"]();
         this.selected = false;
-        this.pacientName = "";
-        this.pacientPhone = "";
+        this.patientName = "";
+        this.patientPhone = "";
     }
     EventRegisterComponent.prototype.ngOnInit = function () {
     };
@@ -2116,28 +2104,35 @@ var EventRegisterComponent = /** @class */ (function () {
         this.close.emit();
     };
     EventRegisterComponent.prototype.onKey = function (event) {
+        var _this = this;
         this.selected = false;
-        this.pacient = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Pacient"]();
-        this.pacients = this.pacientService.getByName(event.target.value);
+        this.patient = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Patient"]();
+        this.patientService.getByName(event.target.value).subscribe(function (resp) { return _this.patients = resp; });
     };
-    EventRegisterComponent.prototype.select = function (pacient) {
-        this.pacientName = "";
+    EventRegisterComponent.prototype.select = function (patient) {
+        this.patientName = "";
         this.selected = true;
-        this.pacient = pacient;
-        this.pacientName = pacient.name;
-        this.pacientPhone = pacient.phone;
+        this.patient = patient;
+        this.patientName = patient.name;
+        this.patientPhone = patient.birthday.toString();
     };
     EventRegisterComponent.prototype.onSubmit = function () {
         var _this = this;
+        console.log(this.selected);
         if (this.selected) {
             var event_1 = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Event"]();
-            event_1.pacient = this.pacient;
+            event_1.patient = this.patient;
             event_1.date = this.date;
             event_1.duration = this.configService.getConfig().interval;
+            this.userService.getById(this.user).subscribe(function (user) {
+                event_1.user = user;
+                _this.eventService.register(event_1);
+                _this.closeAndClean();
+            });
         }
-        else if ((typeof this.pacientName != 'undefined' && this.pacientName) && (typeof this.pacientPhone != 'undefined' && this.pacientPhone)) {
+        else if ((typeof this.patientName != 'undefined' && this.patientName) && (typeof this.patientPhone != 'undefined' && this.patientPhone)) {
             var event_2 = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Event"]();
-            event_2.pacient = this.newPacient();
+            event_2.patient = this.newPatient();
             event_2.date = this.date;
             event_2.duration = this.configService.getConfig().interval;
             this.userService.getById(this.user).subscribe(function (user) {
@@ -2147,19 +2142,19 @@ var EventRegisterComponent = /** @class */ (function () {
             });
         }
     };
-    EventRegisterComponent.prototype.newPacient = function () {
-        var pacient = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Pacient"]();
-        pacient.name = this.pacientName;
-        pacient.phone = this.pacientPhone;
-        this.pacientService.register(pacient);
-        return pacient;
+    EventRegisterComponent.prototype.newPatient = function () {
+        var patient = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Patient"]();
+        patient.name = this.patientName;
+        patient.phone = this.patientPhone;
+        this.patientService.register(patient);
+        return patient;
     };
     EventRegisterComponent.prototype.closeAndClean = function () {
         this.closeModal();
-        this.pacient = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Pacient"]();
+        this.patient = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Patient"]();
         this.selected = false;
-        this.pacientName = "";
-        this.pacientPhone = "";
+        this.patientName = "";
+        this.patientPhone = "";
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
@@ -2183,7 +2178,7 @@ var EventRegisterComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./event-register.component.html */ "./src/app/home/event-register/event-register.component.html"),
             styles: [__webpack_require__(/*! ./event-register.component.css */ "./src/app/home/event-register/event-register.component.css")]
         }),
-        __metadata("design:paramtypes", [_services__WEBPACK_IMPORTED_MODULE_1__["PacientService"],
+        __metadata("design:paramtypes", [_services__WEBPACK_IMPORTED_MODULE_1__["PatientService"],
             _services__WEBPACK_IMPORTED_MODULE_1__["ConfigService"],
             _services__WEBPACK_IMPORTED_MODULE_1__["EventService"],
             _services__WEBPACK_IMPORTED_MODULE_1__["UserService"]])
@@ -2239,7 +2234,7 @@ var HomeRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "body {\n    font-size: .875rem;\n  }\n  \n  .feather {\n    width: 16px;\n    height: 16px;\n    vertical-align: text-bottom;\n  }\n  \n  /*\n   * Sidebar\n   */\n  \n  .sidebar {\n    position: fixed;\n    top: 0;\n    bottom: 0;\n    left: 0;\n    z-index: 100; /* Behind the navbar */\n    padding: 48px 0 0; /* Height of navbar */\n    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);\n  }\n  \n  .sidebar-sticky {\n    position: relative;\n    top: 0;\n    height: calc(100vh - 48px);\n    padding-top: .5rem;\n    overflow-x: hidden;\n    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */\n  }\n  \n  @supports ((position: -webkit-sticky) or (position: sticky)) {\n    .sidebar-sticky {\n      position: -webkit-sticky;\n      position: sticky;\n    }\n  }\n  \n  .sidebar .nav-link {\n    font-weight: 500;\n    color: #333;\n  }\n  \n  .sidebar .nav-link .feather {\n    margin-right: 4px;\n    color: #999;\n  }\n  \n  .sidebar .nav-link.active {\n    color: #007bff;\n  }\n  \n  .sidebar .nav-link:hover .feather,\n  .sidebar .nav-link.active .feather {\n    color: inherit;\n  }\n  \n  .sidebar-heading {\n    font-size: .75rem;\n    text-transform: uppercase;\n  }\n  \n  /*\n   * Content\n   */\n  \n  [role=\"main\"] {\n    padding-top: 48px; /* Space for fixed navbar */\n  }\n  \n  /*\n   * Navbar\n   */\n  \n  .navbar-brand {\n    padding-top: .75rem;\n    padding-bottom: .75rem;\n    font-size: 1rem;\n    background-color: rgba(0, 0, 0, .25);\n    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);\n  }\n  \n  .navbar .form-control {\n    padding: .75rem 1rem;\n    border-width: 0;\n    border-radius: 0;\n  }\n  \n  .form-control-dark {\n    color: #fff;\n    background-color: rgba(255, 255, 255, .1);\n    border-color: rgba(255, 255, 255, .1);\n  }\n  \n  .form-control-dark:focus {\n    border-color: transparent;\n    box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);\n  }\n  "
+module.exports = "body {\r\n    font-size: .875rem;\r\n  }\r\n  \r\n  .feather {\r\n    width: 16px;\r\n    height: 16px;\r\n    vertical-align: text-bottom;\r\n  }\r\n  \r\n  /*\r\n   * Sidebar\r\n   */\r\n  \r\n  .sidebar {\r\n    position: fixed;\r\n    top: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    z-index: 100; /* Behind the navbar */\r\n    padding: 48px 0 0; /* Height of navbar */\r\n    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);\r\n  }\r\n  \r\n  .sidebar-sticky {\r\n    position: relative;\r\n    top: 0;\r\n    height: calc(100vh - 48px);\r\n    padding-top: .5rem;\r\n    overflow-x: hidden;\r\n    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */\r\n  }\r\n  \r\n  @supports ((position: -webkit-sticky) or (position: sticky)) {\r\n    .sidebar-sticky {\r\n      position: -webkit-sticky;\r\n      position: sticky;\r\n    }\r\n  }\r\n  \r\n  .sidebar .nav-link {\r\n    font-weight: 500;\r\n    color: #333;\r\n  }\r\n  \r\n  .sidebar .nav-link .feather {\r\n    margin-right: 4px;\r\n    color: #999;\r\n  }\r\n  \r\n  .sidebar .nav-link.active {\r\n    color: #007bff;\r\n  }\r\n  \r\n  .sidebar .nav-link:hover .feather,\r\n  .sidebar .nav-link.active .feather {\r\n    color: inherit;\r\n  }\r\n  \r\n  .sidebar-heading {\r\n    font-size: .75rem;\r\n    text-transform: uppercase;\r\n  }\r\n  \r\n  /*\r\n   * Content\r\n   */\r\n  \r\n  [role=\"main\"] {\r\n    padding-top: 48px; /* Space for fixed navbar */\r\n  }\r\n  \r\n  /*\r\n   * Navbar\r\n   */\r\n  \r\n  .navbar-brand {\r\n    padding-top: .75rem;\r\n    padding-bottom: .75rem;\r\n    font-size: 1rem;\r\n    background-color: rgba(0, 0, 0, .25);\r\n    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);\r\n  }\r\n  \r\n  .navbar .form-control {\r\n    padding: .75rem 1rem;\r\n    border-width: 0;\r\n    border-radius: 0;\r\n  }\r\n  \r\n  .form-control-dark {\r\n    color: #fff;\r\n    background-color: rgba(255, 255, 255, .1);\r\n    border-color: rgba(255, 255, 255, .1);\r\n  }\r\n  \r\n  .form-control-dark:focus {\r\n    border-color: transparent;\r\n    box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);\r\n  }\r\n  "
 
 /***/ }),
 
@@ -2250,7 +2245,7 @@ module.exports = "body {\n    font-size: .875rem;\n  }\n  \n  .feather {\n    wi
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom\">\n    <h1 class=\"h2\">Recepção</h1>\n    <div class=\"btn-toolbar mb-2 mb-md-0\">\n  \n      <div class=\"btn-group mr-2\">\n        <button class=\"btn btn-sm btn-outline-secondary\" routerLink=\"/home/consult\">Nova Consulta</button>\n        <button class=\"btn btn-sm btn-outline-primary\" routerLink=\"/home/pacient\">Cadastro Cliente</button>\n      </div>\n      <div class=\"dropdown dropleft\">\n        <button class=\"btn btn-secondary btn-outline-secondary dropdown-toggle\" type=\"button\" id=\"dropdownMenuButton\"\n          data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n          Atalho Agenda\n        </button>\n        <div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenuButton\">\n          <a *ngFor=\"let user of attendants\" class=\"dropdown-item\" [routerLink]=\"['/home/agenda', user.id]\">{{user.name}}</a>\n        </div>\n      </div>\n    </div>\n  </div>\n<router-outlet></router-outlet>\n"
+module.exports = "<div class=\"d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom\">\r\n    <h1 class=\"h2\">Recepção</h1>\r\n    <div class=\"btn-toolbar mb-2 mb-md-0\">\r\n  \r\n      <div class=\"btn-group mr-2\">\r\n        <button class=\"btn btn-sm btn-outline-secondary\" routerLink=\"/home/consult\">Nova Consulta</button>\r\n        <button class=\"btn btn-sm btn-outline-primary\" routerLink=\"/home/patient\">Cadastro Cliente</button>\r\n      </div>\r\n      <div class=\"dropdown dropleft\">\r\n        <button class=\"btn btn-secondary btn-outline-secondary dropdown-toggle\" type=\"button\" id=\"dropdownMenuButton\"\r\n          data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\r\n          Atalho Agenda\r\n        </button>\r\n        <div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenuButton\">\r\n          <a *ngFor=\"let user of attendants\" class=\"dropdown-item\" [routerLink]=\"['/home/agenda', user.id]\">{{user.name}}</a>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n<router-outlet></router-outlet>\r\n"
 
 /***/ }),
 
@@ -2319,7 +2314,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _reception_reception_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./reception/reception.component */ "./src/app/home/reception/reception.component.ts");
 /* harmony import */ var _agenda_agenda_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./agenda/agenda.component */ "./src/app/home/agenda/agenda.component.ts");
 /* harmony import */ var _consult_consult_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./consult/consult.component */ "./src/app/home/consult/consult.component.ts");
-/* harmony import */ var _pacient_pacient_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./pacient/pacient.component */ "./src/app/home/pacient/pacient.component.ts");
+/* harmony import */ var _patient_patient_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./patient/patient.component */ "./src/app/home/patient/patient.component.ts");
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 /* harmony import */ var ng2_completer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ng2-completer */ "./node_modules/ng2-completer/esm5/ng2-completer.js");
@@ -2356,7 +2351,7 @@ var HomeModule = /** @class */ (function () {
             ],
             declarations: [
                 _reception_reception_component__WEBPACK_IMPORTED_MODULE_5__["ReceptionComponent"],
-                _agenda_agenda_component__WEBPACK_IMPORTED_MODULE_6__["AgendaComponent"], _pacient_pacient_component__WEBPACK_IMPORTED_MODULE_8__["PacientComponent"],
+                _agenda_agenda_component__WEBPACK_IMPORTED_MODULE_6__["AgendaComponent"], _patient_patient_component__WEBPACK_IMPORTED_MODULE_8__["PatientComponent"],
                 _consult_consult_component__WEBPACK_IMPORTED_MODULE_7__["ConsultComponent"], _home_component__WEBPACK_IMPORTED_MODULE_2__["HomeComponent"], _event_register_event_register_component__WEBPACK_IMPORTED_MODULE_4__["EventRegisterComponent"]
             ]
         })
@@ -2368,9 +2363,9 @@ var HomeModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/home/pacient/pacient.component.css":
+/***/ "./src/app/home/patient/patient.component.css":
 /*!****************************************************!*\
-  !*** ./src/app/home/pacient/pacient.component.css ***!
+  !*** ./src/app/home/patient/patient.component.css ***!
   \****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
@@ -2379,27 +2374,27 @@ module.exports = ""
 
 /***/ }),
 
-/***/ "./src/app/home/pacient/pacient.component.html":
+/***/ "./src/app/home/patient/patient.component.html":
 /*!*****************************************************!*\
-  !*** ./src/app/home/pacient/pacient.component.html ***!
+  !*** ./src/app/home/patient/patient.component.html ***!
   \*****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h4>Pacientes</h4>\n<div id=\"new\" [@popOverState]=\"stateList\">\n    <form [formGroup]=\"registerForm\" (ngSubmit)=\"onSubmit()\">\n        <div class=\"form-row\">\n            <div class=\"form-group col-md-6\">\n                <label for=\"name\">Nome Completo</label>\n                <input type=\"text\" class=\"form-control\" id=\"name\" name=\"name\" formControlName=\"name\" placeholder=\"Nome Completo\" [ngClass]=\"{ 'is-invalid': submitted && f.name.errors }\">\n                <div *ngIf=\"submitted && f.name.errors\" class=\"invalid-feedback\">\n                    <div *ngIf=\"f.name.errors.required\">Obrigatório</div>\n                </div>\n            </div>\n            <div class=\"form-group col-md-3\">\n                <label for=\"cpf\">CPF</label>\n                <input type=\"text\" class=\"form-control\" id=\"cpf\" name=\"cpf\" formControlName=\"cpf\" placeholder=\"CPF\">\n            </div>\n            <div class=\"form-group col-md-3\">\n                <label for=\"birthday\">Data de Nascimento</label>\n                <input id=\"birthday\" name=\"birthday\" placeholder=\"DD/MM/AAAA\" formControlName=\"birthday\" class=\"form-control\"\n                    type=\"date\">\n            </div>\n        </div>\n        <div class=\"form-row\">\n            <div class=\"form-group col-md-6\">\n                <label for=\"phone\">Telefone</label>\n                <input type=\"text\" class=\"form-control\" id=\"phone\" name=\"phone\" mask=\"(00)0 0000-0000\" formControlName=\"phone\" placeholder=\"Telefone\" [ngClass]=\"{ 'is-invalid': submitted && f.phone.errors }\">\n                <div *ngIf=\"submitted && f.phone.errors\" class=\"invalid-feedback\">\n                    <div *ngIf=\"f.phone.errors.required\">Obrigatório</div>\n                </div>\n            </div>\n            <div class=\"form-group col-md-6\">\n                <label for=\"email\">Email</label>\n                <input type=\"email\" class=\"form-control\" id=\"email\" name=\"email\" formControlName=\"email\" placeholder=\"Email\">\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <div>\n                <h6>Endereço</h6>\n            </div>\n            <div class=\"form-row\">\n                <div class=\"form-group col-md-3\">\n                    <label for=\"street\">Rua</label>\n                    <input type=\"text\" class=\"form-control\" id=\"street\" name=\"street\" formControlName=\"street\">\n                </div>\n                <div class=\"form-group col-md-1\">\n                    <label for=\"number\">Número</label>\n                    <input type=\"text\" class=\"form-control\" id=\"number\" name=\"number\" formControlName=\"number\">\n                </div>\n                <div class=\"form-group col-md-2\">\n                    <label for=\"complement\">Complemento</label>\n                    <input type=\"text\" class=\"form-control\" id=\"complement\" name=\"complement\" formControlName=\"complement\">\n                </div>\n                <div class=\"form-group col-md-2\">\n                    <label for=\"city\">Cidade</label>\n                    <input type=\"text\" class=\"form-control\" id=\"city\" name=\"city\" formControlName=\"city\">\n                </div>\n                <div class=\"form-group col-md-2\">\n                    <label for=\"state\">Estado</label>\n                    <select id=\"state\" class=\"form-control\" name=\"state\" formControlName=\"state\">\n                        <option selected value=\"1\">Rio de Janeiro</option>\n                        <option value=\"2\">São Paulo</option>\n                    </select>\n                </div>\n                <div class=\"form-group col-md-2\">\n                    <label for=\"zip\">CEP</label>\n                    <input type=\"text\" class=\"form-control\" id=\"zip\" name=\"zip\" formControlName=\"zip\">\n                </div>\n            </div>\n        </div>\n        <div class=\"form-group\">\n            <button [disabled]=\"loading\" class=\"btn btn-success btn-sm\">Salvar</button>\n            <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\n        </div>\n    </form>\n</div>\n<button class=\"btn btn-primary btn-sm mb-3 float-right\" (click)=\"toggle()\">{{title}}</button>\n<div id=\"list\">\n    <table class=\"table table-striped table-sm\">\n        <thead>\n            <tr>\n                <th scope=\"col\">Nome</th>\n                <th scope=\"col\">CPF</th>\n                <th scope=\"col\">Email</th>\n                <th scope=\"col\"></th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr *ngFor=\"let pacient of pacientService.getAll()\">\n                <td>{{ pacient.name }} </td>\n                <td>{{ pacient.cpf }}</td>\n                <td>{{ pacient.email }}</td>\n                <td>\n                    <a class=\"btn btn-info btn-sm\" (click)=\"edit(pacient.id)\">\n                        <i class=\"far fa-edit\"></i></a>\n                    <a class=\"btn btn-danger btn-sm ml-1\" (click)=\"delete(pacient.id)\">\n                        <i class=\"far fa-trash-alt\"></i></a></td>\n            </tr>\n        </tbody>\n    </table>\n</div>"
+module.exports = "<h4>Patientes</h4>\r\n<div id=\"new\" [@popOverState]=\"stateList\">\r\n    <form [formGroup]=\"registerForm\" (ngSubmit)=\"onSubmit()\">\r\n        <div class=\"form-row\">\r\n            <div class=\"form-group col-md-6\">\r\n                <label for=\"name\">Nome Completo</label>\r\n                <input type=\"text\" class=\"form-control\" id=\"name\" name=\"name\" formControlName=\"name\" placeholder=\"Nome Completo\" [ngClass]=\"{ 'is-invalid': submitted && f.name.errors }\">\r\n                <div *ngIf=\"submitted && f.name.errors\" class=\"invalid-feedback\">\r\n                    <div *ngIf=\"f.name.errors.required\">Obrigatório</div>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group col-md-3\">\r\n                <label for=\"cpf\">CPF</label>\r\n                <input type=\"text\" class=\"form-control\" id=\"cpf\" name=\"cpf\" formControlName=\"cpf\" placeholder=\"CPF\">\r\n            </div>\r\n            <div class=\"form-group col-md-3\">\r\n                <label for=\"birthday\">Data de Nascimento</label>\r\n                <input id=\"birthday\" name=\"birthday\" placeholder=\"DD/MM/AAAA\" formControlName=\"birthday\" class=\"form-control\"\r\n                    type=\"date\">\r\n            </div>\r\n        </div>\r\n        <div class=\"form-row\">\r\n            <div class=\"form-group col-md-6\">\r\n                <label for=\"phone\">Telefone</label>\r\n                <input type=\"text\" class=\"form-control\" id=\"phone\" name=\"phone\" formControlName=\"phone\" placeholder=\"Telefone\" [ngClass]=\"{ 'is-invalid': submitted && f.phone.errors }\">\r\n                <div *ngIf=\"submitted && f.phone.errors\" class=\"invalid-feedback\">\r\n                    <div *ngIf=\"f.phone.errors.required\">Obrigatório</div>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group col-md-6\">\r\n                <label for=\"email\">Email</label>\r\n                <input type=\"email\" class=\"form-control\" id=\"email\" name=\"email\" formControlName=\"email\" placeholder=\"Email\">\r\n            </div>\r\n        </div>\r\n        <div class=\"form-group\">\r\n            <div>\r\n                <h6>Endereço</h6>\r\n            </div>\r\n            <input type=\"text\" class=\"d-none\" id=\"id\" name=\"cpf\" formControlName=\"addressId\" placeholder=\"CPF\">\r\n            <div class=\"form-row\">\r\n                <div class=\"form-group col-md-3\">\r\n                    <label for=\"street\">Rua</label>\r\n                    <input type=\"text\" class=\"form-control\" id=\"street\" name=\"street\" formControlName=\"street\">\r\n                </div>\r\n                <div class=\"form-group col-md-1\">\r\n                    <label for=\"number\">Número</label>\r\n                    <input type=\"text\" class=\"form-control\" id=\"number\" name=\"number\" formControlName=\"number\">\r\n                </div>\r\n                <div class=\"form-group col-md-2\">\r\n                    <label for=\"complement\">Complemento</label>\r\n                    <input type=\"text\" class=\"form-control\" id=\"complement\" name=\"complement\" formControlName=\"complement\">\r\n                </div>\r\n                <div class=\"form-group col-md-2\">\r\n                    <label for=\"city\">Cidade</label>\r\n                    <input type=\"text\" class=\"form-control\" id=\"city\" name=\"city\" formControlName=\"city\">\r\n                </div>\r\n                <div class=\"form-group col-md-2\">\r\n                    <label for=\"state\">Estado</label>\r\n                    <select id=\"state\" class=\"form-control\" name=\"state\" formControlName=\"state\">\r\n                        <option selected value=\"1\">Rio de Janeiro</option>\r\n                        <option value=\"2\">São Paulo</option>\r\n                    </select>\r\n                </div>\r\n                <div class=\"form-group col-md-2\">\r\n                    <label for=\"zip\">CEP</label>\r\n                    <input type=\"text\" class=\"form-control\" id=\"zip\" name=\"zip\" formControlName=\"zip\">\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class=\"form-group\">\r\n            <button [disabled]=\"loading\" class=\"btn btn-success btn-sm\">Salvar</button>\r\n            <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\r\n        </div>\r\n    </form>\r\n</div>\r\n<button class=\"btn btn-primary btn-sm mb-3 float-right\" (click)=\"toggle()\">{{title}}</button>\r\n<div id=\"list\">\r\n    <table class=\"table table-striped table-sm\">\r\n        <thead>\r\n            <tr>\r\n                <th scope=\"col\">Nome</th>\r\n                <th scope=\"col\">CPF</th>\r\n                <th scope=\"col\">Email</th>\r\n                <th scope=\"col\"></th>\r\n            </tr>\r\n        </thead>\r\n        <tbody>\r\n            <tr *ngFor=\"let patient of patients\">\r\n                <td>{{ patient.name }} </td>\r\n                <td>{{ patient.cpf }}</td>\r\n                <td>{{ patient.email }}</td>\r\n                <td>\r\n                    <a class=\"btn btn-info btn-sm\" (click)=\"edit(patient.id)\">\r\n                        <i class=\"far fa-edit\"></i></a>\r\n                    <a class=\"btn btn-danger btn-sm ml-1\" (click)=\"delete(patient.id)\">\r\n                        <i class=\"far fa-trash-alt\"></i></a></td>\r\n            </tr>\r\n        </tbody>\r\n    </table>\r\n</div>"
 
 /***/ }),
 
-/***/ "./src/app/home/pacient/pacient.component.ts":
+/***/ "./src/app/home/patient/patient.component.ts":
 /*!***************************************************!*\
-  !*** ./src/app/home/pacient/pacient.component.ts ***!
+  !*** ./src/app/home/patient/patient.component.ts ***!
   \***************************************************/
-/*! exports provided: PacientComponent */
+/*! exports provided: PatientComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PacientComponent", function() { return PacientComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PatientComponent", function() { return PatientComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _models__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../_models */ "./src/app/_models/index.ts");
 /* harmony import */ var _services__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../_services */ "./src/app/_services/index.ts");
@@ -2419,41 +2414,47 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-var PacientComponent = /** @class */ (function () {
-    function PacientComponent(formBuilder, pacientService) {
+var PatientComponent = /** @class */ (function () {
+    function PatientComponent(formBuilder, patientService) {
         this.formBuilder = formBuilder;
-        this.pacientService = pacientService;
+        this.patientService = patientService;
         this.loading = false;
         this.submitted = false;
         this.show = false;
         this.editing = false;
     }
-    PacientComponent.prototype.ngOnInit = function () {
+    PatientComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.patientService.getAll().subscribe(function (resp) { return _this.patients = resp; });
         this.cleanForm();
         this.title = this.show ? 'Cancelar' : 'Cadastrar';
     };
-    Object.defineProperty(PacientComponent.prototype, "stateList", {
+    Object.defineProperty(PatientComponent.prototype, "stateList", {
         get: function () {
             return this.show ? 'block' : 'none';
         },
         enumerable: true,
         configurable: true
     });
-    PacientComponent.prototype.toggle = function () {
+    PatientComponent.prototype.toggle = function () {
         this.submitted = false;
         this.show = !this.show;
         if (this.editing && !this.show) {
             this.cleanForm();
         }
+        if (this.editing) {
+            this.editing = false;
+        }
         this.title = this.show ? 'Cancelar' : 'Cadastrar';
     };
-    PacientComponent.prototype.cleanForm = function () {
+    PatientComponent.prototype.cleanForm = function () {
         this.registerForm = this.formBuilder.group({
             name: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
             cpf: [''],
             birthday: [''],
             phone: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
             email: [''],
+            addressId: [''],
             street: [],
             number: [],
             complement: [],
@@ -2462,71 +2463,84 @@ var PacientComponent = /** @class */ (function () {
             zip: []
         });
     };
-    Object.defineProperty(PacientComponent.prototype, "f", {
+    Object.defineProperty(PatientComponent.prototype, "f", {
         // convenience getter for easy access to form fields
         get: function () { return this.registerForm.controls; },
         enumerable: true,
         configurable: true
     });
-    PacientComponent.prototype.edit = function (id) {
-        var pacient = this.pacientService.getById(id);
-        this.registerForm = this.formBuilder.group({
-            name: [pacient.name, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
-            cpf: [pacient.cpf],
-            birthday: [pacient.birthday ? pacient.birthday.toISOString().split('T')[0] : ''],
-            phone: [pacient.phone, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
-            email: [pacient.email],
-            street: [pacient.address ? pacient.address.street : ''],
-            number: [pacient.address ? pacient.address.number : ''],
-            complement: [pacient.address ? pacient.address.complement : ''],
-            city: [pacient.address ? pacient.address.city : ''],
-            state: [pacient.address ? pacient.address.state : ''],
-            zip: [pacient.address ? pacient.address.zip : '']
+    PatientComponent.prototype.edit = function (id) {
+        var _this = this;
+        var patient = new _models__WEBPACK_IMPORTED_MODULE_1__["Patient"]();
+        this.patientService.getById(id).subscribe(function (resp) {
+            patient = resp;
+            _this.registerForm = _this.formBuilder.group({
+                name: [patient.name, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
+                cpf: [patient.cpf],
+                birthday: [patient.birthday ? patient.birthday.toString().split('T')[0] : ''],
+                phone: [patient.phone, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required],
+                email: [patient.email],
+                addressId: [patient.address ? patient.address.id : ''],
+                street: [patient.address ? patient.address.street : ''],
+                number: [patient.address ? patient.address.number : ''],
+                complement: [patient.address ? patient.address.complement : ''],
+                city: [patient.address ? patient.address.city : ''],
+                state: [patient.address ? patient.address.state : ''],
+                zip: [patient.address ? patient.address.zip : '']
+            });
+            _this.currentPatient = id;
+            _this.toggle();
+            _this.editing = true;
         });
-        this.editing = true;
-        this.currentPacient = id;
-        this.toggle();
     };
-    PacientComponent.prototype.delete = function (id) {
-        this.pacientService.delete(id);
+    PatientComponent.prototype.delete = function (id) {
+        var _this = this;
+        this.patientService.delete(id).subscribe(function (resp) {
+            _this.patientService.getAll().subscribe(function (resp) { return _this.patients = resp; });
+        });
     };
-    PacientComponent.prototype.onSubmit = function () {
+    PatientComponent.prototype.onSubmit = function () {
+        var _this = this;
         this.submitted = true;
         if (this.registerForm.invalid) {
             return;
         }
-        var pacient = new _models__WEBPACK_IMPORTED_MODULE_1__["Pacient"]();
+        var patient = new _models__WEBPACK_IMPORTED_MODULE_1__["Patient"]();
         var form = this.registerForm.value;
-        pacient.name = form.name;
-        pacient.email = form.email;
-        pacient.phone = form.phone;
-        pacient.cpf = form.cpf;
-        pacient.birthday = form.birthday;
+        patient.name = form.name;
+        patient.email = form.email;
+        patient.phone = form.phone;
+        patient.cpf = form.cpf;
+        patient.birthday = form.birthday;
         var address = new _models__WEBPACK_IMPORTED_MODULE_1__["Address"]();
+        address.id = form.addressId;
         address.city = form.city;
         address.complement = form.complement;
         address.number = form.number;
         address.state = form.state;
         address.street = form.street;
         address.zip = form.zip;
-        pacient.address = address;
+        patient.address = address;
         if (this.editing) {
-            pacient.id = this.currentPacient;
-            this.pacientService.update(pacient);
+            patient.id = this.currentPatient;
+            this.patientService.update(patient).subscribe(function (r) {
+                _this.patientService.getAll().subscribe(function (resp) { return _this.patients = resp; });
+            });
             this.editing = false;
         }
         else {
-            pacient.id = (this.pacientService.getAll().length + 1).toString();
-            this.pacientService.register(pacient);
+            this.patientService.register(patient).subscribe(function (r) {
+                _this.patientService.getAll().subscribe(function (resp) { return _this.patients = resp; });
+            });
         }
         this.toggle();
         this.cleanForm();
     };
-    PacientComponent = __decorate([
+    PatientComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: 'app-pacient',
-            template: __webpack_require__(/*! ./pacient.component.html */ "./src/app/home/pacient/pacient.component.html"),
-            styles: [__webpack_require__(/*! ./pacient.component.css */ "./src/app/home/pacient/pacient.component.css")],
+            selector: 'app-patient',
+            template: __webpack_require__(/*! ./patient.component.html */ "./src/app/home/patient/patient.component.html"),
+            styles: [__webpack_require__(/*! ./patient.component.css */ "./src/app/home/patient/patient.component.css")],
             animations: [
                 Object(_angular_animations__WEBPACK_IMPORTED_MODULE_4__["trigger"])('popOverState', [
                     Object(_angular_animations__WEBPACK_IMPORTED_MODULE_4__["state"])('none', Object(_angular_animations__WEBPACK_IMPORTED_MODULE_4__["style"])({
@@ -2542,9 +2556,9 @@ var PacientComponent = /** @class */ (function () {
                 ])
             ]
         }),
-        __metadata("design:paramtypes", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormBuilder"], _services__WEBPACK_IMPORTED_MODULE_2__["PacientService"]])
-    ], PacientComponent);
-    return PacientComponent;
+        __metadata("design:paramtypes", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormBuilder"], _services__WEBPACK_IMPORTED_MODULE_2__["PatientService"]])
+    ], PatientComponent);
+    return PatientComponent;
 }());
 
 
@@ -2621,7 +2635,7 @@ var ReceptionComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "body {\n    font-size: .875rem;\n  }\n  \n  .feather {\n    width: 16px;\n    height: 16px;\n    vertical-align: text-bottom;\n  }\n  \n  /*\n   * Sidebar\n   */\n  \n  .sidebar {\n    position: fixed;\n    top: 0;\n    bottom: 0;\n    left: 0;\n    z-index: 100; /* Behind the navbar */\n    padding: 48px 0 0; /* Height of navbar */\n    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);\n  }\n  \n  .sidebar-sticky {\n    position: relative;\n    top: 0;\n    height: calc(100vh - 48px);\n    padding-top: .5rem;\n    overflow-x: hidden;\n    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */\n  }\n  \n  @supports ((position: -webkit-sticky) or (position: sticky)) {\n    .sidebar-sticky {\n      position: -webkit-sticky;\n      position: sticky;\n    }\n  }\n  \n  .sidebar .nav-link {\n    font-weight: 500;\n    color: #333;\n  }\n  \n  .sidebar .nav-link .feather {\n    margin-right: 4px;\n    color: #999;\n  }\n  \n  .sidebar .nav-link.active {\n    color: #007bff;\n  }\n  \n  .sidebar .nav-link:hover .feather,\n  .sidebar .nav-link.active .feather {\n    color: inherit;\n  }\n  \n  .sidebar-heading {\n    font-size: .75rem;\n    text-transform: uppercase;\n  }\n  \n  /*\n   * Content\n   */\n  \n  [role=\"main\"] {\n    padding-top: 48px; /* Space for fixed navbar */\n  }\n  \n  /*\n   * Navbar\n   */\n  \n  .navbar-brand {\n    padding-top: .75rem;\n    padding-bottom: .75rem;\n    font-size: 1rem;\n    background-color: rgba(0, 0, 0, .25);\n    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);\n  }\n  \n  .navbar .form-control {\n    padding: .75rem 1rem;\n    border-width: 0;\n    border-radius: 0;\n  }\n  \n  .form-control-dark {\n    color: #fff;\n    background-color: rgba(255, 255, 255, .1);\n    border-color: rgba(255, 255, 255, .1);\n  }\n  \n  .form-control-dark:focus {\n    border-color: transparent;\n    box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);\n  }\n  "
+module.exports = "body {\r\n    font-size: .875rem;\r\n  }\r\n  \r\n  .feather {\r\n    width: 16px;\r\n    height: 16px;\r\n    vertical-align: text-bottom;\r\n  }\r\n  \r\n  /*\r\n   * Sidebar\r\n   */\r\n  \r\n  .sidebar {\r\n    position: fixed;\r\n    top: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    z-index: 100; /* Behind the navbar */\r\n    padding: 48px 0 0; /* Height of navbar */\r\n    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);\r\n  }\r\n  \r\n  .sidebar-sticky {\r\n    position: relative;\r\n    top: 0;\r\n    height: calc(100vh - 48px);\r\n    padding-top: .5rem;\r\n    overflow-x: hidden;\r\n    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */\r\n  }\r\n  \r\n  @supports ((position: -webkit-sticky) or (position: sticky)) {\r\n    .sidebar-sticky {\r\n      position: -webkit-sticky;\r\n      position: sticky;\r\n    }\r\n  }\r\n  \r\n  .sidebar .nav-link {\r\n    font-weight: 500;\r\n    color: #333;\r\n  }\r\n  \r\n  .sidebar .nav-link .feather {\r\n    margin-right: 4px;\r\n    color: #999;\r\n  }\r\n  \r\n  .sidebar .nav-link.active {\r\n    color: #007bff;\r\n  }\r\n  \r\n  .sidebar .nav-link:hover .feather,\r\n  .sidebar .nav-link.active .feather {\r\n    color: inherit;\r\n  }\r\n  \r\n  .sidebar-heading {\r\n    font-size: .75rem;\r\n    text-transform: uppercase;\r\n  }\r\n  \r\n  /*\r\n   * Content\r\n   */\r\n  \r\n  [role=\"main\"] {\r\n    padding-top: 48px; /* Space for fixed navbar */\r\n  }\r\n  \r\n  /*\r\n   * Navbar\r\n   */\r\n  \r\n  .navbar-brand {\r\n    padding-top: .75rem;\r\n    padding-bottom: .75rem;\r\n    font-size: 1rem;\r\n    background-color: rgba(0, 0, 0, .25);\r\n    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);\r\n  }\r\n  \r\n  .navbar .form-control {\r\n    padding: .75rem 1rem;\r\n    border-width: 0;\r\n    border-radius: 0;\r\n  }\r\n  \r\n  .form-control-dark {\r\n    color: #fff;\r\n    background-color: rgba(255, 255, 255, .1);\r\n    border-color: rgba(255, 255, 255, .1);\r\n  }\r\n  \r\n  .form-control-dark:focus {\r\n    border-color: transparent;\r\n    box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);\r\n  }\r\n  "
 
 /***/ }),
 
@@ -2632,7 +2646,7 @@ module.exports = "body {\n    font-size: .875rem;\n  }\n  \n  .feather {\n    wi
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow\">\n    <a class=\"navbar-brand col-sm-3 col-md-2 mr-0\" href=\"#\">Clinava</a>\n    <ul class=\"navbar-nav px-3\">\n      <li class=\"nav-item text-nowrap\">\n        <a class=\"nav-link\" [routerLink]=\"['/login']\">Sair</a>\n      </li>\n    </ul>\n</nav>\n\n  <div class=\"container-fluid\">\n    <div class=\"row\">\n      <nav class=\"col-md-2 d-none d-md-block bg-light sidebar\">\n        <div class=\"sidebar-sticky\">\n          <ul class=\"nav flex-column\">\n            \n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#recepcao\" >Recepção</a>\n              <div id=\"recepcao\" routerLinkActive=\"show\">\n                <ul class=\"nav flex-column ml-3\">\n                  <li class=\"nav-item\">\n                    <a class=\"nav-link\"  routerLink=\"/home/agenda\" routerLinkActive=\"active\">Agenda</a>\n                  </li>\n                  <li class=\"nav-item\" >\n                    <a class=\"nav-link\" routerLink=\"/home/consult\" routerLinkActive=\"active\">Consulta</a>\n                  </li>\n                  <li class=\"nav-item\">\n                    <a class=\"nav-link\" routerLink=\"/home/pacient\" routerLinkActive=\"active\">Paciente</a>\n                  </li>\n                </ul>\n              </div>\n            </li>\n            <li class=\"nav-item\">\n              <a class=\"nav-link\" href=\"#admin\">Administrativo</a>\n              <div id=\"admin\"  routerLinkActive=\"show\">\n                <ul class=\"nav flex-column ml-3\">\n                  <li class=\"nav-item\">\n                    <a class=\"nav-link\"  routerLink=\"/admin/user\" routerLinkActive=\"active\">Usuários</a>\n                  </li>\n                  <li class=\"nav-item\">\n                    <a class=\"nav-link\"  routerLink=\"/admin/configuration\" routerLinkActive=\"active\">Configurações</a>\n                  </li>\n                </ul>\n              </div>\n            </li>\n          </ul>\n        </div>\n      </nav>\n\n      <main role=\"main\" class=\"col-md-10 ml-sm-auto col-lg-10 px-4\">\n          <router-outlet></router-outlet>\n      </main>\n    </div>\n  </div>\n\n"
+module.exports = "<nav class=\"navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow\">\r\n    <a class=\"navbar-brand col-sm-3 col-md-2 mr-0\" href=\"#\">Clinava</a>\r\n    <ul class=\"navbar-nav px-3\">\r\n      <li class=\"nav-item text-nowrap\">\r\n        <a class=\"nav-link\" [routerLink]=\"['/login']\">Sair</a>\r\n      </li>\r\n    </ul>\r\n</nav>\r\n\r\n  <div class=\"container-fluid\">\r\n    <div class=\"row\">\r\n      <nav class=\"col-md-2 d-none d-md-block bg-light sidebar\">\r\n        <div class=\"sidebar-sticky\">\r\n          <ul class=\"nav flex-column\">\r\n            \r\n            <li class=\"nav-item\">\r\n              <a class=\"nav-link\" href=\"#recepcao\" >Recepção</a>\r\n              <div id=\"recepcao\" routerLinkActive=\"show\">\r\n                <ul class=\"nav flex-column ml-3\">\r\n                  <li class=\"nav-item\">\r\n                    <a class=\"nav-link\"  routerLink=\"/home/agenda\" routerLinkActive=\"active\">Agenda</a>\r\n                  </li>\r\n                  <li class=\"nav-item\" >\r\n                    <a class=\"nav-link\" routerLink=\"/home/consult\" routerLinkActive=\"active\">Consulta</a>\r\n                  </li>\r\n                  <li class=\"nav-item\">\r\n                    <a class=\"nav-link\" routerLink=\"/home/patient\" routerLinkActive=\"active\">Patiente</a>\r\n                  </li>\r\n                </ul>\r\n              </div>\r\n            </li>\r\n            <li class=\"nav-item\">\r\n              <a class=\"nav-link\" href=\"#admin\">Administrativo</a>\r\n              <div id=\"admin\"  routerLinkActive=\"show\">\r\n                <ul class=\"nav flex-column ml-3\">\r\n                  <li class=\"nav-item\">\r\n                    <a class=\"nav-link\"  routerLink=\"/admin/user\" routerLinkActive=\"active\">Usuários</a>\r\n                  </li>\r\n                  <li class=\"nav-item\">\r\n                    <a class=\"nav-link\"  routerLink=\"/admin/configuration\" routerLinkActive=\"active\">Configurações</a>\r\n                  </li>\r\n                </ul>\r\n              </div>\r\n            </li>\r\n          </ul>\r\n        </div>\r\n      </nav>\r\n\r\n      <main role=\"main\" class=\"col-md-10 ml-sm-auto col-lg-10 px-4\">\r\n          <router-outlet></router-outlet>\r\n      </main>\r\n    </div>\r\n  </div>\r\n\r\n"
 
 /***/ }),
 
@@ -2708,7 +2722,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div style=\"background-color: #F4F2F4;height: 100%;\">\n<div class=\"container py-5\" >\n    <div class=\"card\">\n        <div class=\"card-header\">\n          Login\n        </div>\n        <div class=\"card-body\">\n            <form [formGroup]=\"loginForm\" (ngSubmit)=\"onSubmit()\">\n                    \n                <div class=\"form-group\">\n                    <label for=\"username\">Email</label>\n                    <input type=\"text\" formControlName=\"username\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.username.errors }\" />\n                    <div *ngIf=\"submitted && f.username.errors\" class=\"invalid-feedback\">\n                        <div *ngIf=\"f.username.errors.required\">Email é obrigatório</div>\n                    </div>\n                </div>\n                <div class=\"form-group\">\n                    <label for=\"password\">Senha</label>\n                    <input type=\"password\" formControlName=\"password\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.password.errors }\" />\n                    <div *ngIf=\"submitted && f.password.errors\" class=\"invalid-feedback\">\n                        <div *ngIf=\"f.password.errors.required\">Senha obrigatória</div>\n                    </div>\n                </div>\n                <div class=\"form-group\">\n                    <button [disabled]=\"loading\" class=\"btn btn-primary\">Login</button>\n                    <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\n                    <!--<a [routerLink]=\"['/register']\" class=\"btn btn-link\">Registrar</a>-->\n                </div>\n            </form>\n        </div>\n      </div>\n</div>\n</div>\n"
+module.exports = "<div style=\"background-color: #F4F2F4;height: 100%;\">\r\n<div class=\"container py-5\" >\r\n    <div class=\"card\">\r\n        <div class=\"card-header\">\r\n          Login\r\n        </div>\r\n        <div class=\"card-body\">\r\n            <form [formGroup]=\"loginForm\" (ngSubmit)=\"onSubmit()\">\r\n                    \r\n                <div class=\"form-group\">\r\n                    <label for=\"username\">Email</label>\r\n                    <input type=\"text\" formControlName=\"username\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.username.errors }\" />\r\n                    <div *ngIf=\"submitted && f.username.errors\" class=\"invalid-feedback\">\r\n                        <div *ngIf=\"f.username.errors.required\">Email é obrigatório</div>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <label for=\"password\">Senha</label>\r\n                    <input type=\"password\" formControlName=\"password\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.password.errors }\" />\r\n                    <div *ngIf=\"submitted && f.password.errors\" class=\"invalid-feedback\">\r\n                        <div *ngIf=\"f.password.errors.required\">Senha obrigatória</div>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <button [disabled]=\"loading\" class=\"btn btn-primary\">Login</button>\r\n                    <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\r\n                    <!--<a [routerLink]=\"['/register']\" class=\"btn btn-link\">Registrar</a>-->\r\n                </div>\r\n            </form>\r\n        </div>\r\n      </div>\r\n</div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -2824,7 +2838,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h2>Register</h2>\n<form [formGroup]=\"registerForm\" (ngSubmit)=\"onSubmit()\">\n    <div class=\"form-group\">\n        <label for=\"firstName\">Nome Completo</label>\n        <input type=\"text\" formControlName=\"firstName\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.firstName.errors }\" />\n        <div *ngIf=\"submitted && f.firstName.errors\" class=\"invalid-feedback\">\n            <div *ngIf=\"f.firstName.errors.required\">First Name is required</div>\n        </div>\n    </div>\n    <div class=\"form-group\">\n        <label for=\"username\">Email</label>\n        <input type=\"text\" formControlName=\"username\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.username.errors }\" />\n        <div *ngIf=\"submitted && f.username.errors\" class=\"invalid-feedback\">\n            <div *ngIf=\"f.username.errors.required\">Username is required</div>\n        </div>\n    </div>\n    <div class=\"form-group\">\n        <label for=\"password\">Password</label>\n        <input type=\"password\" formControlName=\"password\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.password.errors }\" />\n        <div *ngIf=\"submitted && f.password.errors\" class=\"invalid-feedback\">\n            <div *ngIf=\"f.password.errors.required\">Password is required</div>\n            <div *ngIf=\"f.password.errors.minlength\">Password must be at least 6 characters</div>\n        </div>\n    </div>\n    <div class=\"form-group\">\n        <button [disabled]=\"loading\" class=\"btn btn-primary\">Register</button>\n        <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\n        <a [routerLink]=\"['/login']\" class=\"btn btn-link\">Cancel</a>\n    </div>\n</form>\n"
+module.exports = "<h2>Register</h2>\r\n<form [formGroup]=\"registerForm\" (ngSubmit)=\"onSubmit()\">\r\n    <div class=\"form-group\">\r\n        <label for=\"firstName\">Nome Completo</label>\r\n        <input type=\"text\" formControlName=\"firstName\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.firstName.errors }\" />\r\n        <div *ngIf=\"submitted && f.firstName.errors\" class=\"invalid-feedback\">\r\n            <div *ngIf=\"f.firstName.errors.required\">First Name is required</div>\r\n        </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n        <label for=\"username\">Email</label>\r\n        <input type=\"text\" formControlName=\"username\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.username.errors }\" />\r\n        <div *ngIf=\"submitted && f.username.errors\" class=\"invalid-feedback\">\r\n            <div *ngIf=\"f.username.errors.required\">Username is required</div>\r\n        </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n        <label for=\"password\">Password</label>\r\n        <input type=\"password\" formControlName=\"password\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.password.errors }\" />\r\n        <div *ngIf=\"submitted && f.password.errors\" class=\"invalid-feedback\">\r\n            <div *ngIf=\"f.password.errors.required\">Password is required</div>\r\n            <div *ngIf=\"f.password.errors.minlength\">Password must be at least 6 characters</div>\r\n        </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n        <button [disabled]=\"loading\" class=\"btn btn-primary\">Register</button>\r\n        <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\r\n        <a [routerLink]=\"['/login']\" class=\"btn btn-link\">Cancel</a>\r\n    </div>\r\n</form>\r\n"
 
 /***/ }),
 
@@ -2925,7 +2939,7 @@ __webpack_require__.r(__webpack_exports__);
 // The list of file replacements can be found in `angular.json`.
 var environment = {
     production: false,
-    apiUrl: 'https://clinava.herokuapp.com/api'
+    apiUrl: 'http://localhost:8888/api'
 };
 /*
  * In development mode, to ignore zone related error stack frames such as
@@ -2971,7 +2985,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/maurilio.machado/Dev/clinava-ampli/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! C:\Users\Maurílio\IdeaProjects\clinava-front\src\main.ts */"./src/main.ts");
 
 
 /***/ })

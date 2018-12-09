@@ -76,6 +76,7 @@ export class PatientComponent implements OnInit {
       birthday: [''],
       phone: ['',Validators.required],
       email: [''],
+      addressId: [''],
       street: [],
       number: [],
       complement: [],
@@ -94,9 +95,10 @@ export class PatientComponent implements OnInit {
       this.registerForm = this.formBuilder.group({
         name: [patient.name, Validators.required],
         cpf: [patient.cpf],
-        birthday: [patient.birthday ? patient.birthday.toISOString().split('T')[0] : ''],
-        phone: ['', Validators.required],
+        birthday: [patient.birthday ? patient.birthday.toString().split('T')[0] : ''],
+        phone: [patient.phone, Validators.required],
         email: [patient.email],
+        addressId: [patient.address ? patient.address.id : ''],
         street: [patient.address ? patient.address.street : ''],
         number: [patient.address ? patient.address.number : ''],
         complement: [patient.address ? patient.address.complement : ''],
@@ -129,6 +131,7 @@ export class PatientComponent implements OnInit {
     patient.cpf = form.cpf;
     patient.birthday = form.birthday;
     let address = new Address();
+    address.id = form.addressId;
     address.city = form.city;
     address.complement = form.complement;
     address.number = form.number;

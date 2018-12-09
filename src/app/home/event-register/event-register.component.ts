@@ -55,16 +55,21 @@ export class EventRegisterComponent implements OnInit {
     this.selected = true;
     this.patient = patient;
     this.patientName = patient.name;
-    this.patientPhone = patient.birthday.toLocaleDateString();
+    this.patientPhone = patient.birthday.toString();
   }
 
   onSubmit() {
+    console.log(this.selected);
     if (this.selected) {
       let event = new Event();
       event.patient = this.patient;
       event.date = this.date;
       event.duration = this.configService.getConfig().interval;
-      
+      this.userService.getById(this.user).subscribe(user => {
+        event.user = user;
+        this.eventService.register(event);
+        this.closeAndClean();
+      });
     } else if ((typeof this.patientName != 'undefined' && this.patientName) && (typeof this.patientPhone != 'undefined' && this.patientPhone)) {
       let event = new Event();
       event.patient = this.newPatient();

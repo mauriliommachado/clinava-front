@@ -29,7 +29,7 @@
         <div class="form-group">
             <label for="user">Patiente</label>
             <select formControlName="patient" class="form-control"  [ngClass]="{ 'is-invalid': submitted && f.patient.errors }">
-                <option [value]="patient.id" *ngFor="let patient of patientService.getAll()">{{patient.name}}</option>
+                <option [value]="patient.id" *ngFor="let patient of patients">{{patient.name}}</option>
             </select>
             <div *ngIf="submitted && f.patient.errors" class="invalid-feedback">
                 <div *ngIf="f.patient.errors.required">Obrigatório</div>
@@ -74,7 +74,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let event of eventService.getAll()">
+            <tr *ngFor="let event of events">
                 <td>{{ event.date | date:'dd/MM/yy - HH:mm' }}</td>
                 <td>{{ event.patient.name }}</td>
                 <td>{{ event.obs }}</td>
