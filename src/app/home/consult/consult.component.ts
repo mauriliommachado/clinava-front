@@ -109,14 +109,15 @@ export class ConsultComponent implements OnInit {
   edit(id: string) {
     this.eventService.getById(id).subscribe(resp => {
       let event = <Event>resp;
-      let sHour: string = event.date.getHours().toLocaleString();
-      let sMinute: string = event.date.getMinutes().toLocaleString();
+      console.log(event);
+      let sHour: string = new Date(event.date).getHours().toLocaleString();
+      let sMinute: string = new Date(event.date).getMinutes().toLocaleString();
       let time = (sHour.length == 1 ? ("0" + sHour) : sHour) + ":" + (sMinute.length == 1 ? ("0" + sMinute) : sMinute);
       this.registerForm = this.formBuilder.group({
         user: [event.user.id, Validators.required],
         patient: [event.patient.id, Validators.required],
         duration: [event.duration, Validators.required],
-        date: [event.date.toISOString().split('T')[0], Validators.required],
+        date: [event.date.toString().split('T')[0], Validators.required],
         obs: [event.obs],
         time: [time, Validators.required]
       });
@@ -127,7 +128,9 @@ export class ConsultComponent implements OnInit {
   }
 
   delete(id: string) {
-    this.eventService.delete(id);
+    this.eventService.delete(id).subscribe(resp => {
+      this.eventService.getAll().subscribe(resp => this.events = resp);
+    });;
   }
 
   onSubmit() {
@@ -145,10 +148,14 @@ export class ConsultComponent implements OnInit {
         event.patient = <Patient>resp;
         if (this.editing) {
           event.id = this.currentEvent;
-          this.eventService.update(event);
+          this.eventService.update(event).subscribe(resp => {
+            this.eventService.getAll().subscribe(resp => this.events = resp);
+          });
           this.editing = false;
         } else {
-          this.eventService.register(event).subscribe(resp=> resp);
+          this.eventService.register(event).subscribe(resp => {
+            this.eventService.getAll().subscribe(resp => this.events = resp);
+          });
         }
         this.toggle();
         this.cleanForm();

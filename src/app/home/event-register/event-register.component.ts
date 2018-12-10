@@ -42,12 +42,19 @@ export class EventRegisterComponent implements OnInit {
 
   closeModal(): void {
     this.close.emit();
+
   }
 
   onKey(event: any) {
     this.selected = false;
     this.patient = new Patient();
-    this.patientService.getByName(event.target.value).subscribe(resp => this.patients = resp);
+    if(this.patientName){
+      this.patientService.getByName(event.target.value).subscribe(resp => this.patients = resp);
+    }else{
+      this.patients = new Array();
+      this.patient = new Patient();
+    }
+    
   }
 
   select(patient: Patient) {
@@ -55,7 +62,7 @@ export class EventRegisterComponent implements OnInit {
     this.selected = true;
     this.patient = patient;
     this.patientName = patient.name;
-    this.patientPhone = patient.birthday.toString();
+    this.patientPhone = patient.phone;
   }
 
   onSubmit() {
@@ -92,10 +99,11 @@ export class EventRegisterComponent implements OnInit {
   }
 
   closeAndClean() {
-    this.closeModal();
     this.patient = new Patient();
+    this.patients = new Array();
     this.selected = false;
     this.patientName = "";
     this.patientPhone = "";
+    this.closeModal();
   }
 }

@@ -18,7 +18,7 @@ export class PatientService {
         if(!name || name == ""){
             return;
         }
-        return this.getAll();//.filter(p => p.name.toLowerCase().includes(name.toLowerCase()));
+        return this.http.get<Patient[]>(`${environment.apiUrl}/patients?name=`+ name);//.filter(p => p.name.toLowerCase().includes(name.toLowerCase()));
     }
 
     getById(id: string) {
