@@ -43,10 +43,6 @@ export class AgendaComponent implements OnInit {
         this.id = users.length > 0 ? users[0].id : null;
       });
     }
-    route.params.subscribe(val => {
-      this.ngOnInit();
-    });
-
   }
 
   ngOnInit() {
