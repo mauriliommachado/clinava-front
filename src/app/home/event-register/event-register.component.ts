@@ -84,7 +84,7 @@ export class EventRegisterComponent implements OnInit {
       event.duration = this.configService.getConfig().interval;
       this.userService.getById(this.user).subscribe(user => {
         event.user = user;
-        this.eventService.register(event);
+        this.eventService.register(event).subscribe(resp => resp);
         this.closeAndClean();
       });
     }
@@ -94,7 +94,7 @@ export class EventRegisterComponent implements OnInit {
     let patient = new Patient();
     patient.name = this.patientName;
     patient.phone = this.patientPhone;
-    this.patientService.register(patient);
+    this.patientService.register(patient).subscribe(resp => resp);
     return patient;
   }
 
