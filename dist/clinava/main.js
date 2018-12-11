@@ -563,7 +563,7 @@ var AuthenticationService = /** @class */ (function () {
         this.http = http;
     }
     AuthenticationService.prototype.login = function (username, password) {
-        return this.http.post("https://clinava.herokuapp.com/api/auth/signin", { username: username, password: password })
+        return this.http.post("http://localhost:8888/api/auth/signin", { username: username, password: password })
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (response) {
             // login successful if there's a jwt token in the response
             if (response && response.accessToken) {
@@ -574,7 +574,7 @@ var AuthenticationService = /** @class */ (function () {
         }));
     };
     AuthenticationService.prototype.signin = function (user) {
-        return this.http.post("https://clinava.herokuapp.com/api/auth/signup", user)
+        return this.http.post("http://localhost:8888/api/auth/signup", user)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (response) {
             alert(response);
             return response;
@@ -691,9 +691,11 @@ var EventService = /** @class */ (function () {
     };
     EventService.prototype.getByTime = function (date, interval, id) {
         //this should search in a range
-        var endDate = new Date(date.getTime() + interval * 60000);
-        return new Array().filter(function (e) { return e.user.id == id && e.date.getTime() >= date.getTime() && e.date.getTime() < endDate.getTime(); });
-        //return this.http.get<Event[]>(`${environment.apiUrl}/events?userId=` + id + '&startTime=' + date.getTime() + '&startTime=' + date.getTime());
+        var endDate = new Date(date.getTime() + interval * 60000 * 60);
+        //return new Array().filter(e => e.user.id == id && e.date.getTime() >= date.getTime() && e.date.getTime() < endDate.getTime());
+        //
+        //return this.http.get<Event[]>(`${environment.apiUrl}/events?startDate=2018-12-11T08:00&endDate=2018-12-11T10:00&userId=11`);
+        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/events?userId=" + id + '&startTime=' + date.getTime() + '&startTime=' + date.getTime());
     };
     EventService.prototype.getById = function (id) {
         return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/events/" + id);
@@ -1731,40 +1733,44 @@ var AgendaComponent = /** @class */ (function () {
         if (!this.id) {
             return;
         }
-        var _loop_1 = function (d) {
-            var day_1 = new Day();
-            day_1.events = new Array();
-            day_1.header = this_1.today.getDate() + d + "/" + (this_1.today.getMonth() + 1) + " - " + this_1.config.workingDays[d];
-            var _loop_2 = function (index) {
-                var event_1 = new _models_event__WEBPACK_IMPORTED_MODULE_1__["Event"]();
-                event_1.date = new Date(this_1.today);
-                event_1.date.setFullYear(this_1.today.getFullYear());
-                event_1.date.setMonth(this_1.today.getMonth());
-                event_1.date.setDate(this_1.today.getDate() + d);
-                event_1.date.setHours(this_1.config.hourInit);
-                event_1.date.setMinutes(0);
-                event_1.date.setSeconds(0);
-                event_1.date.setMilliseconds(0);
-                event_1.date.setTime(event_1.date.getTime() + this_1.config.interval * index * 60000);
-                var e = this_1.eventService.getByTime(event_1.date, this_1.config.interval, this_1.id);
-                if (e.length != 0) {
-                    e.forEach(function (element) {
-                        event_1 = element;
-                        day_1.events.push(event_1);
-                    });
-                    return "continue";
+        this.eventService.getByTime(this.today, this.config.interval, this.id).subscribe(function (resp) {
+            var _loop_1 = function (d) {
+                var day_1 = new Day();
+                day_1.events = new Array();
+                day_1.header = _this.today.getDate() + d + "/" + (_this.today.getMonth() + 1) + " - " + _this.config.workingDays[d];
+                var events = resp;
+                var _loop_2 = function (index) {
+                    var event_1 = new _models_event__WEBPACK_IMPORTED_MODULE_1__["Event"]();
+                    event_1.date = new Date(_this.today);
+                    event_1.date.setFullYear(_this.today.getFullYear());
+                    event_1.date.setMonth(_this.today.getMonth());
+                    event_1.date.setDate(_this.today.getDate() + d);
+                    event_1.date.setHours(_this.config.hourInit);
+                    event_1.date.setMinutes(0);
+                    event_1.date.setSeconds(0);
+                    event_1.date.setMilliseconds(0);
+                    event_1.date.setTime(event_1.date.getTime() + _this.config.interval * index * 60000);
+                    var endDate = new Date(event_1.date.getTime() + _this.config.interval * 60000);
+                    var e = events.filter(function (e) { return new Date(e.date).getTime() >= event_1.date.getTime() && new Date(e.date).getTime() < endDate.getTime(); });
+                    ;
+                    if (e.length != 0) {
+                        e.forEach(function (element) {
+                            event_1 = element;
+                            day_1.events.push(event_1);
+                        });
+                        return "continue";
+                    }
+                    day_1.events.push(event_1);
+                };
+                for (var index = 0; index <= spots; index++) {
+                    _loop_2(index);
                 }
-                day_1.events.push(event_1);
+                _this.days.push(day_1);
             };
-            for (var index = 0; index <= spots; index++) {
-                _loop_2(index);
+            for (var d = 0; d < _this.config.workingDays.length; d++) {
+                _loop_1(d);
             }
-            this_1.days.push(day_1);
-        };
-        var this_1 = this;
-        for (var d = 0; d < this.config.workingDays.length; d++) {
-            _loop_1(d);
-        }
+        });
     };
     AgendaComponent.prototype.add = function () {
         this.weekIndex = this.weekIndex + 1;

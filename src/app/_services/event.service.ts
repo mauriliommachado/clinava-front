@@ -18,9 +18,11 @@ export class EventService {
     getByTime(date: Date, interval: number, id: string) {
         //this should search in a range
         
-        let endDate = new Date(date.getTime() + interval * 60000);
-        return new Array().filter(e => e.user.id == id && e.date.getTime() >= date.getTime() && e.date.getTime() < endDate.getTime());
-        //return this.http.get<Event[]>(`${environment.apiUrl}/events?userId=` + id + '&startTime=' + date.getTime() + '&startTime=' + date.getTime());
+        let endDate = new Date(date.getTime() + interval * 60000 * 60);
+        //return new Array().filter(e => e.user.id == id && e.date.getTime() >= date.getTime() && e.date.getTime() < endDate.getTime());
+        //
+        //return this.http.get<Event[]>(`${environment.apiUrl}/events?startDate=2018-12-11T08:00&endDate=2018-12-11T10:00&userId=11`);
+        return this.http.get<Event[]>(`${environment.apiUrl}/events?userId=` + id + '&startTime=' + date.getTime() + '&startTime=' + date.getTime());
     }
 
     getById(id: string) {
