@@ -46,15 +46,14 @@ export class AgendaComponent implements OnInit {
     route.params.subscribe(val => {
       this.ngOnInit();
     });
-
   }
 
   ngOnInit() {
     this.weekIndex = 0;
-    this.initDates();
+    this.initDates("ngOnInit");
   }
 
-  initDates() {
+  initDates(source: string) {
     if (!this.id) {
       return;
     }
@@ -75,6 +74,8 @@ export class AgendaComponent implements OnInit {
       return;
     }
     this.eventService.getByTime(this.today, this.config.interval, this.id).subscribe(resp => {
+      this.days = new Array();
+    this.today = new Date();
       for (let d = 0; d < this.config.workingDays.length; d++) {
         let day = new Day();
         day.events = new Array();
@@ -110,22 +111,22 @@ export class AgendaComponent implements OnInit {
 
   add() {
     this.weekIndex = this.weekIndex + 1;
-    this.initDates();
+    this.initDates("add");
   }
 
   reset() {
     this.weekIndex = 0;
-    this.initDates();
+    this.initDates("reset");
   }
 
   sub() {
     this.weekIndex = this.weekIndex - 1;
-    this.initDates();
+    this.initDates("sub");
   }
 
   onClose() {
     this.visible = false;
-    this.initDates();
+    this.initDates("onClose");
   }
 
   show(date: Date) {
