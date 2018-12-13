@@ -48,13 +48,13 @@ export class EventRegisterComponent implements OnInit {
   onKey(event: any) {
     this.selected = false;
     this.patient = new Patient();
-    if(this.patientName){
+    if (this.patientName) {
       this.patientService.getByName(event.target.value).subscribe(resp => this.patients = resp);
-    }else{
+    } else {
       this.patients = new Array();
       this.patient = new Patient();
     }
-    
+
   }
 
   select(patient: Patient) {
@@ -77,22 +77,19 @@ export class EventRegisterComponent implements OnInit {
       });
     } else if ((typeof this.patientName != 'undefined' && this.patientName) && (typeof this.patientPhone != 'undefined' && this.patientPhone)) {
       let event = new Event();
-      event.patient = this.newPatient();
-      event.date = this.date;
-      event.duration = this.configService.getConfig().interval;
-      this.userService.getById(this.user).subscribe(user => {
-        event.user = user;
-        this.eventService.register(event).subscribe(resp => this.closeAndClean());
+      let patient = new Patient();
+      patient.name = this.patientName;
+      patient.phone = this.patientPhone;
+      this.patientService.register(patient).subscribe(resp => {
+        event.patient = <Patient>resp;
+        event.date = this.date;
+        event.duration = this.configService.getConfig().interval;
+        this.userService.getById(this.user).subscribe(user => {
+          event.user = user;
+          this.eventService.register(event).subscribe(resp => this.closeAndClean());
+        });
       });
     }
-  }
-
-  newPatient() {
-    let patient = new Patient();
-    patient.name = this.patientName;
-    patient.phone = this.patientPhone;
-    this.patientService.register(patient).subscribe(resp =>resp);
-    return patient;
   }
 
   closeAndClean() {
