@@ -66,7 +66,6 @@ export class EventRegisterComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.selected);
     if (this.selected) {
       let event = new Event();
       event.patient = this.patient;
@@ -74,8 +73,7 @@ export class EventRegisterComponent implements OnInit {
       event.duration = this.configService.getConfig().interval;
       this.userService.getById(this.user).subscribe(user => {
         event.user = user;
-        this.eventService.register(event);
-        this.closeAndClean();
+        this.eventService.register(event).subscribe(resp => this.closeAndClean());
       });
     } else if ((typeof this.patientName != 'undefined' && this.patientName) && (typeof this.patientPhone != 'undefined' && this.patientPhone)) {
       let event = new Event();
@@ -84,8 +82,7 @@ export class EventRegisterComponent implements OnInit {
       event.duration = this.configService.getConfig().interval;
       this.userService.getById(this.user).subscribe(user => {
         event.user = user;
-        this.eventService.register(event);
-        this.closeAndClean();
+        this.eventService.register(event).subscribe(resp => this.closeAndClean());
       });
     }
   }
@@ -94,7 +91,7 @@ export class EventRegisterComponent implements OnInit {
     let patient = new Patient();
     patient.name = this.patientName;
     patient.phone = this.patientPhone;
-    this.patientService.register(patient);
+    this.patientService.register(patient).subscribe(resp =>resp);
     return patient;
   }
 
