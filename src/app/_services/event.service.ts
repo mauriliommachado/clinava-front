@@ -15,14 +15,12 @@ export class EventService {
         return this.http.get<Event[]>(`${environment.apiUrl}/events`);
     }
 
-    getByTime(date: Date, interval: number, id: string) {
+    getByTime(date: Date, endDate: Date, id: string) {
         //this should search in a range
-        
-        let endDate = new Date(date.getTime() + interval * 60000 * 60);
         //return new Array().filter(e => e.user.id == id && e.date.getTime() >= date.getTime() && e.date.getTime() < endDate.getTime());
         //
         //return this.http.get<Event[]>(`${environment.apiUrl}/events?startDate=2018-12-11T08:00&endDate=2018-12-11T10:00&userId=11`);
-        return this.http.get<Event[]>(`${environment.apiUrl}/events?userId=` + id + '&startTime=' + date.getTime() + '&startTime=' + date.getTime());
+        return this.http.get<Event[]>(`${environment.apiUrl}/events?userId=` + id + '&startDate=' + date.toISOString()+ '&endDate=' + endDate.toISOString());
     }
 
     getById(id: string) {

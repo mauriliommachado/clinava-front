@@ -33,6 +33,7 @@ export class AgendaComponent implements OnInit {
     this.config = this.configService.getConfig();
     this.route.params.subscribe(params => {
       this.id = params["id"];
+      this.ngOnInit();
       // your code continues here
     });
     if (!this.id) {
@@ -44,7 +45,7 @@ export class AgendaComponent implements OnInit {
       });
     }
     route.params.subscribe(val => {
-      this.ngOnInit();
+
     });
   }
 
@@ -73,9 +74,11 @@ export class AgendaComponent implements OnInit {
     if (!this.id) {
       return;
     }
-    this.eventService.getByTime(this.today, this.config.interval, this.id).subscribe(resp => {
-      this.days = new Array();
-    this.today = new Date();
+    let endDate = new Date(this.today.getTime());
+    endDate.setDate(this.endDay);
+    endDate.setHours(this.config.hourEnd);
+    endDate.setMinutes(this.config.interval)
+    this.eventService.getByTime(this.today, endDate, this.id).subscribe(resp => {
       for (let d = 0; d < this.config.workingDays.length; d++) {
         let day = new Day();
         day.events = new Array();
