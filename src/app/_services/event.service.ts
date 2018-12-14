@@ -11,8 +11,12 @@ export class EventService {
     }
 
 
-    getAll() {
-        return this.http.get<Event[]>(`${environment.apiUrl}/events`);
+    getAll(date?: Date) {
+        if (date) {
+            return this.http.get<Event[]>(`${environment.apiUrl}/events?startDate=`+ date.toISOString());
+        } else {
+            return this.http.get<Event[]>(`${environment.apiUrl}/events`);
+        }
     }
 
     getByTime(date: Date, endDate: Date, id: string) {
@@ -20,7 +24,7 @@ export class EventService {
         //return new Array().filter(e => e.user.id == id && e.date.getTime() >= date.getTime() && e.date.getTime() < endDate.getTime());
         //
         //return this.http.get<Event[]>(`${environment.apiUrl}/events?startDate=2018-12-11T08:00&endDate=2018-12-11T10:00&userId=11`);
-        return this.http.get<Event[]>(`${environment.apiUrl}/events?userId=` + id + '&startDate=' + date.toISOString()+ '&endDate=' + endDate.toISOString());
+        return this.http.get<Event[]>(`${environment.apiUrl}/events?userId=` + id + '&startDate=' + date.toISOString() + '&endDate=' + endDate.toISOString());
     }
 
     getById(id: string) {

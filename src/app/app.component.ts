@@ -8,8 +8,6 @@
 export class AppComponent implements OnInit {
 
     ngOnInit() {
-        if (location.protocol === 'http:') {
-            window.location.href = location.href.replace('http', 'https');
-        }
+        
     }
 }

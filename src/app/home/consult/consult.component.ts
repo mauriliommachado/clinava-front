@@ -60,7 +60,7 @@ export class ConsultComponent implements OnInit {
   ngOnInit() {
     this.userService.getAttendants().subscribe(resp => this.attendants = resp);
     this.patientService.getAll().subscribe(resp => this.patients = resp);
-    this.eventService.getAll().subscribe(resp => this.events = resp);
+    this.getAll();
     this.indexDate = new Date();
     if ((this.indexDate.getHours()) < this.config.hourInit) {
       this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (this.config.hourInit - this.indexDate.getHours())));
@@ -78,6 +78,13 @@ export class ConsultComponent implements OnInit {
     this.resetDate();
     this.cleanForm();
     this.title = this.show ? 'Cancelar' : 'Cadastrar';
+  }
+
+  getAll(): any {
+    let dateNow = new Date();
+    dateNow.setHours(0);
+    dateNow.setMinutes(0);
+    this.eventService.getAll(dateNow).subscribe(resp => this.events = resp);
   }
 
 
@@ -129,7 +136,7 @@ export class ConsultComponent implements OnInit {
 
   delete(id: string) {
     this.eventService.delete(id).subscribe(resp => {
-      this.eventService.getAll().subscribe(resp => this.events = resp);
+      this.getAll();
     });;
   }
 
@@ -149,12 +156,12 @@ export class ConsultComponent implements OnInit {
         if (this.editing) {
           event.id = this.currentEvent;
           this.eventService.update(event).subscribe(resp => {
-            this.eventService.getAll().subscribe(resp => this.events = resp);
+            this.getAll();
           });
           this.editing = false;
         } else {
           this.eventService.register(event).subscribe(resp => {
-            this.eventService.getAll().subscribe(resp => this.events = resp);
+            this.getAll();
           });
         }
         this.toggle();
