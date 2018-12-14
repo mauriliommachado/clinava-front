@@ -133,9 +133,11 @@ export class AgendaComponent implements OnInit {
     this.initDates("onClose");
   }
 
-  show(date: Date) {
-    this.eventDate = date;
-    this.visible = true;
+  show(event: Event) {
+    if(!event.id){
+      this.eventDate = event.date;
+      this.visible = true;
+    }
   }
 
 }
