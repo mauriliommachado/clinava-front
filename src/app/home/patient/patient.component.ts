@@ -153,5 +153,4 @@ export class PatientComponent implements OnInit {
     this.toggle();
     this.cleanForm();
   }
-
 }

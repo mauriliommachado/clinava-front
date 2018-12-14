@@ -26,7 +26,7 @@ export class PatientService {
     }
 
     register(patient: Patient) {
-        return this.http.post(`${environment.apiUrl}/patients/`, patient).map(resp => resp);
+        return this.http.post(`${environment.apiUrl}/patients/`, patient, {observe: 'response'});
     }
 
     update(patient: Patient) {

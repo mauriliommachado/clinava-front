@@ -802,7 +802,7 @@ var PatientService = /** @class */ (function () {
         return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/patients/" + id);
     };
     PatientService.prototype.register = function (patient) {
-        return this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/patients/", patient).map(function (resp) { return resp; });
+        return this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/patients/", patient, { observe: 'response' });
     };
     PatientService.prototype.update = function (patient) {
         return this.http.put(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/patients/" + patient.id, patient).map(function (resp) { return resp; });
@@ -2159,7 +2159,7 @@ var EventRegisterComponent = /** @class */ (function () {
             patient.name = this.patientName;
             patient.phone = this.patientPhone;
             this.patientService.register(patient).subscribe(function (resp) {
-                event_2.patient = resp;
+                event_2.patient = resp.body;
                 event_2.date = _this.date;
                 event_2.duration = _this.configService.getConfig().interval;
                 _this.userService.getById(_this.user).subscribe(function (user) {
