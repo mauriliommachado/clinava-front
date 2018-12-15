@@ -7,20 +7,14 @@ import { Config } from '../_models/config';
 @Injectable()
 export class ConfigService {
     
-    config: Config;
 
     constructor(private http: HttpClient) {
-        this.config = this.config = new Config();
-        this.config.hourEnd = 10;
-        this.config.hourInit = 8;
-        this.config.interval = 30;
-        this.config.workingDays =new Array("Segunda", "Terça", "Quarta", "Quinta", "Sexta");
+        
     }
 
 
     getConfig() {
-        return this.config;
-        //return this.http.get<User[]>(`${environment.apiUrl}/users`);
+        return this.http.get<Config[]>(`${environment.apiUrl}/configurations`);
     }
 
     getById(id: string) {
@@ -29,13 +23,11 @@ export class ConfigService {
     }
 
     register(config: Config) {
-        this.config = config;
-        //return this.http.post(`${environment.apiUrl}/users/register`, user);
+        return this.http.post(`${environment.apiUrl}/configurations`, config);
     }
 
-    update(user: Config) {
-        
-        //return this.http.put(`${environment.apiUrl}/users/` + user.id, user);
+    update(config: Config) {
+        return this.http.put(`${environment.apiUrl}/configurations/` + config.id, config);
     }
 
     delete(id: number) {

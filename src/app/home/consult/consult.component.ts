@@ -53,31 +53,43 @@ export class ConsultComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private userService: UserService, private configService: ConfigService
     , private eventService: EventService, private patientService: PatientService) {
-    this.config = this.configService.getConfig();
+
   }
 
 
   ngOnInit() {
-    this.userService.getAttendants().subscribe(resp => this.attendants = resp);
-    this.patientService.getAll().subscribe(resp => this.patients = resp);
-    this.getAll();
-    this.indexDate = new Date();
-    if ((this.indexDate.getHours()) < this.config.hourInit) {
-      this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (this.config.hourInit - this.indexDate.getHours())));
-      this.indexDate.setMinutes(0);
-    } else if ((this.indexDate.getHours() + 1) > this.config.hourEnd) {
-      this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (24 - this.indexDate.getHours())));
-      this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (this.config.hourInit - this.indexDate.getHours())));
-      this.indexDate.setMinutes(0);
-    } else if (this.indexDate.getMinutes() > this.config.interval) {
-      this.indexDate.setTime(60 * 60 * 1000 + this.indexDate.getTime());
-      this.indexDate.setMinutes(0);
-    } else {
-      this.indexDate.setMinutes(30);
-    }
-    this.resetDate();
-    this.cleanForm();
-    this.title = this.show ? 'Cancelar' : 'Cadastrar';
+    this.registerForm = this.formBuilder.group({
+      user: ['', Validators.required],
+      patient: ['', Validators.required],
+      duration: ['', Validators.required],
+      date: ['', Validators.required],
+      obs: [],
+      time: ['', Validators.required]
+    });
+    this.configService.getConfig().subscribe(resp => {
+      this.config = resp[0];
+      this.userService.getAttendants().subscribe(resp => this.attendants = resp);
+      this.patientService.getAll().subscribe(resp => this.patients = resp);
+      this.getAll();
+      this.indexDate = new Date();
+      if ((this.indexDate.getHours()) < this.config.hourInit) {
+        this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (this.config.hourInit - this.indexDate.getHours())));
+        this.indexDate.setMinutes(0);
+      } else if ((this.indexDate.getHours() + 1) > this.config.hourEnd) {
+        this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (24 - this.indexDate.getHours())));
+        this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (this.config.hourInit - this.indexDate.getHours())));
+        this.indexDate.setMinutes(0);
+      } else if (this.indexDate.getMinutes() > this.config.interval) {
+        this.indexDate.setTime(60 * 60 * 1000 + this.indexDate.getTime());
+        this.indexDate.setMinutes(0);
+      } else {
+        this.indexDate.setMinutes(30);
+      }
+      this.resetDate();
+      this.cleanForm();
+      this.title = this.show ? 'Cancelar' : 'Cadastrar';
+    });
+
   }
 
   getAll(): any {

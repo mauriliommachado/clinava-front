@@ -30,7 +30,8 @@ export class AgendaComponent implements OnInit {
   docName: string = "Selecione um atendente";
 
   constructor(private userService: UserService, private configService: ConfigService, private eventService: EventService, private route: ActivatedRoute) {
-    this.config = this.configService.getConfig();
+    
+    
     this.route.params.subscribe(params => {
       this.id = params["id"];
       this.ngOnInit();
@@ -51,7 +52,10 @@ export class AgendaComponent implements OnInit {
 
   ngOnInit() {
     this.weekIndex = 0;
-    this.initDates("ngOnInit");
+    this.configService.getConfig().subscribe(resp => {
+      this.config = resp[0];
+      this.initDates("ngOnInit");
+    });
   }
 
   initDates(source: string) {

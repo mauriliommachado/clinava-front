@@ -1,8 +1,5 @@
 <h4>{{docName}}</h4>
 <h6 *ngIf="docName != 'Selecione um atendente'">{{initDay}}-{{endDay}} {{month}}</h6>
-<div class="list-group" *ngIf="docName == 'Selecione um atendente'">
-<a *ngFor="let user of attendants" class="list-group-item" [routerLink]="['/home/agenda', user.id]">{{user.name}}</a>
-</div>
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
         <li class="page-item">

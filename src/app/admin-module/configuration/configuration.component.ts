@@ -17,12 +17,18 @@ export class ConfigurationComponent implements OnInit {
 
 
   cleanForm() {
-    this.registerForm = this.formBuilder.group({
-      hourInit: [this.configService.getConfig().hourInit, Validators.required],
-      hourEnd: [this.configService.getConfig().hourEnd, Validators.required],
-      interval: [this.configService.getConfig().interval, Validators.required],
-      workingDays: [this.configService.getConfig().workingDays, Validators.required]
-    });
+    let config;
+    this.configService.getConfig().subscribe(resp => {
+      config = resp[0];
+      console.log(config);
+      this.registerForm = this.formBuilder.group({
+        id: [config.id, Validators.required],
+        hourInit: [config.hourInit, Validators.required],
+        hourEnd: [config.hourEnd, Validators.required],
+        interval: [config.interval, Validators.required],
+        workingDays: [config.workingDays, Validators.required]
+      });
+    });    
   }
   // convenience getter for easy access to form fields
   get f() { return this.registerForm.controls; }
@@ -34,6 +40,13 @@ export class ConfigurationComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.registerForm = this.formBuilder.group({
+      id: ["", Validators.required],
+      hourInit: ["", Validators.required],
+      hourEnd: ["", Validators.required],
+      interval: ["", Validators.required],
+      workingDays: ["", Validators.required]
+    });
     this.cleanForm();
   }
 
@@ -43,9 +56,10 @@ export class ConfigurationComponent implements OnInit {
       return;
     }
     let configuration = <Config>this.registerForm.value;
-    this.configService.register(configuration);
-    this.cleanForm();
-    this.submitted = false;
+    this.configService.update(configuration).subscribe(resp => {
+      this.cleanForm();
+      this.submitted = false;
+    });
   }
 
 

@@ -2,6 +2,7 @@
 <br>
 <div id="new">
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <input type="number" formControlName="id" class="d-none"/>
     <div class="form-group">
       <label for="hourInit">Abertura de Horário de Atendimento</label>
       <input type="number" formControlName="hourInit" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.hourInit.errors }" />

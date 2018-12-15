@@ -367,7 +367,7 @@ var Event = /** @class */ (function () {
 /*!**********************************!*\
   !*** ./src/app/_models/index.ts ***!
   \**********************************/
-/*! exports provided: Config, Event, User, Patient, Address, Role, Contact */
+/*! exports provided: Event, User, Config, Patient, Address, Role, Contact */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -607,7 +607,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ConfigService", function() { return ConfigService; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var _models_config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../_models/config */ "./src/app/_models/config.ts");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../environments/environment */ "./src/environments/environment.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -623,25 +623,18 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var ConfigService = /** @class */ (function () {
     function ConfigService(http) {
         this.http = http;
-        this.config = this.config = new _models_config__WEBPACK_IMPORTED_MODULE_2__["Config"]();
-        this.config.hourEnd = 10;
-        this.config.hourInit = 8;
-        this.config.interval = 30;
-        this.config.workingDays = new Array("Segunda", "Terça", "Quarta", "Quinta", "Sexta");
     }
     ConfigService.prototype.getConfig = function () {
-        return this.config;
-        //return this.http.get<User[]>(`${environment.apiUrl}/users`);
+        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/configurations");
     };
     ConfigService.prototype.getById = function (id) {
         //return this.http.get(`${environment.apiUrl}/users/` + id);
     };
     ConfigService.prototype.register = function (config) {
-        this.config = config;
-        //return this.http.post(`${environment.apiUrl}/users/register`, user);
+        return this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/configurations", config);
     };
-    ConfigService.prototype.update = function (user) {
-        //return this.http.put(`${environment.apiUrl}/users/` + user.id, user);
+    ConfigService.prototype.update = function (config) {
+        return this.http.put(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "/configurations/" + config.id, config);
     };
     ConfigService.prototype.delete = function (id) {
         //return this.http.delete(`${environment.apiUrl}/users/` + id);
@@ -1118,7 +1111,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h4>Configurações</h4>\r\n<br>\r\n<div id=\"new\">\r\n  <form [formGroup]=\"registerForm\" (ngSubmit)=\"onSubmit()\">\r\n    <div class=\"form-group\">\r\n      <label for=\"hourInit\">Abertura de Horário de Atendimento</label>\r\n      <input type=\"number\" formControlName=\"hourInit\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.hourInit.errors }\" />\r\n      <div *ngIf=\"submitted && f.hourInit.errors\" class=\"invalid-feedback\">\r\n        <div *ngIf=\"f.hourInit.errors.required\">Obrigatório</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label for=\"hourEnd\">Fechamento de Horário de Atendimento</label>\r\n      <input type=\"number\" formControlName=\"hourEnd\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.hourEnd.errors }\" />\r\n      <div *ngIf=\"submitted && f.hourEnd.errors\" class=\"invalid-feedback\">\r\n        <div *ngIf=\"f.hourEnd.errors.required\">Obrigatório</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label for=\"interval\">Intervalo de Atendimentos (Minutos)</label>\r\n      <input type=\"number\" formControlName=\"interval\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.interval.errors }\" />\r\n      <div *ngIf=\"submitted && f.interval.errors\" class=\"invalid-feedback\">\r\n        <div *ngIf=\"f.interval.errors.required\">Obrigatório</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label for=\"workingDays\">Dias de trabalhados (Selecione dias diferentes usando a tecla CTRL)</label>\r\n      <select multiple class=\"form-control\" id=\"workingDays\" size=\"7\" formControlName=\"workingDays\">\r\n        <option value=\"Domingo\">Domingo</option>\r\n        <option value=\"Segunda\">Segunda</option>\r\n        <option value=\"Terça\">Terça</option>\r\n        <option value=\"Quarta\">Quarta</option>\r\n        <option value=\"Quinta\">Quinta</option>\r\n        <option value=\"Sexta\">Sexta</option>\r\n        <option value=\"Sabado\">Sabado</option>\r\n      </select>\r\n      <div *ngIf=\"submitted && f.workingDays.errors\" class=\"invalid-feedback\">\r\n        <div *ngIf=\"f.workingDays.errors.required\">Obrigatório</div>\r\n      </div>\r\n    </div>\r\n    \r\n    <div class=\"form-group\">\r\n      <button [disabled]=\"loading\" class=\"btn btn-primary\">Salvar</button>\r\n      <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\r\n    </div>\r\n  </form>\r\n</div>"
+module.exports = "<h4>Configurações</h4>\r\n<br>\r\n<div id=\"new\">\r\n  <form [formGroup]=\"registerForm\" (ngSubmit)=\"onSubmit()\">\r\n      <input type=\"number\" formControlName=\"id\" class=\"d-none\"/>\r\n    <div class=\"form-group\">\r\n      <label for=\"hourInit\">Abertura de Horário de Atendimento</label>\r\n      <input type=\"number\" formControlName=\"hourInit\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.hourInit.errors }\" />\r\n      <div *ngIf=\"submitted && f.hourInit.errors\" class=\"invalid-feedback\">\r\n        <div *ngIf=\"f.hourInit.errors.required\">Obrigatório</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label for=\"hourEnd\">Fechamento de Horário de Atendimento</label>\r\n      <input type=\"number\" formControlName=\"hourEnd\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.hourEnd.errors }\" />\r\n      <div *ngIf=\"submitted && f.hourEnd.errors\" class=\"invalid-feedback\">\r\n        <div *ngIf=\"f.hourEnd.errors.required\">Obrigatório</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label for=\"interval\">Intervalo de Atendimentos (Minutos)</label>\r\n      <input type=\"number\" formControlName=\"interval\" class=\"form-control\" [ngClass]=\"{ 'is-invalid': submitted && f.interval.errors }\" />\r\n      <div *ngIf=\"submitted && f.interval.errors\" class=\"invalid-feedback\">\r\n        <div *ngIf=\"f.interval.errors.required\">Obrigatório</div>\r\n      </div>\r\n    </div>\r\n    <div class=\"form-group\">\r\n      <label for=\"workingDays\">Dias de trabalhados (Selecione dias diferentes usando a tecla CTRL)</label>\r\n      <select multiple class=\"form-control\" id=\"workingDays\" size=\"7\" formControlName=\"workingDays\">\r\n        <option value=\"Domingo\">Domingo</option>\r\n        <option value=\"Segunda\">Segunda</option>\r\n        <option value=\"Terça\">Terça</option>\r\n        <option value=\"Quarta\">Quarta</option>\r\n        <option value=\"Quinta\">Quinta</option>\r\n        <option value=\"Sexta\">Sexta</option>\r\n        <option value=\"Sabado\">Sabado</option>\r\n      </select>\r\n      <div *ngIf=\"submitted && f.workingDays.errors\" class=\"invalid-feedback\">\r\n        <div *ngIf=\"f.workingDays.errors.required\">Obrigatório</div>\r\n      </div>\r\n    </div>\r\n    \r\n    <div class=\"form-group\">\r\n      <button [disabled]=\"loading\" class=\"btn btn-primary\">Salvar</button>\r\n      <img *ngIf=\"loading\" src=\"data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==\" />\r\n    </div>\r\n  </form>\r\n</div>"
 
 /***/ }),
 
@@ -1156,11 +1149,18 @@ var ConfigurationComponent = /** @class */ (function () {
         this.submitted = false;
     }
     ConfigurationComponent.prototype.cleanForm = function () {
-        this.registerForm = this.formBuilder.group({
-            hourInit: [this.configService.getConfig().hourInit, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            hourEnd: [this.configService.getConfig().hourEnd, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            interval: [this.configService.getConfig().interval, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            workingDays: [this.configService.getConfig().workingDays, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required]
+        var _this = this;
+        var config;
+        this.configService.getConfig().subscribe(function (resp) {
+            config = resp[0];
+            console.log(config);
+            _this.registerForm = _this.formBuilder.group({
+                id: [config.id, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+                hourInit: [config.hourInit, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+                hourEnd: [config.hourEnd, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+                interval: [config.interval, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+                workingDays: [config.workingDays, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required]
+            });
         });
     };
     Object.defineProperty(ConfigurationComponent.prototype, "f", {
@@ -1170,17 +1170,26 @@ var ConfigurationComponent = /** @class */ (function () {
         configurable: true
     });
     ConfigurationComponent.prototype.ngOnInit = function () {
+        this.registerForm = this.formBuilder.group({
+            id: ["", _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+            hourInit: ["", _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+            hourEnd: ["", _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+            interval: ["", _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+            workingDays: ["", _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required]
+        });
         this.cleanForm();
     };
     ConfigurationComponent.prototype.onSubmit = function () {
+        var _this = this;
         this.submitted = true;
         if (this.registerForm.invalid) {
             return;
         }
         var configuration = this.registerForm.value;
-        this.configService.register(configuration);
-        this.cleanForm();
-        this.submitted = false;
+        this.configService.update(configuration).subscribe(function (resp) {
+            _this.cleanForm();
+            _this.submitted = false;
+        });
     };
     ConfigurationComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -1653,7 +1662,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h4>{{docName}}</h4>\r\n<h6 *ngIf=\"docName != 'Selecione um atendente'\">{{initDay}}-{{endDay}} {{month}}</h6>\r\n<div class=\"list-group\" *ngIf=\"docName == 'Selecione um atendente'\">\r\n<a *ngFor=\"let user of attendants\" class=\"list-group-item\" [routerLink]=\"['/home/agenda', user.id]\">{{user.name}}</a>\r\n</div>\r\n<nav aria-label=\"Page navigation example\">\r\n    <ul class=\"pagination justify-content-center\">\r\n        <li class=\"page-item\">\r\n            <a class=\"page-link\" (click)=\"sub()\">Anterior</a>\r\n        </li>\r\n        <li class=\"page-item\">\r\n            <a class=\"page-link\" (click)=\"reset()\">Hoje</a>\r\n        </li>\r\n        <li class=\"page-item\">\r\n            <a class=\"page-link\" (click)=\"add()\">Próxima</a>\r\n        </li>\r\n    </ul>\r\n</nav>\r\n\r\n<div class=\"container\">\r\n    <div class=\"row no-gutters\">\r\n        <div *ngFor=\"let day of days\" class=\"col mr-1\">\r\n            <ul class=\"list-group\">\r\n                <li class=\"list-group-item active d-flex justify-content-between align-items-center\">\r\n                    {{day.header}}\r\n                </li>\r\n                <!-- <li *ngFor=\"let consult of day.events\" [ngClass]=\"{'list-group-item-success': consult.user == null, 'list-group-item-danger': consult.user != null}\"\r\n                    class=\"list-group-item  d-flex justify-content-between align-items-center\">\r\n                    <span class=\"badge badge-pill\">{{consult.date | date: \"HH:mm\"}}</span>\r\n                    <span *ngIf=\"consult.user != null\">{{consult.user.name}}</span>\r\n                    <span *ngIf=\"consult.user == null\">Vago</span>\r\n                </li> -->\r\n                <a *ngFor=\"let consult of day.events\" (click)=\"show(consult)\" [ngClass]=\"{'list-group-item-success': consult.user == null, 'list-group-item-danger': consult.user != null}\"\r\n                    class=\"list-group-item list-group-item-action flex-column align-items-start\">\r\n                    <div class=\"d-flex w-100 justify-content-between\">\r\n                        <span class=\"badge badge-pill\">{{consult.date | date: \"HH:mm\"}}</span>\r\n                        <h6 class=\"mb-1\" *ngIf=\"consult.user == null\">Vago</h6>\r\n                        <h6 class=\"mb-1\" *ngIf=\"consult.user != null\">Consulta</h6>\r\n                    </div>\r\n                    <p class=\"mb-1\" *ngIf=\"consult.patient != null\">{{consult.patient.name}}</p>\r\n                    <p class=\"mb-1\" *ngIf=\"consult.patient == null\">Horário vago</p>\r\n                </a>\r\n            </ul>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<app-event-register [date]=\"eventDate\" [user]=\"id\" [visible]=\"visible\" (close)=\"onClose()\"></app-event-register>"
+module.exports = "<h4>{{docName}}</h4>\r\n<h6 *ngIf=\"docName != 'Selecione um atendente'\">{{initDay}}-{{endDay}} {{month}}</h6>\r\n<nav aria-label=\"Page navigation example\">\r\n    <ul class=\"pagination justify-content-center\">\r\n        <li class=\"page-item\">\r\n            <a class=\"page-link\" (click)=\"sub()\">Anterior</a>\r\n        </li>\r\n        <li class=\"page-item\">\r\n            <a class=\"page-link\" (click)=\"reset()\">Hoje</a>\r\n        </li>\r\n        <li class=\"page-item\">\r\n            <a class=\"page-link\" (click)=\"add()\">Próxima</a>\r\n        </li>\r\n    </ul>\r\n</nav>\r\n\r\n<div class=\"container\">\r\n    <div class=\"row no-gutters\">\r\n        <div *ngFor=\"let day of days\" class=\"col mr-1\">\r\n            <ul class=\"list-group\">\r\n                <li class=\"list-group-item active d-flex justify-content-between align-items-center\">\r\n                    {{day.header}}\r\n                </li>\r\n                <!-- <li *ngFor=\"let consult of day.events\" [ngClass]=\"{'list-group-item-success': consult.user == null, 'list-group-item-danger': consult.user != null}\"\r\n                    class=\"list-group-item  d-flex justify-content-between align-items-center\">\r\n                    <span class=\"badge badge-pill\">{{consult.date | date: \"HH:mm\"}}</span>\r\n                    <span *ngIf=\"consult.user != null\">{{consult.user.name}}</span>\r\n                    <span *ngIf=\"consult.user == null\">Vago</span>\r\n                </li> -->\r\n                <a *ngFor=\"let consult of day.events\" (click)=\"show(consult)\" [ngClass]=\"{'list-group-item-success': consult.user == null, 'list-group-item-danger': consult.user != null}\"\r\n                    class=\"list-group-item list-group-item-action flex-column align-items-start\">\r\n                    <div class=\"d-flex w-100 justify-content-between\">\r\n                        <span class=\"badge badge-pill\">{{consult.date | date: \"HH:mm\"}}</span>\r\n                        <h6 class=\"mb-1\" *ngIf=\"consult.user == null\">Vago</h6>\r\n                        <h6 class=\"mb-1\" *ngIf=\"consult.user != null\">Consulta</h6>\r\n                    </div>\r\n                    <p class=\"mb-1\" *ngIf=\"consult.patient != null\">{{consult.patient.name}}</p>\r\n                    <p class=\"mb-1\" *ngIf=\"consult.patient == null\">Horário vago</p>\r\n                </a>\r\n            </ul>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<app-event-register [date]=\"eventDate\" [user]=\"id\" [visible]=\"visible\" (close)=\"onClose()\"></app-event-register>"
 
 /***/ }),
 
@@ -1697,7 +1706,6 @@ var AgendaComponent = /** @class */ (function () {
         this.eventDate = new Date();
         this.visible = false;
         this.docName = "Selecione um atendente";
-        this.config = this.configService.getConfig();
         this.route.params.subscribe(function (params) {
             _this.id = params["id"];
             _this.ngOnInit();
@@ -1715,8 +1723,12 @@ var AgendaComponent = /** @class */ (function () {
         });
     }
     AgendaComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.weekIndex = 0;
-        this.initDates("ngOnInit");
+        this.configService.getConfig().subscribe(function (resp) {
+            _this.config = resp[0];
+            _this.initDates("ngOnInit");
+        });
     };
     AgendaComponent.prototype.initDates = function (source) {
         var _this = this;
@@ -1885,33 +1897,43 @@ var ConsultComponent = /** @class */ (function () {
         this.submitted = false;
         this.show = false;
         this.editing = false;
-        this.config = this.configService.getConfig();
     }
     ConsultComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.userService.getAttendants().subscribe(function (resp) { return _this.attendants = resp; });
-        this.patientService.getAll().subscribe(function (resp) { return _this.patients = resp; });
-        this.getAll();
-        this.indexDate = new Date();
-        if ((this.indexDate.getHours()) < this.config.hourInit) {
-            this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (this.config.hourInit - this.indexDate.getHours())));
-            this.indexDate.setMinutes(0);
-        }
-        else if ((this.indexDate.getHours() + 1) > this.config.hourEnd) {
-            this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (24 - this.indexDate.getHours())));
-            this.indexDate.setTime(this.indexDate.getTime() + (60 * 60 * 1000 * (this.config.hourInit - this.indexDate.getHours())));
-            this.indexDate.setMinutes(0);
-        }
-        else if (this.indexDate.getMinutes() > this.config.interval) {
-            this.indexDate.setTime(60 * 60 * 1000 + this.indexDate.getTime());
-            this.indexDate.setMinutes(0);
-        }
-        else {
-            this.indexDate.setMinutes(30);
-        }
-        this.resetDate();
-        this.cleanForm();
-        this.title = this.show ? 'Cancelar' : 'Cadastrar';
+        this.registerForm = this.formBuilder.group({
+            user: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+            patient: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+            duration: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+            date: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+            obs: [],
+            time: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required]
+        });
+        this.configService.getConfig().subscribe(function (resp) {
+            _this.config = resp[0];
+            _this.userService.getAttendants().subscribe(function (resp) { return _this.attendants = resp; });
+            _this.patientService.getAll().subscribe(function (resp) { return _this.patients = resp; });
+            _this.getAll();
+            _this.indexDate = new Date();
+            if ((_this.indexDate.getHours()) < _this.config.hourInit) {
+                _this.indexDate.setTime(_this.indexDate.getTime() + (60 * 60 * 1000 * (_this.config.hourInit - _this.indexDate.getHours())));
+                _this.indexDate.setMinutes(0);
+            }
+            else if ((_this.indexDate.getHours() + 1) > _this.config.hourEnd) {
+                _this.indexDate.setTime(_this.indexDate.getTime() + (60 * 60 * 1000 * (24 - _this.indexDate.getHours())));
+                _this.indexDate.setTime(_this.indexDate.getTime() + (60 * 60 * 1000 * (_this.config.hourInit - _this.indexDate.getHours())));
+                _this.indexDate.setMinutes(0);
+            }
+            else if (_this.indexDate.getMinutes() > _this.config.interval) {
+                _this.indexDate.setTime(60 * 60 * 1000 + _this.indexDate.getTime());
+                _this.indexDate.setMinutes(0);
+            }
+            else {
+                _this.indexDate.setMinutes(30);
+            }
+            _this.resetDate();
+            _this.cleanForm();
+            _this.title = _this.show ? 'Cancelar' : 'Cadastrar';
+        });
     };
     ConsultComponent.prototype.getAll = function () {
         var _this = this;
@@ -2160,27 +2182,33 @@ var EventRegisterComponent = /** @class */ (function () {
     EventRegisterComponent.prototype.onSubmit = function () {
         var _this = this;
         if (this.selected) {
-            var event_1 = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Event"]();
-            event_1.patient = this.patient;
-            event_1.date = this.date;
-            event_1.duration = this.configService.getConfig().interval;
-            this.userService.getById(this.user).subscribe(function (user) {
-                event_1.user = user;
-                _this.eventService.register(event_1).subscribe(function (resp) { return _this.closeAndClean(); });
+            this.configService.getConfig().subscribe(function (resp) {
+                var config = resp[0];
+                var event = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Event"]();
+                event.patient = _this.patient;
+                event.date = _this.date;
+                event.duration = config.interval;
+                _this.userService.getById(_this.user).subscribe(function (user) {
+                    event.user = user;
+                    _this.eventService.register(event).subscribe(function (resp) { return _this.closeAndClean(); });
+                });
             });
         }
         else if ((typeof this.patientName != 'undefined' && this.patientName) && (typeof this.patientPhone != 'undefined' && this.patientPhone)) {
-            var event_2 = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Event"]();
-            var patient = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Patient"]();
-            patient.name = this.patientName;
-            patient.phone = this.patientPhone;
-            this.patientService.register(patient).subscribe(function (resp) {
-                event_2.patient = resp.body;
-                event_2.date = _this.date;
-                event_2.duration = _this.configService.getConfig().interval;
-                _this.userService.getById(_this.user).subscribe(function (user) {
-                    event_2.user = user;
-                    _this.eventService.register(event_2).subscribe(function (resp) { return _this.closeAndClean(); });
+            this.configService.getConfig().subscribe(function (resp) {
+                var config = resp[0];
+                var event = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Event"]();
+                var patient = new src_app_models__WEBPACK_IMPORTED_MODULE_2__["Patient"]();
+                patient.name = _this.patientName;
+                patient.phone = _this.patientPhone;
+                _this.patientService.register(patient).subscribe(function (resp) {
+                    event.patient = resp.body;
+                    event.date = _this.date;
+                    event.duration = config.interval;
+                    _this.userService.getById(_this.user).subscribe(function (user) {
+                        event.user = user;
+                        _this.eventService.register(event).subscribe(function (resp) { return _this.closeAndClean(); });
+                    });
                 });
             });
         }

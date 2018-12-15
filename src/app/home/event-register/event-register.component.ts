@@ -67,26 +67,33 @@ export class EventRegisterComponent implements OnInit {
 
   onSubmit() {
     if (this.selected) {
-      let event = new Event();
-      event.patient = this.patient;
-      event.date = this.date;
-      event.duration = this.configService.getConfig().interval;
-      this.userService.getById(this.user).subscribe(user => {
-        event.user = user;
-        this.eventService.register(event).subscribe(resp => this.closeAndClean());
-      });
-    } else if ((typeof this.patientName != 'undefined' && this.patientName) && (typeof this.patientPhone != 'undefined' && this.patientPhone)) {
-      let event = new Event();
-      let patient = new Patient();
-      patient.name = this.patientName;
-      patient.phone = this.patientPhone;
-      this.patientService.register(patient).subscribe(resp => {
-        event.patient = <Patient>resp.body;
+      this.configService.getConfig().subscribe(resp => {
+        let config = resp[0];
+        let event = new Event();
+        event.patient = this.patient;
         event.date = this.date;
-        event.duration = this.configService.getConfig().interval;
+        event.duration = config.interval;
         this.userService.getById(this.user).subscribe(user => {
           event.user = user;
           this.eventService.register(event).subscribe(resp => this.closeAndClean());
+        });
+      })
+
+    } else if ((typeof this.patientName != 'undefined' && this.patientName) && (typeof this.patientPhone != 'undefined' && this.patientPhone)) {
+      this.configService.getConfig().subscribe(resp => {
+        let config = resp[0];
+        let event = new Event();
+        let patient = new Patient();
+        patient.name = this.patientName;
+        patient.phone = this.patientPhone;
+        this.patientService.register(patient).subscribe(resp => {
+          event.patient = <Patient>resp.body;
+          event.date = this.date;
+          event.duration = config.interval;
+          this.userService.getById(this.user).subscribe(user => {
+            event.user = user;
+            this.eventService.register(event).subscribe(resp => this.closeAndClean());
+          });
         });
       });
     }
