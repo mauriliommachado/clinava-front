@@ -20,7 +20,6 @@ export class ConfigurationComponent implements OnInit {
     let config;
     this.configService.getConfig().subscribe(resp => {
       config = resp[0];
-      console.log(config);
       this.registerForm = this.formBuilder.group({
         id: [config.id, Validators.required],
         hourInit: [config.hourInit, Validators.required],
@@ -36,7 +35,7 @@ export class ConfigurationComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private alertService: AlertService,
     private configService: ConfigService) {
-
+      
   }
 
   ngOnInit() {
@@ -58,6 +57,7 @@ export class ConfigurationComponent implements OnInit {
     let configuration = <Config>this.registerForm.value;
     this.configService.update(configuration).subscribe(resp => {
       this.cleanForm();
+      this.alertService.success("Configurações salvas com sucesso.", 5000);
       this.submitted = false;
     });
   }

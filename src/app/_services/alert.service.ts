@@ -22,14 +22,20 @@ export class AlertService {
         });
     }
 
-    success(message: string, keepAfterNavigationChange = false) {
+    success(message: string, dimissAfter: number = 0, keepAfterNavigationChange = false) {
         this.keepAfterNavigationChange = keepAfterNavigationChange;
         this.subject.next({ type: 'success', text: message });
+        if (dimissAfter > 0) {
+            setTimeout(() => { this.subject.next(); }, dimissAfter)
+        }
     }
 
-    error(message: string, keepAfterNavigationChange = false) {
+    error(message: string, dimissAfter: number = 0, keepAfterNavigationChange = false) {
         this.keepAfterNavigationChange = keepAfterNavigationChange;
         this.subject.next({ type: 'error', text: message });
+        if (dimissAfter > 0) {
+            setTimeout(() => { this.subject.next(); }, dimissAfter)
+        }
     }
 
     getMessage(): Observable<any> {

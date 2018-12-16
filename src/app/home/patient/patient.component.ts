@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Patient, Address, Contact } from '../../_models';
-import { PatientService } from '../../_services';
+import { Patient, Address} from '../../_models';
+import { PatientService, AlertService } from '../../_services';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import {
@@ -41,7 +41,8 @@ export class PatientComponent implements OnInit {
   editing = false;
   patients: Array<Patient>;
 
-  constructor(private formBuilder: FormBuilder, private patientService: PatientService) {
+  constructor(private formBuilder: FormBuilder, private patientService: PatientService,
+    private alertService: AlertService) {
 
   }
 
@@ -143,11 +144,13 @@ export class PatientComponent implements OnInit {
       patient.id = this.currentPatient;
       this.patientService.update(patient).subscribe(r=> {
         this.patientService.getAll().subscribe(resp => this.patients = resp);
+        this.alertService.success("Salvo com sucesso.", 5000);
       });
       this.editing = false;
     } else {
       this.patientService.register(patient).subscribe(r=> {
         this.patientService.getAll().subscribe(resp => this.patients = resp);
+        this.alertService.success("Salvo com sucesso.", 5000);
       });
     }
     this.toggle();

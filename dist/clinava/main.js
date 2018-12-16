@@ -509,15 +509,25 @@ var AlertService = /** @class */ (function () {
             }
         });
     }
-    AlertService.prototype.success = function (message, keepAfterNavigationChange) {
+    AlertService.prototype.success = function (message, dimissAfter, keepAfterNavigationChange) {
+        var _this = this;
+        if (dimissAfter === void 0) { dimissAfter = 0; }
         if (keepAfterNavigationChange === void 0) { keepAfterNavigationChange = false; }
         this.keepAfterNavigationChange = keepAfterNavigationChange;
         this.subject.next({ type: 'success', text: message });
+        if (dimissAfter > 0) {
+            setTimeout(function () { _this.subject.next(); }, dimissAfter);
+        }
     };
-    AlertService.prototype.error = function (message, keepAfterNavigationChange) {
+    AlertService.prototype.error = function (message, dimissAfter, keepAfterNavigationChange) {
+        var _this = this;
+        if (dimissAfter === void 0) { dimissAfter = 0; }
         if (keepAfterNavigationChange === void 0) { keepAfterNavigationChange = false; }
         this.keepAfterNavigationChange = keepAfterNavigationChange;
         this.subject.next({ type: 'error', text: message });
+        if (dimissAfter > 0) {
+            setTimeout(function () { _this.subject.next(); }, dimissAfter);
+        }
     };
     AlertService.prototype.getMessage = function () {
         return this.subject.asObservable();
@@ -1153,7 +1163,6 @@ var ConfigurationComponent = /** @class */ (function () {
         var config;
         this.configService.getConfig().subscribe(function (resp) {
             config = resp[0];
-            console.log(config);
             _this.registerForm = _this.formBuilder.group({
                 id: [config.id, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
                 hourInit: [config.hourInit, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
@@ -1188,6 +1197,7 @@ var ConfigurationComponent = /** @class */ (function () {
         var configuration = this.registerForm.value;
         this.configService.update(configuration).subscribe(function (resp) {
             _this.cleanForm();
+            _this.alertService.success("Configurações salvas com sucesso.", 5000);
             _this.submitted = false;
         });
     };
@@ -1347,7 +1357,7 @@ var UserComponent = /** @class */ (function () {
                     _this.users = res;
                     _this.toggle();
                     _this.cleanForm();
-                    _this.alertService.success("Editado com sucesso");
+                    _this.alertService.success("Salvo com sucesso.", 5000);
                 });
             });
             this.editing = false;
@@ -1358,6 +1368,7 @@ var UserComponent = /** @class */ (function () {
                     _this.users = res;
                     _this.toggle();
                     _this.cleanForm();
+                    _this.alertService.success("Salvo com sucesso.", 5000);
                 });
             });
             ;
@@ -1887,10 +1898,11 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var ConsultComponent = /** @class */ (function () {
-    function ConsultComponent(formBuilder, userService, configService, eventService, patientService) {
+    function ConsultComponent(formBuilder, userService, configService, alertService, eventService, patientService) {
         this.formBuilder = formBuilder;
         this.userService = userService;
         this.configService = configService;
+        this.alertService = alertService;
         this.eventService = eventService;
         this.patientService = patientService;
         this.loading = false;
@@ -2025,6 +2037,7 @@ var ConsultComponent = /** @class */ (function () {
                 }
                 _this.toggle();
                 _this.cleanForm();
+                _this.alertService.success("Salvo com sucesso.", 5000);
                 _this.indexDate = new Date();
             });
         });
@@ -2077,7 +2090,7 @@ var ConsultComponent = /** @class */ (function () {
                 ])
             ]
         }),
-        __metadata("design:paramtypes", [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormBuilder"], _services__WEBPACK_IMPORTED_MODULE_1__["UserService"], _services__WEBPACK_IMPORTED_MODULE_1__["ConfigService"],
+        __metadata("design:paramtypes", [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormBuilder"], _services__WEBPACK_IMPORTED_MODULE_1__["UserService"], _services__WEBPACK_IMPORTED_MODULE_1__["ConfigService"], _services__WEBPACK_IMPORTED_MODULE_1__["AlertService"],
             _services__WEBPACK_IMPORTED_MODULE_1__["EventService"], _services__WEBPACK_IMPORTED_MODULE_1__["PatientService"]])
     ], ConsultComponent);
     return ConsultComponent;
@@ -2135,11 +2148,12 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var EventRegisterComponent = /** @class */ (function () {
-    function EventRegisterComponent(patientService, configService, eventService, userService) {
+    function EventRegisterComponent(patientService, configService, eventService, userService, alertService) {
         this.patientService = patientService;
         this.configService = configService;
         this.eventService = eventService;
         this.userService = userService;
+        this.alertService = alertService;
         this.close = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.visible = false;
         this.patients = [];
@@ -2190,7 +2204,10 @@ var EventRegisterComponent = /** @class */ (function () {
                 event.duration = config.interval;
                 _this.userService.getById(_this.user).subscribe(function (user) {
                     event.user = user;
-                    _this.eventService.register(event).subscribe(function (resp) { return _this.closeAndClean(); });
+                    _this.eventService.register(event).subscribe(function (resp) {
+                        _this.closeAndClean();
+                        _this.alertService.success("Salvo com sucesso.", 5000);
+                    });
                 });
             });
         }
@@ -2207,7 +2224,10 @@ var EventRegisterComponent = /** @class */ (function () {
                     event.duration = config.interval;
                     _this.userService.getById(_this.user).subscribe(function (user) {
                         event.user = user;
-                        _this.eventService.register(event).subscribe(function (resp) { return _this.closeAndClean(); });
+                        _this.eventService.register(event).subscribe(function (resp) {
+                            _this.closeAndClean();
+                            _this.alertService.success("Salvo com sucesso.", 5000);
+                        });
                     });
                 });
             });
@@ -2246,7 +2266,8 @@ var EventRegisterComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [_services__WEBPACK_IMPORTED_MODULE_1__["PatientService"],
             _services__WEBPACK_IMPORTED_MODULE_1__["ConfigService"],
             _services__WEBPACK_IMPORTED_MODULE_1__["EventService"],
-            _services__WEBPACK_IMPORTED_MODULE_1__["UserService"]])
+            _services__WEBPACK_IMPORTED_MODULE_1__["UserService"],
+            _services__WEBPACK_IMPORTED_MODULE_1__["AlertService"]])
     ], EventRegisterComponent);
     return EventRegisterComponent;
 }());
@@ -2376,14 +2397,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _home_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./home.component */ "./src/app/home/home.component.ts");
 /* harmony import */ var _home_routing_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./home-routing.module */ "./src/app/home/home-routing.module.ts");
 /* harmony import */ var _event_register_event_register_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./event-register/event-register.component */ "./src/app/home/event-register/event-register.component.ts");
-/* harmony import */ var _reception_reception_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./reception/reception.component */ "./src/app/home/reception/reception.component.ts");
-/* harmony import */ var _agenda_agenda_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./agenda/agenda.component */ "./src/app/home/agenda/agenda.component.ts");
-/* harmony import */ var _consult_consult_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./consult/consult.component */ "./src/app/home/consult/consult.component.ts");
-/* harmony import */ var _patient_patient_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./patient/patient.component */ "./src/app/home/patient/patient.component.ts");
-/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
-/* harmony import */ var ng2_completer__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ng2-completer */ "./node_modules/ng2-completer/esm5/ng2-completer.js");
-/* harmony import */ var ngx_mask__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ngx-mask */ "./node_modules/ngx-mask/fesm5/ngx-mask.js");
+/* harmony import */ var _agenda_agenda_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./agenda/agenda.component */ "./src/app/home/agenda/agenda.component.ts");
+/* harmony import */ var _consult_consult_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./consult/consult.component */ "./src/app/home/consult/consult.component.ts");
+/* harmony import */ var _patient_patient_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./patient/patient.component */ "./src/app/home/patient/patient.component.ts");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var ng2_completer__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ng2-completer */ "./node_modules/ng2-completer/esm5/ng2-completer.js");
+/* harmony import */ var ngx_mask__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ngx-mask */ "./node_modules/ngx-mask/fesm5/ngx-mask.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2402,22 +2422,20 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
-
 var HomeModule = /** @class */ (function () {
     function HomeModule() {
     }
     HomeModule = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
             imports: [
-                _angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"], _angular_platform_browser__WEBPACK_IMPORTED_MODULE_9__["BrowserModule"],
-                _angular_forms__WEBPACK_IMPORTED_MODULE_10__["ReactiveFormsModule"],
-                ngx_mask__WEBPACK_IMPORTED_MODULE_12__["NgxMaskModule"].forChild(),
-                _home_routing_module__WEBPACK_IMPORTED_MODULE_3__["HomeRoutingModule"], _home_routing_module__WEBPACK_IMPORTED_MODULE_3__["HomeRoutingModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_10__["FormsModule"], ng2_completer__WEBPACK_IMPORTED_MODULE_11__["Ng2CompleterModule"]
+                _angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"], _angular_platform_browser__WEBPACK_IMPORTED_MODULE_8__["BrowserModule"],
+                _angular_forms__WEBPACK_IMPORTED_MODULE_9__["ReactiveFormsModule"],
+                ngx_mask__WEBPACK_IMPORTED_MODULE_11__["NgxMaskModule"].forChild(),
+                _home_routing_module__WEBPACK_IMPORTED_MODULE_3__["HomeRoutingModule"], _home_routing_module__WEBPACK_IMPORTED_MODULE_3__["HomeRoutingModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_9__["FormsModule"], ng2_completer__WEBPACK_IMPORTED_MODULE_10__["Ng2CompleterModule"]
             ],
             declarations: [
-                _reception_reception_component__WEBPACK_IMPORTED_MODULE_5__["ReceptionComponent"],
-                _agenda_agenda_component__WEBPACK_IMPORTED_MODULE_6__["AgendaComponent"], _patient_patient_component__WEBPACK_IMPORTED_MODULE_8__["PatientComponent"],
-                _consult_consult_component__WEBPACK_IMPORTED_MODULE_7__["ConsultComponent"], _home_component__WEBPACK_IMPORTED_MODULE_2__["HomeComponent"], _event_register_event_register_component__WEBPACK_IMPORTED_MODULE_4__["EventRegisterComponent"]
+                _agenda_agenda_component__WEBPACK_IMPORTED_MODULE_5__["AgendaComponent"], _patient_patient_component__WEBPACK_IMPORTED_MODULE_7__["PatientComponent"],
+                _consult_consult_component__WEBPACK_IMPORTED_MODULE_6__["ConsultComponent"], _home_component__WEBPACK_IMPORTED_MODULE_2__["HomeComponent"], _event_register_event_register_component__WEBPACK_IMPORTED_MODULE_4__["EventRegisterComponent"]
             ]
         })
     ], HomeModule);
@@ -2480,9 +2498,10 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var PatientComponent = /** @class */ (function () {
-    function PatientComponent(formBuilder, patientService) {
+    function PatientComponent(formBuilder, patientService, alertService) {
         this.formBuilder = formBuilder;
         this.patientService = patientService;
+        this.alertService = alertService;
         this.loading = false;
         this.submitted = false;
         this.show = false;
@@ -2590,12 +2609,14 @@ var PatientComponent = /** @class */ (function () {
             patient.id = this.currentPatient;
             this.patientService.update(patient).subscribe(function (r) {
                 _this.patientService.getAll().subscribe(function (resp) { return _this.patients = resp; });
+                _this.alertService.success("Salvo com sucesso.", 5000);
             });
             this.editing = false;
         }
         else {
             this.patientService.register(patient).subscribe(function (r) {
                 _this.patientService.getAll().subscribe(function (resp) { return _this.patients = resp; });
+                _this.alertService.success("Salvo com sucesso.", 5000);
             });
         }
         this.toggle();
@@ -2621,72 +2642,10 @@ var PatientComponent = /** @class */ (function () {
                 ])
             ]
         }),
-        __metadata("design:paramtypes", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormBuilder"], _services__WEBPACK_IMPORTED_MODULE_2__["PatientService"]])
+        __metadata("design:paramtypes", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormBuilder"], _services__WEBPACK_IMPORTED_MODULE_2__["PatientService"],
+            _services__WEBPACK_IMPORTED_MODULE_2__["AlertService"]])
     ], PatientComponent);
     return PatientComponent;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/home/reception/reception.component.css":
-/*!********************************************************!*\
-  !*** ./src/app/home/reception/reception.component.css ***!
-  \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = ""
-
-/***/ }),
-
-/***/ "./src/app/home/reception/reception.component.html":
-/*!*********************************************************!*\
-  !*** ./src/app/home/reception/reception.component.html ***!
-  \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = ""
-
-/***/ }),
-
-/***/ "./src/app/home/reception/reception.component.ts":
-/*!*******************************************************!*\
-  !*** ./src/app/home/reception/reception.component.ts ***!
-  \*******************************************************/
-/*! exports provided: ReceptionComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ReceptionComponent", function() { return ReceptionComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-var ReceptionComponent = /** @class */ (function () {
-    function ReceptionComponent() {
-    }
-    ReceptionComponent.prototype.ngOnInit = function () {
-    };
-    ReceptionComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: 'app-reception',
-            template: __webpack_require__(/*! ./reception.component.html */ "./src/app/home/reception/reception.component.html"),
-            styles: [__webpack_require__(/*! ./reception.component.css */ "./src/app/home/reception/reception.component.css")]
-        }),
-        __metadata("design:paramtypes", [])
-    ], ReceptionComponent);
-    return ReceptionComponent;
 }());
 
 
@@ -2711,7 +2670,7 @@ module.exports = "body {\r\n    font-size: .875rem;\r\n  }\r\n  \r\n  .feather {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow\">\r\n    <a class=\"navbar-brand col-sm-3 col-md-2 mr-0\" href=\"#\">Clinava</a>\r\n    <ul class=\"navbar-nav px-3\">\r\n      <li class=\"nav-item text-nowrap\">\r\n        <a class=\"nav-link\" [routerLink]=\"['/login']\">Sair</a>\r\n      </li>\r\n    </ul>\r\n</nav>\r\n\r\n  <div class=\"container-fluid\">\r\n    <div class=\"row\">\r\n      <nav class=\"col-md-2 d-none d-md-block bg-light sidebar\">\r\n        <div class=\"sidebar-sticky\">\r\n          <ul class=\"nav flex-column\">\r\n            \r\n            <li class=\"nav-item\">\r\n              <a class=\"nav-link\" href=\"#recepcao\" >Recepção</a>\r\n              <div id=\"recepcao\" routerLinkActive=\"show\">\r\n                <ul class=\"nav flex-column ml-3\">\r\n                  <li class=\"nav-item\">\r\n                    <a class=\"nav-link\"  routerLink=\"/home/agenda\" routerLinkActive=\"active\">Agenda</a>\r\n                  </li>\r\n                  <li class=\"nav-item\" >\r\n                    <a class=\"nav-link\" routerLink=\"/home/consult\" routerLinkActive=\"active\">Consulta</a>\r\n                  </li>\r\n                  <li class=\"nav-item\">\r\n                    <a class=\"nav-link\" routerLink=\"/home/patient\" routerLinkActive=\"active\">Patiente</a>\r\n                  </li>\r\n                </ul>\r\n              </div>\r\n            </li>\r\n            <li class=\"nav-item\">\r\n              <a class=\"nav-link\" href=\"#admin\">Administrativo</a>\r\n              <div id=\"admin\"  routerLinkActive=\"show\">\r\n                <ul class=\"nav flex-column ml-3\">\r\n                  <li class=\"nav-item\">\r\n                    <a class=\"nav-link\"  routerLink=\"/admin/user\" routerLinkActive=\"active\">Usuários</a>\r\n                  </li>\r\n                  <li class=\"nav-item\">\r\n                    <a class=\"nav-link\"  routerLink=\"/admin/configuration\" routerLinkActive=\"active\">Configurações</a>\r\n                  </li>\r\n                </ul>\r\n              </div>\r\n            </li>\r\n          </ul>\r\n        </div>\r\n      </nav>\r\n\r\n      <main role=\"main\" class=\"col-md-10 ml-sm-auto col-lg-10 px-4\">\r\n          <router-outlet></router-outlet>\r\n      </main>\r\n    </div>\r\n  </div>\r\n\r\n"
+module.exports = "<nav class=\"navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow\">\r\n    <a class=\"navbar-brand col-sm-3 col-md-2 mr-0\" href=\"#\">Clinava</a>\r\n    <ul class=\"navbar-nav px-3\">\r\n      <li class=\"nav-item text-nowrap\">\r\n        <a class=\"nav-link\" [routerLink]=\"['/login']\">Sair</a>\r\n      </li>\r\n    </ul>\r\n</nav>\r\n\r\n  <div class=\"container-fluid\">\r\n    <div class=\"row\">\r\n      <nav class=\"col-md-2 d-none d-md-block bg-light sidebar\">\r\n        <div class=\"sidebar-sticky\">\r\n          <ul class=\"nav flex-column\">\r\n            \r\n            <li class=\"nav-item\">\r\n              <a class=\"nav-link\" href=\"#recepcao\" >Recepção</a>\r\n              <div id=\"recepcao\" routerLinkActive=\"show\">\r\n                <ul class=\"nav flex-column ml-3\">\r\n                  <li class=\"nav-item\">\r\n                    <a class=\"nav-link\"  routerLink=\"/home/agenda\" routerLinkActive=\"active\">Agenda</a>\r\n                  </li>\r\n                  <li class=\"nav-item\" >\r\n                    <a class=\"nav-link\" routerLink=\"/home/consult\" routerLinkActive=\"active\">Consulta</a>\r\n                  </li>\r\n                  <li class=\"nav-item\">\r\n                    <a class=\"nav-link\" routerLink=\"/home/patient\" routerLinkActive=\"active\">Patiente</a>\r\n                  </li>\r\n                </ul>\r\n              </div>\r\n            </li>\r\n            <li class=\"nav-item\">\r\n              <a class=\"nav-link\" href=\"#admin\">Administrativo</a>\r\n              <div id=\"admin\"  routerLinkActive=\"show\">\r\n                <ul class=\"nav flex-column ml-3\">\r\n                  <li class=\"nav-item\">\r\n                    <a class=\"nav-link\"  routerLink=\"/admin/user\" routerLinkActive=\"active\">Usuários</a>\r\n                  </li>\r\n                  <li class=\"nav-item\">\r\n                    <a class=\"nav-link\"  routerLink=\"/admin/configuration\" routerLinkActive=\"active\">Configurações</a>\r\n                  </li>\r\n                </ul>\r\n              </div>\r\n            </li>\r\n          </ul>\r\n        </div>\r\n      </nav>\r\n\r\n      <main role=\"main\" class=\"col-md-10 ml-sm-auto col-lg-10 px-4\">\r\n          <router-outlet></router-outlet>\r\n          <alert></alert>\r\n      </main>\r\n    </div>\r\n  </div>\r\n\r\n\r\n"
 
 /***/ }),
 

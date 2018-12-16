@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { HomeComponent } from './home.component'
 import { HomeRoutingModule } from './home-routing.module';
 import {EventRegisterComponent } from './event-register/event-register.component'
-import { ReceptionComponent } from './reception/reception.component';
 import { AgendaComponent } from './agenda/agenda.component';
 import { ConsultComponent } from './consult/consult.component';
 import { PatientComponent } from './patient/patient.component';
@@ -21,7 +20,6 @@ import {NgxMaskModule} from 'ngx-mask';
     HomeRoutingModule, HomeRoutingModule, FormsModule,Ng2CompleterModule
   ],
   declarations: [
-    ReceptionComponent,
     AgendaComponent, PatientComponent,
     ConsultComponent, HomeComponent,EventRegisterComponent]
 })

@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { PatientService, ConfigService, UserService, EventService } from '../../_services';
+import { PatientService, ConfigService, UserService, EventService, AlertService } from '../../_services';
 import { Patient, User, Event, Contact } from 'src/app/_models';
 
 
@@ -24,7 +24,8 @@ export class EventRegisterComponent implements OnInit {
   constructor(private patientService: PatientService,
     private configService: ConfigService,
     private eventService: EventService,
-    private userService: UserService) {
+    private userService: UserService,
+    private alertService: AlertService) {
   }
 
 
@@ -75,7 +76,10 @@ export class EventRegisterComponent implements OnInit {
         event.duration = config.interval;
         this.userService.getById(this.user).subscribe(user => {
           event.user = user;
-          this.eventService.register(event).subscribe(resp => this.closeAndClean());
+          this.eventService.register(event).subscribe(resp => {
+            this.closeAndClean(); 
+            this.alertService.success("Salvo com sucesso.", 5000);
+          });
         });
       })
 
@@ -92,7 +96,10 @@ export class EventRegisterComponent implements OnInit {
           event.duration = config.interval;
           this.userService.getById(this.user).subscribe(user => {
             event.user = user;
-            this.eventService.register(event).subscribe(resp => this.closeAndClean());
+            this.eventService.register(event).subscribe(resp => {
+              this.closeAndClean(); 
+              this.alertService.success("Salvo com sucesso.", 5000);
+            });
           });
         });
       });

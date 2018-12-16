@@ -123,7 +123,7 @@ export class UserComponent implements OnInit {
           this.users = res;
           this.toggle();
           this.cleanForm();
-          this.alertService.success("Editado com sucesso");
+          this.alertService.success("Salvo com sucesso.", 5000);
         });
       });
       this.editing = false;
@@ -133,6 +133,7 @@ export class UserComponent implements OnInit {
           this.users = res;
           this.toggle();
           this.cleanForm();
+          this.alertService.success("Salvo com sucesso.", 5000);
         });
       });;
     }

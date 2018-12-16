@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Event } from '../../_models/event';
 import { Config } from '../../_models/config';
-import { UserService, ConfigService, EventService, PatientService } from '../../_services';
+import { UserService, ConfigService, EventService, PatientService, AlertService } from '../../_services';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import {
@@ -51,7 +51,7 @@ export class ConsultComponent implements OnInit {
   patients;
   events;
 
-  constructor(private formBuilder: FormBuilder, private userService: UserService, private configService: ConfigService
+  constructor(private formBuilder: FormBuilder, private userService: UserService, private configService: ConfigService, private alertService: AlertService
     , private eventService: EventService, private patientService: PatientService) {
 
   }
@@ -178,6 +178,7 @@ export class ConsultComponent implements OnInit {
         }
         this.toggle();
         this.cleanForm();
+        this.alertService.success("Salvo com sucesso.", 5000);
         this.indexDate = new Date();
       });
     });
