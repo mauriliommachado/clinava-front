@@ -13,7 +13,11 @@ export class RoleService {
         this.roles = new Array();
     }
 
+    getBusinessId(): string {
+        return JSON.parse(localStorage.getItem("currentUser")).businessId;
+    }
+
     getAll() {
-        return this.http.get<Role[]>(`${environment.apiUrl}/roles`);
+        return this.http.get<Role[]>(`${environment.apiUrl}` + this.getBusinessId() + `/roles`);
     }
 }

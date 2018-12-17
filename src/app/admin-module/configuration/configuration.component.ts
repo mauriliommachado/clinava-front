@@ -19,15 +19,27 @@ export class ConfigurationComponent implements OnInit {
   cleanForm() {
     let config;
     this.configService.getConfig().subscribe(resp => {
-      config = resp[0];
-      this.registerForm = this.formBuilder.group({
-        id: [config.id, Validators.required],
-        hourInit: [config.hourInit, Validators.required],
-        hourEnd: [config.hourEnd, Validators.required],
-        interval: [config.interval, Validators.required],
-        workingDays: [config.workingDays, Validators.required]
-      });
-    });    
+      if (resp && resp.length > 0) {
+        config = resp[0];
+        this.registerForm = this.formBuilder.group({
+          id: [config.id, Validators.required],
+          hourInit: [config.hourInit, Validators.required],
+          hourEnd: [config.hourEnd, Validators.required],
+          interval: [config.interval, Validators.required],
+          workingDays: [config.workingDays, Validators.required]
+        });
+      } else {
+        config = resp[0];
+        this.registerForm = this.formBuilder.group({
+          id: [""],
+          hourInit: ["", Validators.required],
+          hourEnd: ["", Validators.required],
+          interval: ["", Validators.required],
+          workingDays: ["", Validators.required]
+        });
+      }
+
+    });
   }
   // convenience getter for easy access to form fields
   get f() { return this.registerForm.controls; }
@@ -35,12 +47,12 @@ export class ConfigurationComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private alertService: AlertService,
     private configService: ConfigService) {
-      
+
   }
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
-      id: ["", Validators.required],
+      id: [""],
       hourInit: ["", Validators.required],
       hourEnd: ["", Validators.required],
       interval: ["", Validators.required],
@@ -51,10 +63,12 @@ export class ConfigurationComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
+    console.log(this.f)
     if (this.registerForm.invalid) {
       return;
     }
     let configuration = <Config>this.registerForm.value;
+    console.log(configuration);
     this.configService.update(configuration).subscribe(resp => {
       this.cleanForm();
       this.alertService.success("Configurações salvas com sucesso.", 5000);

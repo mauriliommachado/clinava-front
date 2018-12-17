@@ -12,25 +12,31 @@ export class ConfigService {
         
     }
 
+    getBusinessId(): string {
+        return JSON.parse(localStorage.getItem("currentUser")).businessId;
+    }
 
     getConfig() {
-        return this.http.get<Config[]>(`${environment.apiUrl}/configurations`);
+        return this.http.get<Config[]>(`${environment.apiUrl}` + this.getBusinessId() + `/configurations`);
     }
 
     getById(id: string) {
        
-        //return this.http.get(`${environment.apiUrl}/users/` + id);
+        //return this.http.get(`${environment.apiUrl}/` + this.getBusinessId() + `/users/` + id);
     }
 
     register(config: Config) {
-        return this.http.post(`${environment.apiUrl}/configurations`, config);
+        return this.http.post(`${environment.apiUrl}` + this.getBusinessId() + `/configurations`, config);
     }
 
     update(config: Config) {
-        return this.http.put(`${environment.apiUrl}/configurations/` + config.id, config);
+        if(!config.id){
+            config.id = 0;
+        }
+        return this.http.put(`${environment.apiUrl}` + this.getBusinessId() + `/configurations/` + config.id, config);
     }
 
     delete(id: number) {
-        //return this.http.delete(`${environment.apiUrl}/users/` + id);
+        //return this.http.delete(`${environment.apiUrl}/` + this.getBusinessId() + `/users/` + id);
     }
 }

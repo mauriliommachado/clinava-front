@@ -10,39 +10,42 @@ export class UserService {
     constructor(private http: HttpClient) {
     }
 
+    getBusinessId(): string {
+        return JSON.parse(localStorage.getItem("currentUser")).businessId;
+    }
 
     getAll() {
-        return this.http.get<User[]>(`${environment.apiUrl}/users`)
+        return this.http.get<User[]>(`${environment.apiUrl}` + this.getBusinessId() + `/users`)
             .map(res => res);
     }
 
     getAttendants() {
-        return this.http.get<User[]>(`${environment.apiUrl}/users?role=ROLE_ADMIN`).map(res => res);
+        return this.http.get<User[]>(`${environment.apiUrl}` + this.getBusinessId() + `/users?role=ROLE_ADMIN`).map(res => res);
         //return this.users.filter(u => u.role == "attendant");
     }
 
     getUsers() {
-        return this.http.get<User[]>(`${environment.apiUrl}/users`).map(res => res);
+        return this.http.get<User[]>(`${environment.apiUrl}` + this.getBusinessId() + `/users`).map(res => res);
         //return this.users.filter(u => u.role == "user");
-        //return this.http.get<User[]>(`${environment.apiUrl}/users`);
+        //return this.http.get<User[]>(`${environment.apiUrl}/` + this.getBusinessId() + `/users`);
     }
 
     getById(id: string) {
-        return this.http.get<User>(`${environment.apiUrl}/users/` + id).map(res => res);
+        return this.http.get<User>(`${environment.apiUrl}` + this.getBusinessId() + `/users/` + id).map(res => res);
         //return this.users.find(u => u.id == id);
-        //return this.http.get(`${environment.apiUrl}/users/` + id);
+        //return this.http.get(`${environment.apiUrl}/` + this.getBusinessId() + `/users/` + id);
     }
 
     register(user: User) {
-        return this.http.post(`${environment.apiUrl}/users/`, user);
+        return this.http.post(`${environment.apiUrl}` + this.getBusinessId() + `/users/`, user);
     }
 
     update(user: User) {
-        return this.http.put(`${environment.apiUrl}/users`, user);
+        return this.http.put(`${environment.apiUrl}` + this.getBusinessId() + `/users`, user);
     }
 
     delete(id: string) {
         //this.users = this.users.filter(e => e.id !== id);
-        return this.http.delete(`${environment.apiUrl}/users/`+id)
+        return this.http.delete(`${environment.apiUrl}` + this.getBusinessId() + `/users/` + id)
     }
 }
