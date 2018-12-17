@@ -4,10 +4,9 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://clinava.herokuapp.com/api/business/',
-  apiLogin: 'https://clinava.herokuapp.com/api'
+  apiUrl: 'http://localhost:8888/api/business/',
+  apiLogin: 'http://localhost:8888/api'
 };
-
 
 function GetBusinessId(){
   if(localStorage.getItem("currentUser") && JSON.parse(localStorage.getItem("currentUser"))){
