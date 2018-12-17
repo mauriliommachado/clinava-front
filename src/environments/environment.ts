@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://clinava.herokuapp.com/api'
+  apiUrl: 'http://localhost:8888/api/business/'+ JSON.parse(localStorage.getItem("currentUser")).businessId,
+  apiLogin: 'http://localhost:8888/api'
 };
 
 /*

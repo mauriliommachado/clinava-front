@@ -1,7 +1,7 @@
 const proxy = [
     {
       context: '/api',
-      target: 'https://clinava.herokuapp.com/',
+      target: 'http://localhost:8888/',
       pathRewrite: {'^/api' : ''}
     }
   ];
