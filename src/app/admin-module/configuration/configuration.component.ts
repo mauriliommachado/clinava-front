@@ -5,8 +5,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-Configuration',
-  templateUrl: './Configuration.component.html',
-  styleUrls: ['./Configuration.component.css']
+  templateUrl: './configuration.component.html',
+  styleUrls: ['./configuration.component.css']
 })
 export class ConfigurationComponent implements OnInit {
   title: String;
