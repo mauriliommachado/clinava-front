@@ -11,6 +11,7 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         if(environment.production){
+            console.log(location.protocol);
             console.log(new String(location.protocol) !== new String("https"))
             console.log(location.protocol.match("https") === null)
         }
