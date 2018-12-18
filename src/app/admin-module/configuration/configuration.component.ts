@@ -63,12 +63,10 @@ export class ConfigurationComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    console.log(this.f)
     if (this.registerForm.invalid) {
       return;
     }
     let configuration = <Config>this.registerForm.value;
-    console.log(configuration);
     this.configService.update(configuration).subscribe(resp => {
       this.cleanForm();
       this.alertService.success("Configurações salvas com sucesso.", 5000);

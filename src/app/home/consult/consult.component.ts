@@ -128,7 +128,6 @@ export class ConsultComponent implements OnInit {
   edit(id: string) {
     this.eventService.getById(id).subscribe(resp => {
       let event = <Event>resp;
-      console.log(event);
       let sHour: string = new Date(event.date).getHours().toLocaleString();
       let sMinute: string = new Date(event.date).getMinutes().toLocaleString();
       let time = (sHour.length == 1 ? ("0" + sHour) : sHour) + ":" + (sMinute.length == 1 ? ("0" + sMinute) : sMinute);
