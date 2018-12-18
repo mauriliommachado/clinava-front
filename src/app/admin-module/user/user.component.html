@@ -11,13 +11,6 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="username">Usuário</label>
-      <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
-      <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-        <div *ngIf="f.username.errors.required">Obrigatório</div>
-      </div>
-    </div>
-    <div class="form-group">
       <label for="email">Email</label>
       <input type="text" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
       <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
@@ -27,7 +20,7 @@
     <div class="form-group">
       <label for="role">Acesso</label>
       <select formControlName="role" class="form-control"  [ngClass]="{ 'is-invalid': submitted && f.role.errors }">
-        <option *ngFor="let role of roles" [value]="role.id">{{role.name}}</option>
+        <option *ngFor="let role of roles" [value]="role.id">{{role.name | role}}</option>
       </select>
       <div *ngIf="submitted && f.role.errors" class="invalid-feedback">
           <div *ngIf="f.role.errors.required">Obrigatório</div>

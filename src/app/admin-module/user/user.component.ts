@@ -55,7 +55,6 @@ export class UserComponent implements OnInit {
   cleanForm() {
     this.registerForm = this.formBuilder.group({
       name: ['', Validators.required],
-      username: ['', Validators.required],
       email: ['', Validators.required],
       role: ['', Validators.required],
       password: ['']
@@ -85,7 +84,6 @@ export class UserComponent implements OnInit {
     });
     this.registerForm = this.formBuilder.group({
       name: ['', Validators.required],
-      username: ['', Validators.required],
       email: ['', Validators.required],
       role: ['', Validators.required],
       password: ['']
@@ -115,7 +113,7 @@ export class UserComponent implements OnInit {
     let role = new Role();
     role.id = this.registerForm.value.role;
     user.roles.push(role);
-    user.username = u.username;
+    user.username = user.email;
     if (this.editing) {
       user.id = this.currentUser.id;
       this.userService.update(user).subscribe(resp => {
@@ -146,7 +144,6 @@ export class UserComponent implements OnInit {
       user = res;
       this.registerForm = this.formBuilder.group({
         name: [user.name, Validators.required],
-        username: [user.username, Validators.required],
         email: [user.email, Validators.required],
         role: [user.roles[0].id, Validators.required],
         password: [user.password]
@@ -169,7 +166,6 @@ export class UserComponent implements OnInit {
 }
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { first } from 'rxjs/operators';
 
 @Pipe({ name: 'role' })
 export class RepeatPipe implements PipeTransform {
