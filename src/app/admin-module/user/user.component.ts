@@ -68,7 +68,7 @@ export class UserComponent implements OnInit {
     if (this.editing && !this.show) {
       this.cleanForm()
     }
-    if(this.editing){
+    if (this.editing) {
       this.editing = false;
     }
     this.title = this.show ? 'Cancelar' : 'Cadastrar'
@@ -170,18 +170,14 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({ name: 'role' })
 export class RepeatPipe implements PipeTransform {
   transform(value: any) {
-    if (value[0].name == "ROLE_ADMIN") {
-      return "Atendente";
-    }
-    return "Usuário";
-  }
-}
-
-@Pipe({ name: 'select' })
-export class RolePipe implements PipeTransform {
-  transform(value: any) {
-    if (value == "ROLE_ADMIN") {
-      return "Atendente";
+    if (Array.isArray(value)) {
+      if (value[0].name == "ROLE_ADMIN") {
+        return "Atendente";
+      }
+    } else {
+      if (value == "ROLE_ADMIN") {
+        return "Atendente";
+      }
     }
     return "Usuário";
   }
