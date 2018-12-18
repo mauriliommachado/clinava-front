@@ -176,3 +176,13 @@ export class RepeatPipe implements PipeTransform {
     return "Usuário";
   }
 }
+
+@Pipe({ name: 'select' })
+export class RolePipe implements PipeTransform {
+  transform(value: any) {
+    if (value == "ROLE_ADMIN") {
+      return "Atendente";
+    }
+    return "Usuário";
+  }
+}

@@ -1,4 +1,5 @@
 ﻿<div style="background-color: #F4F2F4;height: 100%;">
+    <alert></alert>
 <div class="container py-5" >
     <div class="card">
         <div class="card-header">
@@ -6,7 +7,6 @@
         </div>
         <div class="card-body">
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-                    
                 <div class="form-group">
                     <label for="username">Email</label>
                     <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
@@ -31,3 +31,4 @@
       </div>
 </div>
 </div>
+
