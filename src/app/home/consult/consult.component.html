@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="user">Patiente</label>
+            <label for="user">Paciente</label>
             <select formControlName="patient" class="form-control"  [ngClass]="{ 'is-invalid': submitted && f.patient.errors }">
                 <option [value]="patient.id" *ngFor="let patient of patients">{{patient.name}}</option>
             </select>
@@ -67,7 +67,7 @@
         <thead>
             <tr>
                 <th scope="col">Data</th>
-                <th scope="col">Patiente</th>
+                <th scope="col">Paciente</th>
                 <th scope="col">Observação</th>
                 <th scope="col">Atendente</th>
                 <th scope="col"></th>
