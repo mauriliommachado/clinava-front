@@ -30,8 +30,8 @@ export class AgendaComponent implements OnInit {
   docName: string = "Selecione um atendente";
 
   constructor(private userService: UserService, private configService: ConfigService, private eventService: EventService, private route: ActivatedRoute) {
-    
-    
+
+
     this.route.params.subscribe(params => {
       this.id = params["id"];
       this.ngOnInit();
@@ -71,14 +71,16 @@ export class AgendaComponent implements OnInit {
     if (day !== 1) {             // Only manipulate the date if it isn't Mon.
       this.today.setHours(-24 * (day - 1));   // Set the hours to day number minus 1
     }
-    this.initDay = this.today.getDate();
-    this.endDay = this.today.getDate() + this.config.workingDays.length - 1;
+    
     this.month = this.monthNames[this.today.getMonth()];
     let spots = (60 / this.config.interval) * (this.config.hourEnd - this.config.hourInit);
     if (!this.id) {
       return;
     }
-    let endDate = new Date(this.today.getTime());
+    this.initDay = this.today.getDate();
+    
+    let endDate = new Date(this.today.getTime() + 24 * 60 * 60 * 1000 * this.config.workingDays.length - 1);
+    this.endDay = endDate.getDate();
     endDate.setDate(this.endDay);
     endDate.setHours(this.config.hourEnd);
     endDate.setMinutes(this.config.interval)
@@ -87,7 +89,9 @@ export class AgendaComponent implements OnInit {
       for (let d = 0; d < this.config.workingDays.length; d++) {
         let day = new Day();
         day.events = new Array();
-        day.header = this.today.getDate() + d + "/" + (this.today.getMonth() + 1) + " - " + this.config.workingDays[d];
+        let hd = new Date(this.today.getTime());
+        hd.setTime(hd.getTime() + 24 * 60 * 60 * 1000 * d);
+        day.header = hd.getDate() + "/" + (hd.getMonth() + 1) + " - " + this.config.workingDays[d];
         let events = resp;
         for (let index = 0; index <= spots; index++) {
           let event = new Event();
@@ -138,10 +142,13 @@ export class AgendaComponent implements OnInit {
   }
 
   show(event: Event) {
-    if(!event.id){
+    if (!event.id) {
       this.eventDate = event.date;
       this.visible = true;
     }
+  }
+  getDaysInMonth(m, y) {
+    return m === 2 ? y & 3 || !(y % 25) && y & 15 ? 28 : 29 : 30 + (m + (m >> 3) & 1);
   }
 
 }
