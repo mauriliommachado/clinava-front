@@ -25,6 +25,13 @@
       </div>
     </div>
     <div class="form-group">
+      <label for="interval">Limite de SMS´s (Os primeiros 100 são por nossa conta!)</label>
+      <input type="number" formControlName="smsLimit" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.smsLimit.errors }" />
+      <div *ngIf="submitted && f.smsLimit.errors" class="invalid-feedback">
+        <div *ngIf="f.smsLimit.errors.required">Obrigatório</div>
+      </div>
+    </div>
+    <div class="form-group">
       <label for="workingDays">Dias de trabalhados (Selecione dias diferentes usando a tecla CTRL)</label>
       <select multiple class="form-control" id="workingDays" size="7" formControlName="workingDays">
         <option value="Domingo">Domingo</option>

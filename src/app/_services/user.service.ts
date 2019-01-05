@@ -41,7 +41,7 @@ export class UserService {
     }
 
     update(user: User) {
-        return this.http.put(`${environment.apiUrl}` + this.getBusinessId() + `/users`, user);
+        return this.http.put(`${environment.apiUrl}` + this.getBusinessId() + `/users`, user).map(resp => resp);;
     }
 
     delete(id: string) {

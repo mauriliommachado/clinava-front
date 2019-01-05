@@ -3,6 +3,7 @@
     hourInit: number;
     hourEnd: number;
     interval: number;
+    smsLimit: number;
     workingDays: string[];
 }
 

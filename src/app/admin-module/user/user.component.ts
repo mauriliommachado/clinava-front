@@ -54,7 +54,7 @@ export class UserComponent implements OnInit {
 
   cleanForm() {
     this.registerForm = this.formBuilder.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.minLength(3), Validators.required]],
       email: ['', Validators.required],
       role: ['', Validators.required],
       password: ['']
@@ -83,7 +83,7 @@ export class UserComponent implements OnInit {
       this.roles = res;
     });
     this.registerForm = this.formBuilder.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.minLength(3), Validators.required]],
       email: ['', Validators.required],
       role: ['', Validators.required],
       password: ['']
@@ -143,7 +143,7 @@ export class UserComponent implements OnInit {
     this.userService.getById(id).subscribe((res: User) => {
       user = res;
       this.registerForm = this.formBuilder.group({
-        name: [user.name, Validators.required],
+        name: [user.name,[Validators.minLength(3), Validators.required]],
         email: [user.email, Validators.required],
         role: [user.roles[0].id, Validators.required],
         password: [user.password]

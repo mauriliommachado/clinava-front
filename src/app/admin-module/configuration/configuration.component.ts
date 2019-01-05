@@ -23,6 +23,7 @@ export class ConfigurationComponent implements OnInit {
         config = resp[0];
         this.registerForm = this.formBuilder.group({
           id: [config.id, Validators.required],
+          smsLimit: [config.smsLimit, Validators.required],
           hourInit: [config.hourInit, Validators.required],
           hourEnd: [config.hourEnd, Validators.required],
           interval: [config.interval, Validators.required],
@@ -32,6 +33,7 @@ export class ConfigurationComponent implements OnInit {
         config = resp[0];
         this.registerForm = this.formBuilder.group({
           id: [""],
+          smsLimit: ["", Validators.required],
           hourInit: ["", Validators.required],
           hourEnd: ["", Validators.required],
           interval: ["", Validators.required],
@@ -53,6 +55,7 @@ export class ConfigurationComponent implements OnInit {
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
       id: [""],
+      smsLimit: ["", Validators.required],
       hourInit: ["", Validators.required],
       hourEnd: ["", Validators.required],
       interval: ["", Validators.required],
