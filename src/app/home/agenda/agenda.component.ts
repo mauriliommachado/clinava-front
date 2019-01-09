@@ -26,8 +26,10 @@ export class AgendaComponent implements OnInit {
   today: Date;
   id: string;
   visible = false;
+  showSummary = false;
   attendants;
   docName: string = "Selecione um atendente";
+  event: Event= null;
 
   constructor(private userService: UserService, private configService: ConfigService, private eventService: EventService, private route: ActivatedRoute) {
 
@@ -54,11 +56,11 @@ export class AgendaComponent implements OnInit {
     this.weekIndex = 0;
     this.configService.getConfig().subscribe(resp => {
       this.config = resp[0];
-      this.initDates("ngOnInit");
+      this.initDates();
     });
   }
 
-  initDates(source: string) {
+  initDates() {
     if (!this.id) {
       return;
     }
@@ -123,28 +125,33 @@ export class AgendaComponent implements OnInit {
 
   add() {
     this.weekIndex = this.weekIndex + 1;
-    this.initDates("add");
+    this.initDates();
   }
 
   reset() {
     this.weekIndex = 0;
-    this.initDates("reset");
+    this.initDates();
   }
 
   sub() {
     this.weekIndex = this.weekIndex - 1;
-    this.initDates("sub");
+    this.initDates();
   }
 
   onClose() {
     this.visible = false;
-    this.initDates("onClose");
+    this.showSummary = false;
+    this.event = null;
+    this.initDates();
   }
 
   show(event: Event) {
     if (!event.id) {
       this.eventDate = event.date;
       this.visible = true;
+    }else{
+      this.event = event;
+      this.showSummary = true;
     }
   }
   getDaysInMonth(m, y) {

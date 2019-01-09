@@ -11,6 +11,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Ng2CompleterModule } from "ng2-completer";
 import {NgxMaskModule} from 'ngx-mask';
+import { ConsultSummaryComponent } from './consult-summary/consult-summary.component';
 
 @NgModule({
   imports: [
@@ -21,6 +22,6 @@ import {NgxMaskModule} from 'ngx-mask';
   ],
   declarations: [
     AgendaComponent, PatientComponent,
-    ConsultComponent, HomeComponent,EventRegisterComponent]
+    ConsultComponent, HomeComponent,EventRegisterComponent, ConsultSummaryComponent]
 })
 export class HomeModule { }

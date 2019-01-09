@@ -1,0 +1,21 @@
+<div class="modal-custom" [hidden]="!visible" (click)="hide($event)" id="customModal">
+  <div class="card w-50">
+    <h5 class="card-header">Consulta - {{event.patient.name}}</h5>
+    <div class="card-body">
+        <div class="form-group">
+            <label for="date">Data</label>
+            <input type="text" id="date" name="date" [(ngModel)]="formatedDate" class="form-control"
+              readonly />
+          </div>
+      <div class="form-group">
+        <label for="phone">Telefone</label>
+        <input type="text" id="phone" name="phone" mask="(00)0 0000-0000" [(ngModel)]="event.patient.phone" class="form-control"
+          readonly />
+      </div>
+    </div>
+    <div class="card-footer text-right">
+      <button type="button" class="btn btn-secondary" id="close" (click)="hide($event)">Cancelar</button>
+      <button type="button" class="btn btn-info ml-3" id="confirm" (click)="confirm($event)">Confirmar Consulta</button>
+    </div>
+  </div>
+</div>

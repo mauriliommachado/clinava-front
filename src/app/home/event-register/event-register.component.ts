@@ -43,7 +43,6 @@ export class EventRegisterComponent implements OnInit {
 
   closeModal(): void {
     this.close.emit();
-
   }
 
   onKey(event: any) {

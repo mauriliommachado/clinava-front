@@ -7,4 +7,6 @@ export class Event {
     date: Date;
     obs: string;
     duration: number;
+    confirmed: boolean;
 }
+
