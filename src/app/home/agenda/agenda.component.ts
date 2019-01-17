@@ -16,6 +16,8 @@ export class AgendaComponent implements OnInit {
 
   monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
     "Julho", "Agosto", "Setembro", "Outrubro", "Novembro", "Dezembro"];
+  weekNames = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta",
+    "Sabado"];
   config: Config;
   initDay: number;
   endDay: number;
@@ -88,11 +90,12 @@ export class AgendaComponent implements OnInit {
     endDate.setMinutes(this.config.interval)
     this.eventService.getByTime(this.today, endDate, this.id).subscribe(resp => {
       this.days = new Array();
+      console.log(this.config.workingDays);
       for (let d = 0; d < this.config.workingDays.length; d++) {
         let day = new Day();
         day.events = new Array();
         let hd = new Date(this.today.getTime());
-        hd.setTime(hd.getTime() + 24 * 60 * 60 * 1000 * d);
+        hd.setTime(hd.getTime() + 24 * 60 * 60 * 1000 * (this.weekNames.indexOf(this.config.workingDays[d]) -1));
         day.header = hd.getDate() + "/" + (hd.getMonth() + 1) + " - " + this.config.workingDays[d];
         let events = resp;
         for (let index = 0; index <= spots; index++) {
