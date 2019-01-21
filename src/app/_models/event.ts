@@ -8,5 +8,7 @@ export class Event {
     obs: string;
     duration: number;
     confirmed: boolean;
+    finished: boolean;
+    checkIn: Date;
 }
 

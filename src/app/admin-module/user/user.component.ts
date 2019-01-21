@@ -57,7 +57,8 @@ export class UserComponent implements OnInit {
       name: ['', [Validators.minLength(3), Validators.required]],
       email: ['', Validators.required],
       role: ['', Validators.required],
-      password: ['']
+      password: [''],
+      crm: ['']
     });
   }
 
@@ -86,7 +87,8 @@ export class UserComponent implements OnInit {
       name: ['', [Validators.minLength(3), Validators.required]],
       email: ['', Validators.required],
       role: ['', Validators.required],
-      password: ['']
+      password: [''],
+      crm: ['']
     });
     this.title = this.show ? 'Cancelar' : 'Cadastrar';
   }
@@ -114,6 +116,7 @@ export class UserComponent implements OnInit {
     role.id = this.registerForm.value.role;
     user.roles.push(role);
     user.username = user.email;
+    user.crm = u.crm;
     if (this.editing) {
       user.id = this.currentUser.id;
       this.userService.update(user).subscribe(resp => {
@@ -146,7 +149,8 @@ export class UserComponent implements OnInit {
         name: [user.name,[Validators.minLength(3), Validators.required]],
         email: [user.email, Validators.required],
         role: [user.roles[0].id, Validators.required],
-        password: [user.password]
+        password: [user.password],
+        crm: [user.crm]
       });
       this.currentUser = user;
       this.toggle();

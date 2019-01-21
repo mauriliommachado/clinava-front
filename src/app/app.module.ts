@@ -10,15 +10,19 @@ import { routing } from './app.routing';
 import { AlertComponent } from './_directives';
 import { AuthGuard } from './_guards';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
-import { AlertService, AuthenticationService, UserService, ConfigService, EventService, PatientService,RoleService } from './_services';
+import { AlertService, AuthenticationService, UserService, ConfigService, EventService, PatientService, RoleService, RecordService } from './_services';
 import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
 import { IndexComponent } from './index/index.component';
 
-import { HomeRoutingModule } from './home/home-routing.module'; //<-- import
-import { HomeModule }     from './home/home.module'; //<-- import
-import { AdminModuleModule }     from './admin-module/admin-module.module'; //<-- import
-import {NgxMaskModule} from 'ngx-mask'
+import { HomeRoutingModule } from './home/home-routing.module';
+import { HomeModule } from './home/home.module';
+import { ClinicModule } from './clinic/clinic.module';
+import { ClinicHome } from './clinic/clinic.component';
+import { FinanceModule } from './finance/finance.module';
+import { FinanceHome } from './finance/finance.component';
+import { AdminModuleModule } from './admin-module/admin-module.module';
+import { NgxMaskModule } from 'ngx-mask'
 
 @NgModule({
     imports: [
@@ -26,7 +30,9 @@ import {NgxMaskModule} from 'ngx-mask'
         ReactiveFormsModule,
         HttpClientModule,
         routing,
-        HomeModule,AdminModuleModule,
+        ClinicModule,
+        FinanceModule,
+        HomeModule, AdminModuleModule,
         HomeRoutingModule,
         BrowserModule,
         BrowserAnimationsModule,
@@ -36,14 +42,17 @@ import {NgxMaskModule} from 'ngx-mask'
         AppComponent,
         AlertComponent,
         LoginComponent,
-        RegisterComponent,IndexComponent ],
+        ClinicHome,
+        FinanceHome,
+        RegisterComponent, IndexComponent],
     providers: [
         AuthGuard,
         AlertService,
         AuthenticationService,
         UserService,
         EventService,
-        ConfigService,PatientService,RoleService, 
+        RecordService,
+        ConfigService, PatientService, RoleService,
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     ],

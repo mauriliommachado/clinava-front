@@ -1,0 +1,7 @@
+<h4>Lista de Espera</h4>
+<ul class="list-group w-50 mt-5">
+  <a class="list-group-item d-flex justify-content-between align-items-center list-group-item-info" *ngFor="let e of events" (click)="openEvent(e.id)">
+    <span class="badge badge-pill">{{e.date | date: "HH:mm"}}</span> {{e.patient.name}}
+    <span class="badge badge-pill">Check in: {{e.checkIn | date: "HH:mm"}}</span>
+  </a>
+</ul>
