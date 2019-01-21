@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';import { Config } from '../../_models';
 import { AlertService, ConfigService } from '../../_services';
+import { User } from '../../_models';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -15,6 +16,7 @@ export class InsuranceComponent implements OnInit {
 
   registerForm: FormGroup;
   submitted = false;
+  users: User[];
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
@@ -31,5 +33,9 @@ export class InsuranceComponent implements OnInit {
 
    // convenience getter for easy access to form fields
    get f() { return this.registerForm.controls; }
+
+   onSubmit(){
+     
+   }
 
 }
