@@ -1,5 +1,4 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { first } from 'rxjs/operators';
 
 
 @Component({
@@ -8,9 +7,13 @@ import { first } from 'rxjs/operators';
 })
 export class IndexComponent implements OnInit {
 
+    role: string;
+    constructor() {
+
+    }
 
     ngOnInit() {
-        //this.loadAllUsers();
+        this.role = JSON.parse(localStorage.getItem("currentUser")).role.name;
     }
 
 }

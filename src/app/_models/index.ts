@@ -5,3 +5,5 @@ export * from './patient';
 export * from './address';
 export * from './roles';
 export * from './contact';
+export * from './record';
+export * from './template'

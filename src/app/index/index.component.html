@@ -29,6 +29,32 @@
                 </ul>
               </div>
             </li>
+            <li class="nav-item" *ngIf="role != 'ROLE_USER'">
+              <a class="nav-link" href="#admin" >Clínico</a>
+              <div id="admin"  routerLinkActive="show">
+                <ul class="nav flex-column ml-3">
+                  <li class="nav-item">
+                    <a class="nav-link"  routerLink="/event/list" routerLinkActive="active">Lista</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link"  routerLink="/event/record" routerLinkActive="active">Atendimento</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item" *ngIf="role != 'ROLE_USER'">
+              <a class="nav-link" href="#admin" >Financeiro</a>
+              <div id="admin"  routerLinkActive="show">
+                <ul class="nav flex-column ml-3">
+                  <li class="nav-item">
+                    <a class="nav-link"  routerLink="/finance/insurance" routerLinkActive="active">Convênio</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link"  routerLink="/finance/payment_methods" routerLinkActive="active">Formas de Pagamento</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
             <li class="nav-item">
               <a class="nav-link" href="#admin">Administrativo</a>
               <div id="admin"  routerLinkActive="show">
@@ -42,6 +68,7 @@
                 </ul>
               </div>
             </li>
+            
           </ul>
         </div>
       </nav>

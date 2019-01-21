@@ -15,13 +15,12 @@
                 <label for="time">Hora</label>
                 <div class="input-group mb-2">
                     <div class="input-group-prepend">
-                        <button class="input-
-                        group-text" (click)="subMinutes()">-</button>
+                        <a class="input-group-text" (click)="subMinutes()">-</a>
                     </div>
                     <input type="time" formControlName="time" [ngModel]="time" [ngClass]="{ 'is-invalid': submitted && f.time.errors }"
                         class="form-control" id="time">
                     <div class="input-group-prepend">
-                        <button class="input-group-text" (click)="addMinutes()">+</button>
+                        <a class="input-group-text" (click)="addMinutes()">+</a>
                     </div>
                 </div>
             </div>

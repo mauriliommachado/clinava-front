@@ -5,3 +5,4 @@ export * from './event.service';
 export * from './config.service';
 export * from './patient.service';
 export * from './roles.service';
+export * from './record.service'

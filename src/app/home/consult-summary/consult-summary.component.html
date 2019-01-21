@@ -14,8 +14,10 @@
       </div>
     </div>
     <div class="card-footer text-right">
-      <button type="button" class="btn btn-secondary" id="close" (click)="hide($event)">Cancelar</button>
-      <button type="button" class="btn btn-info ml-3" id="confirm" (click)="confirm($event)">Confirmar Consulta</button>
+      <button type="button" class="btn btn-secondary" id="close" (click)="hide($event)">Sair</button>
+      <button type="button" *ngIf="!event.checkIn" class="btn btn-success ml-3" id="checkin" (click)="checkin($event)">Check in</button>
+      <button type="button" *ngIf="!event.confirmed" class="btn btn-info ml-3" id="confirm" (click)="confirm($event)">Confirmar Consulta</button>
+      <button type="button" *ngIf="event.confirmed" class="btn btn-danger ml-3" id="cancel" (click)="cancel($event)">Cancelar Consulta</button>
     </div>
   </div>
 </div>

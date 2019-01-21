@@ -90,7 +90,6 @@ export class AgendaComponent implements OnInit {
     endDate.setMinutes(this.config.interval)
     this.eventService.getByTime(this.today, endDate, this.id).subscribe(resp => {
       this.days = new Array();
-      console.log(this.config.workingDays);
       for (let d = 0; d < this.config.workingDays.length; d++) {
         let day = new Day();
         day.events = new Array();
