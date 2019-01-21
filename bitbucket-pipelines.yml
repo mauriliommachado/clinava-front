@@ -23,6 +23,7 @@ pipelines:
         name: Deploy to staging
         script:
         - git filter-branch -- --all
+        - npm install
         - ng build --configuration=development
         - git add .
         - git commit -m "deploy"
