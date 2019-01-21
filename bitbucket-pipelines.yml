@@ -23,4 +23,5 @@ pipelines:
         name: Deploy to staging
         script:
         - git filter-branch -- --all
+        - git pull https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_STAGING_NAME.git HEAD:master
         - git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_STAGING_NAME.git HEAD:master
