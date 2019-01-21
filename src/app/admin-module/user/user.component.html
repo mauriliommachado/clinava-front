@@ -19,6 +19,10 @@
       </div>
     </div>
     <div class="form-group">
+      <label for="crm">CRM</label>
+      <input type="text" id="crm" formControlName="crm" class="form-control"  />
+    </div>
+    <div class="form-group">
       <label for="role">Acesso</label>
       <select formControlName="role" class="form-control"  [ngClass]="{ 'is-invalid': submitted && f.role.errors }">
         <option *ngFor="let role of roles" [value]="role.id">{{role.name | role}}</option>

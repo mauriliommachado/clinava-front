@@ -28,10 +28,34 @@ export class ConsultSummaryComponent implements OnInit {
     if (elementId == "customModal" || elementId == "confirm") {
       this.event.confirmed = true;
       this.eventService.update(this.event).subscribe(resp => {
-      this.visible = false;
+        this.visible = false;
         this.closeModal();
       });
 
+    }
+  }
+
+  cancel(event) {
+    let elementId: string = (event.target as Element).id;
+    if (elementId == "customModal" || elementId == "cancel") {
+      this.event.confirmed = false;
+      this.event.checkIn = null;
+      this.eventService.update(this.event).subscribe(resp => {
+        this.visible = false;
+        this.closeModal();
+      });
+    }
+  }
+
+  checkin(event) {
+    let elementId: string = (event.target as Element).id;
+    if (elementId == "customModal" || elementId == "checkin") {
+      this.event.checkIn = new Date();
+      this.event.confirmed = true;
+      this.eventService.update(this.event).subscribe(resp => {
+        this.visible = false;
+        this.closeModal();
+      });
     }
   }
 

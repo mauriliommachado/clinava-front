@@ -27,7 +27,10 @@ export class ConfigurationComponent implements OnInit {
           hourInit: [config.hourInit, Validators.required],
           hourEnd: [config.hourEnd, Validators.required],
           interval: [config.interval, Validators.required],
-          workingDays: [config.workingDays, Validators.required]
+          workingDays: [config.workingDays, Validators.required],
+          anamneseTemplate:[config.anamneseTemplate],
+          attestTemplate:[config.attestTemplate],
+          prescriptionTemplate:[config.prescriptionTemplate]
         });
       } else {
         config = resp[0];
@@ -37,7 +40,10 @@ export class ConfigurationComponent implements OnInit {
           hourInit: ["", Validators.required],
           hourEnd: ["", Validators.required],
           interval: ["", Validators.required],
-          workingDays: ["", Validators.required]
+          workingDays: ["", Validators.required],
+          anamneseTemplate:[''],
+          attestTemplate:[''],
+          prescriptionTemplate:['']
         });
       }
 
@@ -59,7 +65,10 @@ export class ConfigurationComponent implements OnInit {
       hourInit: ["", Validators.required],
       hourEnd: ["", Validators.required],
       interval: ["", Validators.required],
-      workingDays: ["", Validators.required]
+      workingDays: ["", Validators.required],
+      anamneseTemplate:[''],
+      attestTemplate:[''],
+      prescriptionTemplate:['']
     });
     this.cleanForm();
   }

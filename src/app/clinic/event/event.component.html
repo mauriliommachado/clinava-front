@@ -1,0 +1,120 @@
+<div class="p-2">
+  <h4>Paciente</h4>
+  <h5>{{event.patient.name}}</h5>
+  <p><strong>Idade: </strong> {{event.patient.birthday | date: "dd/MM/yyyy"}} </p>
+  <button type="button" class="btn btn-danger" (click)="close()">Encerrar atendimento</button>
+</div>
+<form [formGroup]="registerForm">
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+        aria-selected="true">Histórico</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="anamnese-tab" data-toggle="tab" href="#anamnese" role="tab" aria-controls="anamnese"
+        aria-selected="false">Anamnese</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="evolucao-tab" data-toggle="tab" href="#evolucao" role="tab" aria-controls="evolucao"
+        aria-selected="false">Evolução</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="diagnostico-tab" data-toggle="tab" href="#diagnostico" role="tab" aria-controls="diagnostico"
+        aria-selected="false">Diagnostico</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="precricao-tab" data-toggle="tab" href="#precricao" role="tab" aria-controls="precricao"
+        aria-selected="false">Prescrições</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="exames-tab" data-toggle="tab" href="#exames" role="tab" aria-controls="exames"
+        aria-selected="false">Exames</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="atestado-tab" data-toggle="tab" href="#atestado" role="tab" aria-controls="atestado"
+        aria-selected="false">Atestados</a>
+    </li>
+
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active p-1" id="home" role="tabpanel" aria-labelledby="home-tab">
+      <div class="card bg-light mt-1" *ngFor="let r of pastRecords">
+        <h6 class="card-header">Consulta - {{r.date | date: "dd/MM/yyyy"}}</h6>
+        <div class="card-body">
+          <h6 class="card-title">Anamnese:</h6>
+          <p class="card-text">{{r.anamnese}}</p>
+          <h6 class="card-title">Evolução:</h6>
+          <p class="card-text">{{r.evolution}}</p>
+          <h6 class="card-title">Diagnosticos:</h6>
+          <p class="card-text">{{r.diagnosis1}}</p>
+          <p class="card-text">{{r.diagnosis2}}</p>
+          <p class="card-text">{{r.diagnosis3}}</p>
+          <p class="card-text">{{r.diagnosis4}}</p>
+          <h6 class="card-title">Prescriçãos:</h6>
+          <p class="card-text">{{r.prescriptions}}</p>
+          <h6 class="card-title">Exames:</h6>
+          <p class="card-text">{{r.exams}}</p>
+          <h6 class="card-title">Atestados:</h6>
+          <p class="card-text">{{r.attest}}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="anamnese" role="anamnese" aria-labelledby="anamnese-tab">
+      <div class="form-group">
+        <label for="lblAnamnese">Anamnese</label>
+        <textarea class="form-control" id="lblAnamnese" rows="10" formControlName="anamnese"></textarea>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="evolucao" role="tabpanel" aria-labelledby="evolucao-tab">
+      <div class="form-group">
+        <label for="lblevolucao">Evolução</label>
+        <textarea class="form-control" id="lblevolucao" rows="10" formControlName="evolution"></textarea>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="diagnostico" role="tabpanel" aria-labelledby="diagnostico-tab">
+      <div class="form-group">
+        <label for="lbldiagnostico1">Diagnostico 1</label>
+        <input class="form-control" formControlName="diagnosis1" id="lbldiagnostico1" />
+      </div>
+      <div class="form-group">
+        <label for="lbldiagnostico2">Diagnostico 2</label>
+        <input class="form-control" formControlName="diagnosis2" id="lbldiagnostico2" />
+      </div>
+      <div class="form-group">
+        <label for="lbldiagnostico3">Diagnostico 3</label>
+        <input class="form-control" formControlName="diagnosis3" id="lbldiagnostico3" />
+      </div>
+      <div class="form-group">
+        <label for="lbldiagnostico4">Diagnostico 4</label>
+        <input class="form-control" formControlName="diagnosis4" id="lbldiagnostico4" />
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="precricao" role="tabpanel" aria-labelledby="precricao-tab">
+      <div class="form-group">
+        <label for="lblprescricao">Prescrição</label>
+        <textarea class="form-control" id="lblprescricao" rows="10" formControlName="prescriptions"></textarea>
+      </div>
+      <a class="btn btn-info" (click)="print('prescriptions')">Imprimir</a>
+    </div>
+
+    <div class="tab-pane fade" id="exames" role="tabpanel" aria-labelledby="exames-tab">
+      <div class="form-group">
+        <label for="lblexames">Exames</label>
+        <textarea class="form-control" id="lblexames" rows="10" formControlName="exams"></textarea>
+      </div>
+      <a class="btn btn-info" (click)="print('exams')">Imprimir</a>
+    </div>
+
+    <div class="tab-pane fade" id="atestado" role="tabpanel" aria-labelledby="atestado-tab">
+      <div class="form-group">
+        <label for="lblatestados">Atestados</label>
+        <textarea class="form-control" id="lblatestados" rows="10" formControlName="attest"></textarea>
+      </div>
+      <a class="btn btn-info" (click)="print('attest')">Imprimir</a>
+    </div>
+  </div>
+</form>

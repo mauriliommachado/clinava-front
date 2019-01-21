@@ -12,4 +12,5 @@ export class User {
     roles: Role[];
     address: Address;
     contacts: Contact[];
+    crm: string;
 }

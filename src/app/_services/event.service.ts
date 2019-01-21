@@ -9,8 +9,13 @@ export class EventService {
 
     constructor(private http: HttpClient) {
     }
+
     getBusinessId(): string {
         return JSON.parse(localStorage.getItem("currentUser")).businessId;
+    }
+
+    getUserId(): string {
+        return JSON.parse(localStorage.getItem("currentUser")).userId;
     }
 
     getAll(date?: Date) {
@@ -22,11 +27,11 @@ export class EventService {
     }
 
     getByTime(date: Date, endDate: Date, id: string) {
-        //this should search in a range
-        //return new Array().filter(e => e.user.id == id && e.date.getTime() >= date.getTime() && e.date.getTime() < endDate.getTime());
-        //
-        //return this.http.get<Event[]>(`${environment.apiUrl}/` + this.getBusinessId() + `/events?startDate=2018-12-11T08:00&endDate=2018-12-11T10:00&userId=11`);
         return this.http.get<Event[]>(`${environment.apiUrl}` + this.getBusinessId() + `/events?userId=` + id + '&startDate=' + date.toISOString() + '&endDate=' + endDate.toISOString());
+    }
+
+    getByCheckedId(date: Date) {
+        return this.http.get<Event[]>(`${environment.apiUrl}` + this.getBusinessId() + `/events?userId=` + this.getUserId() + '&startDate=' + date.toISOString() + '&checked=' + true);
     }
 
     getById(id: string) {
