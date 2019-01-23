@@ -17,6 +17,7 @@ export class ProceduresComponent implements OnInit {
   registerForm: FormGroup;
   submitted = false;
   users: User[];
+  get f() { return this.registerForm.controls; }
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
@@ -35,8 +36,7 @@ export class ProceduresComponent implements OnInit {
     });
   }
 
-   // convenience getter for easy access to form fields
-   get f() { return this.registerForm.controls; }
+ 
 
    onSubmit(){
      
