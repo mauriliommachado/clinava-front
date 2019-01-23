@@ -32,6 +32,13 @@
         <div *ngIf="f.name.errors.required">Obrigatório</div>
       </div>
     </div>
+    <div class="form-group">
+      <label for="billingDay">Dia de Faturamento</label>
+      <input type="text" formControlName="billingDay" mask="00" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.billingDay.errors }" />
+      <div *ngIf="submitted && f.billingDay.errors" class="invalid-feedback">
+        <div *ngIf="f.billingDay.errors.required">Obrigatório</div>
+      </div>
+    </div>
   </form>
 </div>
 

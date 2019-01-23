@@ -18,9 +18,10 @@ import { FinanceHome } from './finance/finance.component';
 import { PlanComponent } from './admin-module/plan/plan.component';
 import { InsuranceComponent } from './admin-module/insurance/insurance.component';
 import { ProceduresComponent } from './admin-module/procedures/procedures.component';
-import { PaymentMethodComponent } from './finance/payment-method/payment-method.component';
+import { PaymentMethodComponent } from './admin-module/payment-method/payment-method.component';
 import { BillComponent } from './finance/bill/bill.component';
 import { FlowComponent } from './finance/flow/flow.component';
+import { BillingComponent } from './home/billing/billing.component';
 
 
 const appRoutes: Routes = [
@@ -34,7 +35,8 @@ const appRoutes: Routes = [
           { path: 'agenda', component: AgendaComponent },
           { path: 'agenda/:id', component: AgendaComponent },
           { path: 'consult', component: ConsultComponent },
-          { path: 'patient', component: PatientComponent }
+          { path: 'patient', component: PatientComponent },
+          { path: 'billing', component: BillingComponent }
         ]
       }
     ]
@@ -47,6 +49,7 @@ const appRoutes: Routes = [
           { path: 'insurance', component: InsuranceComponent },
           { path: 'plan', component: PlanComponent },
           { path: 'procedures', component: ProceduresComponent },
+          { path: 'payment_method', component: PaymentMethodComponent },
           { path: 'user', component: UserComponent },
           { path: 'configuration', component: ConfigurationComponent }
         ]
@@ -72,7 +75,7 @@ const appRoutes: Routes = [
       {
         path: '', component: FinanceHome,
         children: [
-          { path: 'payment_method', component: PaymentMethodComponent },
+
           { path: 'bill', component: BillComponent },
           { path: 'flow', component: FlowComponent }
         ]

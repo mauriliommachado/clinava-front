@@ -6,6 +6,7 @@ import { HomeRoutingModule } from './home-routing.module';
 import {EventRegisterComponent } from './event-register/event-register.component'
 import { AgendaComponent } from './agenda/agenda.component';
 import { ConsultComponent } from './consult/consult.component';
+import { BillingComponent } from './billing/billing.component';
 import { PatientComponent } from './patient/patient.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -22,6 +23,6 @@ import { ConsultSummaryComponent } from './consult-summary/consult-summary.compo
   ],
   declarations: [
     AgendaComponent, PatientComponent,
-    ConsultComponent, HomeComponent,EventRegisterComponent, ConsultSummaryComponent]
+    ConsultComponent, HomeComponent,EventRegisterComponent, ConsultSummaryComponent, BillingComponent]
 })
 export class HomeModule { }

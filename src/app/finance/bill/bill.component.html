@@ -3,11 +3,11 @@
 <div>
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
     <div class="form-row">
-      <div class="col-md-6 mb-3">
+      <div class="col-md-6">
         <label for="document" class="col-form-label">Número do Documento</label>
-        <input type="number" class="form-control" id="document" name="document" autocomplete="false" placeholder="Número do Documento">
+        <input type="text" class="form-control" id="document" name="document" autocomplete="false" placeholder="Número do Documento">
       </div>
-      <div class="col-md-6 mb-3">
+      <div class="col-md-6">
         <label for="expireAt" class="col-form-label">Data de Validade</label>
         <input type="date" autocomplete="off" name="expireAt" id="expireAt" class="form-control" required />
       </div>
@@ -19,14 +19,14 @@
       </div>
     </div>
     <div class="form-row">
-      <div class="col-md-6 mb-3">
+      <div class="col-md-6">
         <label for="nature" class="col-form-label">Natureza</label>
         <select id="nature" name="nature" class="form-control" required>
           <option>RECEITA</option>
           <option>DESPESA</option>
         </select>
       </div>
-      <div class="col-md-6 mb-3">
+      <div class="col-md-6">
         <label for="category" class="col-form-label">Categoria</label>
         <select id="category" name="category" class="form-control" required>
           <option selected>FIXO</option>
@@ -35,12 +35,12 @@
       </div>
     </div>
     <div class="form-row">
-      <div class="col-md-6 mb-3">
+      <div class="col-md-6">
         <label for="value" class="col-form-label">Valor Total</label>
-        <input type="text" class="form-control" id="value" name="value" autocomplete="false" placeholder="Valor Total"
+        <input type="text" class="form-control" id="value" name="value" autocomplete="false" placeholder="Valor Total" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', align : 'left' }"
           required>
       </div>
-      <div class="col-md-6 mb-3">
+      <div class="col-md-6">
         <label for="status" class="col-form-label">Forma de Pagamento</label>
         <select id="status" name="status" class="form-control" required>
           <option selected>Dinheiro A Vista</option>
@@ -48,15 +48,14 @@
       </div>
     </div>
     <div class="form-row">
-      <div class="col-md-6 mb-3">
+      <div class="col-md-6">
         <label for="status" class="col-form-label">Status</label>
-        <select id="status" name="status" class="form-control" required>
+        <select id="status" name="status" class="form-control mb-3" required>
           <option selected>ABERTO</option>
           <option>FECHADO</option>
         </select>
       </div>
     </div>
-
   </form>
 </div>
 

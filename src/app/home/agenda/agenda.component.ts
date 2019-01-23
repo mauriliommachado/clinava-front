@@ -29,6 +29,7 @@ export class AgendaComponent implements OnInit {
   id: string;
   visible = false;
   showSummary = false;
+  showBilling = false;
   attendants;
   docName: string = "Selecione um atendente";
   event: Event= null;
@@ -143,6 +144,7 @@ export class AgendaComponent implements OnInit {
   onClose() {
     this.visible = false;
     this.showSummary = false;
+    this.showBilling = false;
     this.event = null;
     this.initDates();
   }
@@ -156,6 +158,12 @@ export class AgendaComponent implements OnInit {
       this.showSummary = true;
     }
   }
+
+  bill(event: Event){
+    this.event = event;
+    this.showBilling = true;
+  }
+
   getDaysInMonth(m, y) {
     return m === 2 ? y & 3 || !(y % 25) && y & 15 ? 28 : 29 : 30 + (m + (m >> 3) & 1);
   }

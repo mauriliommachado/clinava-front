@@ -1,26 +1,27 @@
 <div class="modal-custom" [hidden]="!visible" (click)="hide($event)" id="customModal">
-<div class="card w-50">
-  <h5 class="card-header">Consulta Rápida</h5>
-  <div class="card-body">
-    <div class="form-group" id="patientDiv">
-      <label for="patient">Paciente</label>
-      <input type="text" (keyup)="onKey($event)" [(ngModel)]="patientName" id="patient" name="patient" class="form-control"
-        autocomplete="off" />
-      <div class="w-100">
-        <div class="list-group auto-complete" *ngIf="!selected">
-          <a *ngFor="let user of patients" class="list-group-item list-group-item-action" (click)="select(user)">{{user.name}}
-            <small class="float-right">{{user.birthday | date:'dd/MM/yyyy'}}</small></a>
+  <div class="card w-50">
+    <h5 class="card-header">Consulta Rápida</h5>
+    <div class="card-body">
+      <div class="form-group" id="patientDiv">
+        <label for="patient">Paciente</label>
+        <input type="text" (keyup)="onKey($event)" [(ngModel)]="patientName" id="patient" name="patient" class="form-control"
+          autocomplete="off" />
+        <div class="w-100">
+          <div class="list-group auto-complete" *ngIf="!selected">
+            <a *ngFor="let user of patients" class="list-group-item list-group-item-action" (click)="select(user)">{{user.name}}
+              <small class="float-right">{{user.birthday | date:'dd/MM/yyyy'}}</small></a>
+          </div>
         </div>
       </div>
+      <div class="form-group">
+        <label for="phone">Telefone</label>
+        <input type="text" id="phone" name="phone" mask="(00)0 0000-0000" [(ngModel)]="patientPhone" class="form-control"
+          autocomplete="off" />
+      </div>
     </div>
-    <div class="form-group">
-      <label for="phone">Telefone</label>
-      <input type="text" id="phone" name="phone" mask="(00)0 0000-0000" [(ngModel)]="patientPhone" class="form-control" autocomplete="off" />
+    <div class="card-footer text-right">
+      <button type="button" class="btn btn-secondary" id="close" (click)="hide($event)">Cancelar</button>
+      <button type="button" class="btn btn-primary ml-3" (click)="onSubmit()">Marcar</button>
     </div>
   </div>
-  <div class="card-footer text-right">
-    <button type="button" class="btn btn-secondary" id="close" (click)="hide($event)">Cancelar</button>
-    <button type="button" class="btn btn-primary ml-3" (click)="onSubmit()">Marcar</button>
-  </div>
-</div>
 </div>

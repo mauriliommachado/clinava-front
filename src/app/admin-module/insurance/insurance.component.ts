@@ -22,6 +22,7 @@ export class InsuranceComponent implements OnInit {
     this.registerForm = this.formBuilder.group({
       name: ["", Validators.required],
       ansCode: ["", Validators.required],
+      billingDay: ["", Validators.required],
       cnpj:  ["", Validators.required],
       social: ["", Validators.required]
     });
@@ -32,6 +33,7 @@ export class InsuranceComponent implements OnInit {
     this.registerForm = this.formBuilder.group({
       name: ["", Validators.required],
       ansCode: ["", Validators.required],
+      billingDay: ["", Validators.required],
       cnpj:  ["", Validators.required],
       social: ["", Validators.required]
     });

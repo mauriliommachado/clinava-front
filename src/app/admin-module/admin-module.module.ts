@@ -6,18 +6,23 @@ import { UserComponent, RepeatPipe } from './user/user.component';
 import { AdminComponent } from './admin.component';
 import { ConfigurationComponent } from './configuration/configuration.component';
 import { InsuranceComponent } from './insurance/insurance.component';
+import { PaymentMethodComponent } from './payment-method/payment-method.component';
 import { ProceduresComponent } from './procedures/procedures.component';
 import { PlanComponent } from './plan/plan.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AlertService, AuthenticationService, UserService } from '../_services';
+import {NgxMaskModule} from 'ngx-mask';
+import { NgxCurrencyModule } from "ngx-currency";
 
 @NgModule({
   imports: [
     CommonModule,
     AdminModuleRoutingModule,
-    ReactiveFormsModule
+    NgxMaskModule.forChild(),
+    ReactiveFormsModule,
+    NgxCurrencyModule
   ],
-  declarations: [UserComponent, AdminComponent, ConfigurationComponent, RepeatPipe, InsuranceComponent, PlanComponent, ProceduresComponent],
+  declarations: [UserComponent, AdminComponent, ConfigurationComponent, RepeatPipe, InsuranceComponent, PlanComponent, ProceduresComponent, PaymentMethodComponent],
   providers: [
     AlertService,
     AuthenticationService,

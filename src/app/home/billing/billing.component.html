@@ -1,0 +1,99 @@
+<div class="modal-custom-lg" [hidden]="!visible" (click)="hide($event)" id="customModal">
+  <div class="card ">
+    <h5 class="card-header">Faturamento</h5>
+    <div class="card-body">
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label for="inputTipodePagamento">Operadora</label>
+          <select id="inputTipodePagamento" class="form-control">
+            <option selected>Unimed</option>
+          </select>
+        </div>
+        <div class="form-group col-md-4">
+          <label for="inputTipodePagamento">Plano</label>
+          <select id="inputTipodePagamento" class="form-control">
+            <option selected>Flex 1</option>
+          </select>
+        </div>
+        <div class="form-group col-md-4">
+          <label for="inputFormadePagamento">Forma de Pagamento</label>
+          <select id="inputFormadePagamento" class="form-control">
+            <option selected>Escolher Formao de Pagamento...</option>
+            <option>Dinheiro</option>
+            <option>Cartão Debito</option>
+            <option>Cartão Credito</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <label for="inputObs4">Observação</label>
+        <input type="obs" class="form-control" id="inputObs4" placeholder="Observação">
+      </div>
+      <br>
+      <h4>Procedimentos:</h4>
+      <br>
+      <div class="form-row">
+        <div class="form-group col-md-1">
+          <label for="inputQtde4">Código</label>
+          <input type="Qtde" class="form-control" id="inputQtde4" placeholder="Código">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputProcedimentos">Procedimentos</label>
+          <select id="inputProcedimentos" class="form-control">
+            <option selected>Escolher Procedimento</option>
+          </select>
+        </div>
+        <div class="form-group col-md-1">
+          <label for="inputQtde4">Qtde</label>
+          <input type="Qtde" class="form-control" id="inputQtde4" placeholder="Qtde">
+        </div>
+
+        <div class="form-group col-md-1">
+          <label for="inputSenha4">Valor</label>
+          <input type="Valor" class="form-control" id="inputValor4" placeholder="Valor">
+        </div>
+        <div class="form-group col-md-2">
+          <label for="inputValorFinal4">Valor Final</label>
+          <input type="ValorFinal" class="form-control" id="inputValorFinal4" placeholder="Valor Final" readonly>
+        </div>
+        <div class="form-group col-md-1">
+          <label for="inputDesc4">Adicionar</label>
+          <button id="Cadastrar" name="Cadastrar" class="btn btn-success" type="Submit">Adicionar</button>
+        </div>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Codigo</th>
+              <th>Procedimento</th>
+              <th>Quantidade</th>
+              <th>Valor Unitário</th>
+              <th>Valor Total</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th>Valor Final</th>
+              <th>R$ 70,00</th>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr>
+              <td>123.123.321</td>
+              <td>Consulta</td>
+              <td>1</td>
+              <td>70,00</td>
+              <td>70,00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card-footer text-right">
+      <button type="button" class="btn btn-secondary" id="close" (click)="hide($event)">Cancelar</button>
+      <button type="button" class="btn btn-primary ml-3" (click)="onSubmit()">Faturar</button>
+    </div>
+  </div>
+</div>
