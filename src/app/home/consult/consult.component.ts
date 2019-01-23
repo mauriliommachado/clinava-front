@@ -158,6 +158,9 @@ export class ConsultComponent implements OnInit {
     }
     let event = <Event>this.registerForm.value;
     event.date = new Date(this.registerForm.value.date);
+    console.log("form date: "+ this.registerForm.value.date);
+    console.log("date event:"+ event.date);
+    console.log("index date:"+ this.indexDate)
     event.date.setHours(this.registerForm.value.time.split(':')[0]);
     event.date.setMinutes(this.registerForm.value.time.split(':')[1]);
     this.userService.getById(this.registerForm.value.user).subscribe(user => {
