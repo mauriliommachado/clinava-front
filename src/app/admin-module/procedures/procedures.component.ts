@@ -4,11 +4,11 @@ import { User } from '../../_models';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-insurance',
-  templateUrl: './insurance.component.html',
-  styleUrls: ['./insurance.component.css']
+  selector: 'app-procedures',
+  templateUrl: './procedures.component.html',
+  styleUrls: ['./procedures.component.css']
 })
-export class InsuranceComponent implements OnInit {
+export class ProceduresComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
     private alertService: AlertService,
@@ -20,14 +20,18 @@ export class InsuranceComponent implements OnInit {
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
-      name: ["", Validators.required]
+      name: ["", Validators.required],
+      code: ["", Validators.required],
+      value:  ["", Validators.required]
     });
     this.cleanForm();
   }
 
   cleanForm() {
     this.registerForm = this.formBuilder.group({
-      name: ["", Validators.required]
+      name: ["", Validators.required],
+      code: ["", Validators.required],
+      value:  ["", Validators.required]
     });
   }
 
