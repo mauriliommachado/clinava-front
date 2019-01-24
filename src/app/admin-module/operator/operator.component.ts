@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertService, PlanService, OperatorService } from '../../_services';
-import { Plan, Operator } from '../../_models';
+import { AlertService, OperatorService } from '../../_services';
+import { Operator } from '../../_models';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   trigger,
@@ -11,9 +11,9 @@ import {
 } from '@angular/animations';
 
 @Component({
-  selector: 'app-plan',
-  templateUrl: './plan.component.html',
-  styleUrls: ['./plan.component.css'],
+  selector: 'app-operator',
+  templateUrl: './operator.component.html',
+  styleUrls: ['./operator.component.css'],
   animations: [
     trigger('popOverState', [
       state('none', style({
@@ -29,36 +29,30 @@ import {
     ])
   ]
 })
-export class PlanComponent implements OnInit {
+export class OperatorComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
     private alertService: AlertService,
-    private planService: PlanService,
     private operatorService: OperatorService) { }
 
-  currentPlan: string;
+  currentOperator: string;
   title: String;
   registerForm: FormGroup;
   loading = false;
   submitted = false;
   show = false;
   editing = false;
-  plans: Plan[];
   operators: Operator[];
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
       name: ["", Validators.required],
       ansCode: ["", Validators.required],
-      operator: ["", Validators.required]
+      billingDay: ["", Validators.required],
+      cnpj: ["", Validators.required],
+      social: ["", Validators.required]
     });
-    
-    this.planService.getAll().subscribe(resp => {
-      this.plans = resp;
-      this.operatorService.getAll().subscribe(op => {
-        this.operators = op;
-      })
-    });
+    this.operatorService.getAll().subscribe(resp => this.operators = resp);
     this.cleanForm();
     this.title = this.show ? 'Cancelar' : 'Cadastrar';
   }
@@ -67,7 +61,7 @@ export class PlanComponent implements OnInit {
     return this.show ? 'block' : 'none'
   }
 
-  teste() {
+  teste(){
     return false;
   }
 
@@ -78,14 +72,16 @@ export class PlanComponent implements OnInit {
       this.cleanForm()
     }
     this.title = this.show ? 'Cancelar' : 'Cadastrar';
-    this.planService.getAll().subscribe(resp => this.plans = resp);
+    this.operatorService.getAll().subscribe(resp => this.operators = resp);
   }
 
   cleanForm() {
     this.registerForm = this.formBuilder.group({
       name: ["", Validators.required],
       ansCode: ["", Validators.required],
-      operator: ["", Validators.required]
+      billingDay: ["", Validators.required],
+      cnpj: ["", Validators.required],
+      social: ["", Validators.required]
     });
   }
 
@@ -97,20 +93,16 @@ export class PlanComponent implements OnInit {
     if (this.registerForm.invalid) {
       return;
     }
-    let plan = new Plan();
-    plan.name = this.registerForm.value.name;
-    plan.ansCode = this.registerForm.value.ansCode;
-    plan.operator = new Operator();
-    plan.operator.ansCode = this.registerForm.value.operator;
+    let operator = <Operator>this.registerForm.value;
     if (this.editing) {
-      this.planService.update(plan).subscribe(r => {
+      this.operatorService.update(operator).subscribe(r => {
         this.alertService.success("Salvo com sucesso.", 5000);
         this.toggle();
         this.cleanForm();
       });
       this.editing = false;
     } else {
-      this.planService.register(plan).subscribe(r => {
+      this.operatorService.register(operator).subscribe(r => {
         this.alertService.success("Salvo com sucesso.", 5000);
         this.toggle();
         this.cleanForm();
@@ -119,26 +111,26 @@ export class PlanComponent implements OnInit {
   }
 
   edit(id: string) {
-    let plan = new Plan();
-    this.planService.getById(id).subscribe(resp => {
-      plan = <Plan>resp
-      console.log(plan)
+    let operator = new Operator();
+    this.operatorService.getById(id).subscribe(resp => {
+      operator = <Operator>resp
       this.registerForm.setValue({
-        name: plan.name,
-        ansCode: plan.ansCode,
-        operator: plan.operator.ansCode
+        name: operator.name,
+        ansCode: operator.ansCode,
+        billingDay: operator.billingDay,
+        cnpj: operator.cnpj,
+        social: operator.social
       });
-      this.currentPlan = id;
+      this.currentOperator = id;
       this.toggle();
       this.editing = true;
     });
   }
 
   delete(id: string) {
-    this.planService.delete(id).subscribe(resp => {
-      this.planService.getAll().subscribe(resp => this.plans = resp);
+    this.operatorService.delete(id).subscribe(resp => {
+      this.operatorService.getAll().subscribe(resp => this.operators = resp);
     });
   }
 
 }
-

@@ -7,3 +7,6 @@ export * from './roles';
 export * from './contact';
 export * from './record';
 export * from './template'
+export * from './operator'
+export * from './plan'
+export * from './procedure'

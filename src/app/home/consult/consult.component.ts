@@ -56,7 +56,6 @@ export class ConsultComponent implements OnInit {
 
   }
 
-
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
       user: ['', Validators.required],

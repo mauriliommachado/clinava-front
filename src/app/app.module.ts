@@ -10,7 +10,19 @@ import { routing } from './app.routing';
 import { AlertComponent } from './_directives';
 import { AuthGuard } from './_guards';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
-import { AlertService, AuthenticationService, UserService, ConfigService, EventService, PatientService, RoleService, RecordService } from './_services';
+import {
+    AlertService,
+    AuthenticationService,
+    UserService,
+    ConfigService,
+    EventService,
+    PatientService,
+    RoleService,
+    RecordService,
+    OperatorService,
+    PlanService,
+    ProcedureService
+} from './_services';
 import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
 import { IndexComponent } from './index/index.component';
@@ -53,6 +65,9 @@ import { NgxMaskModule } from 'ngx-mask'
         EventService,
         RecordService,
         ConfigService, PatientService, RoleService,
+        OperatorService,
+        PlanService,
+        ProcedureService,
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     ],

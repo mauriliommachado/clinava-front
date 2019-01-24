@@ -16,7 +16,7 @@ import { ListComponent } from './clinic/list/list.component';
 import { ClinicHome } from './clinic/clinic.component';
 import { FinanceHome } from './finance/finance.component';
 import { PlanComponent } from './admin-module/plan/plan.component';
-import { InsuranceComponent } from './admin-module/insurance/insurance.component';
+import { OperatorComponent } from './admin-module/operator/operator.component';
 import { ProceduresComponent } from './admin-module/procedures/procedures.component';
 import { PaymentMethodComponent } from './admin-module/payment-method/payment-method.component';
 import { BillComponent } from './finance/bill/bill.component';
@@ -46,7 +46,7 @@ const appRoutes: Routes = [
       {
         path: '', component: AdminComponent,
         children: [
-          { path: 'insurance', component: InsuranceComponent },
+          { path: 'operator', component: OperatorComponent },
           { path: 'plan', component: PlanComponent },
           { path: 'procedures', component: ProceduresComponent },
           { path: 'payment_method', component: PaymentMethodComponent },

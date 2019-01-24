@@ -53,7 +53,6 @@ export class PatientComponent implements OnInit {
     this.title = this.show ? 'Cancelar' : 'Cadastrar'
   }
 
-
   get stateList() {
     return this.show ? 'block' : 'none'
   }

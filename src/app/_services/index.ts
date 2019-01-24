@@ -6,3 +6,6 @@ export * from './config.service';
 export * from './patient.service';
 export * from './roles.service';
 export * from './record.service'
+export * from './operator.service'
+export * from './plan.service'
+export * from './procedure.service'
