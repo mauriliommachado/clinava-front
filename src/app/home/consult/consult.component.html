@@ -6,14 +6,15 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="date">Data</label>
-                <input type="date" formControlName="date" class="form-control form-control-sm" [ngModel]="date" [ngClass]="{ 'is-invalid': submitted && f.date.errors }" />
+                <input type="date" formControlName="date" class="form-control form-control-sm" [ngModel]="date"
+                    [ngClass]="{ 'is-invalid': submitted && f.date.errors }" />
                 <div *ngIf="submitted && f.date.errors" class="invalid-feedback">
                     <div *ngIf="f.date.errors.required">Obrigatório</div>
                 </div>
             </div>
             <div class="form-group col-md-6">
                 <label for="time">Hora</label>
-                <div class="input-group mb-2">
+                <div class="input-group input-group-sm mb-2">
                     <div class="input-group-prepend">
                         <a class="input-group-text" (click)="subMinutes()">-</a>
                     </div>
@@ -27,7 +28,7 @@
         </div>
         <div class="form-group">
             <label for="user">Paciente</label>
-            <select formControlName="patient" class="form-control form-control-sm"  [ngClass]="{ 'is-invalid': submitted && f.patient.errors }">
+            <select formControlName="patient" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.patient.errors }">
                 <option [value]="patient.id" *ngFor="let patient of patients">{{patient.name}}</option>
             </select>
             <div *ngIf="submitted && f.patient.errors" class="invalid-feedback">
