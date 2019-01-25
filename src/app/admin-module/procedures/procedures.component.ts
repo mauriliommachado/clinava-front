@@ -88,16 +88,16 @@ export class ProceduresComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     let inserts: Procedure[] = new Array();
-    if(!this.procedure.name){
+    if (!this.procedure.name) {
       alert("Nome do procedimento não pode estar vazio.");
       return;
     }
     this.plans.forEach((p, i) => {
       let procedure = new Procedure();
-      if(this.editing && !this.codes[i] ){
-        alert("Código de procedimento para o plano "+ this.plans[i].name + " não pode estar vazio")
+      if (this.editing && !this.codes[i]) {
+        alert("Código de procedimento para o plano " + this.plans[i].name + " não pode estar vazio")
         return;
-      }else if(this.codes[i]){
+      } else if (this.codes[i]) {
         procedure.code = this.codes[i];
         procedure.value = this.numbers[i];
         procedure.name = this.procedure.name;
@@ -111,17 +111,20 @@ export class ProceduresComponent implements OnInit {
         this.procedureService.update(procedure).subscribe(r => {
           this.alertService.success("Salvo com sucesso.", 5000);
           this.editing = false;
+          this.cleanForm();
+          this.toggle();
         });
       });
     } else {
       inserts.forEach(procedure => {
         this.procedureService.register(procedure).subscribe(r => {
           this.alertService.success("Salvo com sucesso.", 5000);
+          this.cleanForm();
+          this.toggle();
         });
       });
     }
-    this.cleanForm();
-    this.toggle();
+
   }
 
   edit(id: number) {
