@@ -94,10 +94,10 @@
         </thead>
         <tbody>
             <tr *ngFor="let patient of patients">
-                <td>{{ patient.name }} </td>
-                <td>{{ patient.cpf }}</td>
-                <td>{{ patient.email }}</td>
-                <td>
+                <td class="align-middle">{{ patient.name }} </td>
+                <td class="align-middle">{{ patient.cpf }}</td>
+                <td class="align-middle">{{ patient.email }}</td>
+                <td class="align-middle">
                     <a class="btn btn-info btn-sm" (click)="edit(patient.id)">
                         <i class="far fa-edit"></i></a>
                     <a class="btn btn-danger btn-sm ml-1" (click)="delete(patient.id)">

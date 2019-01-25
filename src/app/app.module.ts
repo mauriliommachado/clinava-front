@@ -21,7 +21,9 @@ import {
     RecordService,
     OperatorService,
     PlanService,
-    ProcedureService
+    ProcedureService,
+    PaymentMethodService,
+    BillService
 } from './_services';
 import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
@@ -68,6 +70,8 @@ import { NgxMaskModule } from 'ngx-mask'
         OperatorService,
         PlanService,
         ProcedureService,
+        PaymentMethodService,
+        BillService,
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     ],

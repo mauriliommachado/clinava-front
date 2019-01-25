@@ -82,11 +82,11 @@
         </thead>
         <tbody>
             <tr *ngFor="let event of events">
-                <td>{{ event.date | date:'dd/MM/yy - HH:mm' }}</td>
-                <td>{{ event.patient.name }}</td>
-                <td>{{ event.obs }}</td>
-                <td>{{ event.user.name }}</td>
-                <td>
+                <td class="align-middle">{{ event.date | date:'dd/MM/yy - HH:mm' }}</td>
+                <td class="align-middle">{{ event.patient.name }}</td>
+                <td class="align-middle">{{ event.obs }}</td>
+                <td class="align-middle">{{ event.user.name }}</td>
+                <td class="align-middle">
                     <a class="btn btn-info btn-sm" (click)="edit(event.id)">
                         <i class="far fa-edit"></i></a>
                     <a class="btn btn-danger btn-sm ml-1" (click)="delete(event.id)">
