@@ -36,7 +36,7 @@ export class ProceduresComponent implements OnInit {
     private procedureService: ProcedureService,
     private planService: PlanService) { }
 
-  currentProcedure: string;
+  currentProcedure: number;
   title: String;
   loading = false;
   submitted = false;
@@ -50,29 +50,12 @@ export class ProceduresComponent implements OnInit {
 
 
   ngOnInit() {
-
-    this.procedureService.getAll().subscribe(resp => {
-      this.procedures = resp;
-      this.planService.getAll().subscribe(op => {
-        this.plans = op;
-        this.numbers = new Array();
-        this.codes = new Array();
-        this.plans.forEach(p => {
-          this.numbers.push(0);
-          this.codes.push("");
-        });
-      })
-    });
     this.cleanForm();
     this.title = this.show ? 'Cancelar' : 'Cadastrar';
   }
 
   get stateList() {
     return this.show ? 'block' : 'none'
-  }
-
-  teste() {
-    return false;
   }
 
   toggle() {
@@ -86,7 +69,19 @@ export class ProceduresComponent implements OnInit {
   }
 
   cleanForm() {
-
+    this.procedureService.getAll().subscribe(resp => {
+      this.procedures = resp;
+      this.procedure = new Procedure();
+      this.planService.getAll().subscribe(op => {
+        this.plans = op;
+        this.numbers = new Array();
+        this.codes = new Array();
+        this.plans.forEach(p => {
+          this.numbers.push(0);
+          this.codes.push("");
+        });
+      })
+    });
   }
 
 
@@ -102,42 +97,48 @@ export class ProceduresComponent implements OnInit {
       procedure.plan = this.plans[i];
       inserts.push(procedure);
     });
-    console.log(inserts);
     if (this.editing) {
       inserts.forEach(procedure => {
+        procedure.id = this.currentProcedure;
         this.procedureService.update(procedure).subscribe(r => {
+          this.alertService.success("Salvo com sucesso.", 5000);
 
+          this.cleanForm();
+          this.editing = false;
         });
       });
-      this.alertService.success("Salvo com sucesso.", 5000);
-      this.toggle();
-      this.cleanForm();
-      this.editing = false;
     } else {
       inserts.forEach(procedure => {
         this.procedureService.register(procedure).subscribe(r => {
+          this.alertService.success("Salvo com sucesso.", 5000);
+
+          this.cleanForm();
         });
       });
-      this.alertService.success("Salvo com sucesso.", 5000);
-      this.toggle();
-      this.cleanForm();
     }
+    this.toggle();
   }
 
-  edit(id: string) {
-    return;
-    /* let procedure = new Procedure();
+  edit(id: number) {
+    let procedure = new Procedure();
     this.procedureService.getById(id).subscribe(resp => {
       procedure = <Procedure>resp
-      console.log(procedure)
-
+      this.procedure = procedure;
+      this.plans = new Array();
+      this.plans.push(procedure.plan);
+      this.numbers = new Array();
+      this.codes = new Array();
+      this.plans.forEach(p => {
+        this.numbers.push(procedure.value);
+        this.codes.push(procedure.code);
+      });
       this.currentProcedure = id;
       this.toggle();
       this.editing = true;
-    }); */
+    });
   }
 
-  delete(id: string) {
+  delete(id: number) {
     this.procedureService.delete(id).subscribe(resp => {
       this.procedureService.getAll().subscribe(resp => this.procedures = resp);
     });

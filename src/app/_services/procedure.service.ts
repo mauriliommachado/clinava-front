@@ -24,8 +24,8 @@ export class ProcedureService {
         return this.http.get<Procedure[]>(`${environment.apiUrl}` + this.getBusinessId() + `/procedures?name=`+ name);
     }
 
-    getById(ansCode: string) {
-        return this.http.get(`${environment.apiUrl}` + this.getBusinessId() + `/procedures/` + ansCode);
+    getById(id: number) {
+        return this.http.get(`${environment.apiUrl}` + this.getBusinessId() + `/procedures/` + id);
     }
 
     register(procedure: Procedure) {
@@ -36,7 +36,7 @@ export class ProcedureService {
         return this.http.put(`${environment.apiUrl}` + this.getBusinessId() + `/procedures/`, procedure).map(resp => resp);
     }
 
-    delete(ansCode: string) {
-        return this.http.delete(`${environment.apiUrl}` + this.getBusinessId() + `/procedures/` + ansCode).map(resp => resp);
+    delete(id: number) {
+        return this.http.delete(`${environment.apiUrl}` + this.getBusinessId() + `/procedures/` + id).map(resp => resp);
     }
 }

@@ -2,6 +2,7 @@
 <button class="btn btn-primary btn-sm float-right mb-4" (click)="toggle()">{{title}}</button>
 <br>
 <div id="new" [@popOverState]="stateList">
+  <input type="number" [(ngModel)]="procedure.id" class="d-none" />
   <div class="form-group">
     <label for="name">Nome</label>
     <input type="text" class="form-control" [(ngModel)]="procedure.name" />
@@ -9,7 +10,7 @@
   <div class="form-row" *ngFor="let p of plans; index as i">
     <div class="form-group col-md-6">
       <label for="code">Código - {{p.name}}</label>
-      <input type="text" class="form-control" [(ngModel)]="codes[i]"/>
+      <input type="text" class="form-control" [(ngModel)]="codes[i]" />
     </div>
     <div class="form-group col-md-6">
       <label for="value">Valor - {{p.name}}</label>
@@ -30,6 +31,7 @@
         <th scope="col">Código</th>
         <th scope="col">Nome</th>
         <th scope="col">Plano</th>
+        <th scope="col">Valor</th>
         <th scope="col"></th>
         <th scope="col"></th>
       </tr>
@@ -40,6 +42,7 @@
         <td>{{ p.code }}</td>
         <td>{{ p.name }}</td>
         <td>{{ p.plan.name }}</td>
+        <td>{{ p.value }}</td>
         <td>
           <a class="btn btn-info btn-sm" (click)="edit(p.id)">
             <i class="far fa-edit"></i></a></td>
