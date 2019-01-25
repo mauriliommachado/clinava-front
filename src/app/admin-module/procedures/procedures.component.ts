@@ -91,11 +91,13 @@ export class ProceduresComponent implements OnInit {
 
     this.plans.forEach((p, i) => {
       let procedure = new Procedure();
-      procedure.code = this.codes[i];
-      procedure.value = this.numbers[i];
-      procedure.name = this.procedure.name;
-      procedure.plan = this.plans[i];
-      inserts.push(procedure);
+      if(this.codes[i]){
+        procedure.code = this.codes[i];
+        procedure.value = this.numbers[i];
+        procedure.name = this.procedure.name;
+        procedure.plan = this.plans[i];
+        inserts.push(procedure);
+      }
     });
     if (this.editing) {
       inserts.forEach(procedure => {
