@@ -67,7 +67,7 @@
       </div>
       <div class="col-md-6">
         <label for="validUntil" class="col-form-label">Data de Validade</label>
-        <input type="date" autocomplete="off" formControlName="validUntil" [ngModel]="date" name="validUntil" id="validUntil"
+        <input type="date" autocomplete="off" formControlName="validUntil" name="validUntil" id="validUntil"
           class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.validUntil.errors }" />
         <div *ngIf="submitted && f.validUntil.errors" class="invalid-feedback">
           <div *ngIf="f.validUntil.errors.required">Obrigatório</div>
