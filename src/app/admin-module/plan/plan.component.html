@@ -6,14 +6,14 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="ansCode">Registro ANS</label>
-        <input type="text" formControlName="ansCode" mask="000000000" [readonly]="editing" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.ansCode.errors }" />
+        <input type="text" formControlName="ansCode" mask="000000000" [readonly]="editing" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.ansCode.errors }" />
         <div *ngIf="submitted && f.ansCode.errors" class="invalid-feedback">
           <div *ngIf="f.ansCode.errors.required">Obrigatório</div>
         </div>
       </div>
       <div class="form-group col-md-6">
         <label for="operator">Operadora</label>
-        <select formControlName="operator" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.operator.errors }">
+        <select formControlName="operator" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.operator.errors }">
           <option [value]="op.ansCode" *ngFor="let op of operators">{{op.name}}</option>
         </select>
         <div *ngIf="submitted && f.operator.errors" class="invalid-feedback">
@@ -23,7 +23,7 @@
     </div>
     <div class="form-group">
       <label for="name">Nome</label>
-      <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+      <input type="text" formControlName="name" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
       <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
         <div *ngIf="f.name.errors.required">Obrigatório</div>
       </div>

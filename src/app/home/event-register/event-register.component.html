@@ -4,7 +4,7 @@
     <div class="card-body">
       <div class="form-group" id="patientDiv">
         <label for="patient">Paciente</label>
-        <input type="text" (keyup)="onKey($event)" [(ngModel)]="patientName" id="patient" name="patient" class="form-control"
+        <input type="text" (keyup)="onKey($event)" [(ngModel)]="patientName" id="patient" name="patient" class="form-control form-control-sm"
           autocomplete="off" />
         <div class="w-100">
           <div class="list-group auto-complete" *ngIf="!selected">
@@ -15,7 +15,7 @@
       </div>
       <div class="form-group">
         <label for="phone">Telefone</label>
-        <input type="text" id="phone" name="phone" mask="(00)0 0000-0000" [(ngModel)]="patientPhone" class="form-control"
+        <input type="text" id="phone" name="phone" mask="(00)0 0000-0000" [(ngModel)]="patientPhone" class="form-control form-control-sm"
           autocomplete="off" />
       </div>
     </div>

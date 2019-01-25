@@ -4,14 +4,14 @@
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="description">Descrição</label>
-      <input type="text" formControlName="description" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.description.errors }" />
+      <input type="text" formControlName="description" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.description.errors }" />
       <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
         <div *ngIf="f.description.errors.required">Obrigatório</div>
       </div>
     </div>
     <div class="form-group">
       <label for="value">Tipo</label>
-      <select formControlName="value" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.value.errors }">
+      <select formControlName="value" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.value.errors }">
         <option value="VISTA">A Vista</option>
         <option value="PRAZO">A Prazo</option>
       </select>
@@ -21,21 +21,21 @@
     </div>
     <div class="form-group">
       <label for="installment">Qtd. de Parcelas</label>
-      <input type="text" formControlName="installment" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.installment.errors }" />
+      <input type="text" formControlName="installment" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.installment.errors }" />
     </div>
     <div class="form-group">
       <label for="firstInstallment">Primeira Parcela</label>
-      <input type="date" formControlName="firstInstallment" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.firstInstallment.errors }" />
+      <input type="date" formControlName="firstInstallment" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.firstInstallment.errors }" />
     </div>
     <div class="form-group">
       <label for="installmentDays">Dias entre parcelas</label>
-      <input type="number" step="1" formControlName="installmentDays" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.installmentDays.errors }" />
+      <input type="number" step="1" formControlName="installmentDays" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.installmentDays.errors }" />
     </div>
     <div class="form-group">
       <label for="discount">Acrescimo/Desconto</label><br>
       <small>Deslize a barra para adicionar um desconto ou um acrescimo</small>
       <input type="range" step="1" min="-100" max="100" #ranger (input)="yourMethod(ranger.value)" formControlName="discount"
-        class="form-control" [ngClass]="{ 'is-invalid': submitted && f.discount.errors }" />
+        class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.discount.errors }" />
       <small><p>{{teste}}</p></small>
     </div>
 

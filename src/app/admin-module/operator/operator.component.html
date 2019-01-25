@@ -6,14 +6,14 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="ansCode">Registro ANS</label>
-        <input type="text" formControlName="ansCode" [readonly]="editing" class="form-control" mask="000000" [ngClass]="{ 'is-invalid': submitted && f.ansCode.errors }" />
+        <input type="text" formControlName="ansCode" [readonly]="editing" class="form-control form-control-sm" mask="000000" [ngClass]="{ 'is-invalid': submitted && f.ansCode.errors }" />
         <div *ngIf="submitted && f.ansCode.errors" class="invalid-feedback">
           <div *ngIf="f.ansCode.errors.required">Obrigatório</div>
         </div>
       </div>
       <div class="form-group col-md-6">
         <label for="cnpj">CNPJ</label>
-        <input type="text" formControlName="cnpj" class="form-control" mask="00.000.000/0000-00" [ngClass]="{ 'is-invalid': submitted && f.cnpj.errors }" />
+        <input type="text" formControlName="cnpj" class="form-control form-control-sm" mask="00.000.000/0000-00" [ngClass]="{ 'is-invalid': submitted && f.cnpj.errors }" />
         <div *ngIf="submitted && f.cnpj.errors" class="invalid-feedback">
           <div *ngIf="f.cnpj.errors.required">Obrigatório</div>
         </div>
@@ -21,21 +21,21 @@
     </div>
     <div class="form-group">
       <label for="social">Razão Social</label>
-      <input type="text" formControlName="social" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.social.errors }" />
+      <input type="text" formControlName="social" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.social.errors }" />
       <div *ngIf="submitted && f.social.errors" class="invalid-feedback">
         <div *ngIf="f.social.errors.required">Obrigatório</div>
       </div>
     </div>
     <div class="form-group">
       <label for="name">Nome</label>
-      <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+      <input type="text" formControlName="name" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
       <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
         <div *ngIf="f.name.errors.required">Obrigatório</div>
       </div>
     </div>
     <div class="form-group">
       <label for="billingDay">Dia de Faturamento</label>
-      <input type="text" formControlName="billingDay" mask="00" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.billingDay.errors }" />
+      <input type="text" formControlName="billingDay" mask="00" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.billingDay.errors }" />
       <div *ngIf="submitted && f.billingDay.errors" class="invalid-feedback">
         <div *ngIf="f.billingDay.errors.required">Obrigatório</div>
       </div>

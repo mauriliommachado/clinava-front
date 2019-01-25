@@ -6,7 +6,7 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="date">Data</label>
-                <input type="date" formControlName="date" class="form-control" [ngModel]="date" [ngClass]="{ 'is-invalid': submitted && f.date.errors }" />
+                <input type="date" formControlName="date" class="form-control form-control-sm" [ngModel]="date" [ngClass]="{ 'is-invalid': submitted && f.date.errors }" />
                 <div *ngIf="submitted && f.date.errors" class="invalid-feedback">
                     <div *ngIf="f.date.errors.required">Obrigatório</div>
                 </div>
@@ -18,7 +18,7 @@
                         <a class="input-group-text" (click)="subMinutes()">-</a>
                     </div>
                     <input type="time" formControlName="time" [ngModel]="time" [ngClass]="{ 'is-invalid': submitted && f.time.errors }"
-                        class="form-control" id="time">
+                        class="form-control form-control-sm" id="time">
                     <div class="input-group-prepend">
                         <a class="input-group-text" (click)="addMinutes()">+</a>
                     </div>
@@ -27,7 +27,7 @@
         </div>
         <div class="form-group">
             <label for="user">Paciente</label>
-            <select formControlName="patient" class="form-control"  [ngClass]="{ 'is-invalid': submitted && f.patient.errors }">
+            <select formControlName="patient" class="form-control form-control-sm"  [ngClass]="{ 'is-invalid': submitted && f.patient.errors }">
                 <option [value]="patient.id" *ngFor="let patient of patients">{{patient.name}}</option>
             </select>
             <div *ngIf="submitted && f.patient.errors" class="invalid-feedback">
@@ -36,18 +36,18 @@
         </div>
         <div class="form-group">
             <label for="duration">Duração</label>
-            <input type="number" formControlName="duration" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.duration.errors }" />
+            <input type="number" formControlName="duration" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.duration.errors }" />
             <div *ngIf="submitted && f.duration.errors" class="invalid-feedback">
                 <div *ngIf="f.duration.errors.required">Duração tem que ser preenchida</div>
             </div>
         </div>
         <div class="form-group">
             <label for="obs">Observação</label>
-            <input type="text" formControlName="obs" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.obs.errors }" />
+            <input type="text" formControlName="obs" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.obs.errors }" />
         </div>
         <div class="form-group">
             <label for="user">Atendente</label>
-            <select formControlName="user" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.user.errors }">
+            <select formControlName="user" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.user.errors }">
                 <option selected>Selecionar</option>
                 <option [value]="user.id" *ngFor="let user of attendants">{{user.name}}</option>
             </select>

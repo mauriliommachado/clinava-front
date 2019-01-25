@@ -4,32 +4,32 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="name">Nome Completo</label>
-                <input type="text" class="form-control" id="name" name="name" formControlName="name" placeholder="Nome Completo" [ngClass]="{ 'is-invalid': submitted && f.name.errors }">
+                <input type="text" class="form-control form-control-sm" id="name" name="name" formControlName="name" placeholder="Nome Completo" [ngClass]="{ 'is-invalid': submitted && f.name.errors }">
                 <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
                     <div *ngIf="f.name.errors.required">Obrigatório</div>
                 </div>
             </div>
             <div class="form-group col-md-3">
                 <label for="cpf">CPF</label>
-                <input type="text" class="form-control" id="cpf" name="cpf" formControlName="cpf" placeholder="CPF">
+                <input type="text" class="form-control form-control-sm" id="cpf" name="cpf" formControlName="cpf" placeholder="CPF">
             </div>
             <div class="form-group col-md-3">
                 <label for="birthday">Data de Nascimento</label>
-                <input id="birthday" name="birthday" placeholder="DD/MM/AAAA" formControlName="birthday" class="form-control"
+                <input id="birthday" name="birthday" placeholder="DD/MM/AAAA" formControlName="birthday" class="form-control form-control-sm"
                     type="date">
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="phone">Telefone</label>
-                <input type="text" class="form-control" id="phone" name="phone" formControlName="phone" placeholder="Telefone" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }">
+                <input type="text" class="form-control form-control-sm" id="phone" name="phone" formControlName="phone" placeholder="Telefone" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }">
                 <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
                     <div *ngIf="f.phone.errors.required">Obrigatório</div>
                 </div>
             </div>
             <div class="form-group col-md-6">
                 <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" name="email" formControlName="email" placeholder="Email">
+                <input type="email" class="form-control form-control-sm" id="email" name="email" formControlName="email" placeholder="Email">
             </div>
         </div>
         <div class="form-group">
@@ -40,30 +40,30 @@
             <div class="form-row">
                 <div class="form-group col-md-3">
                     <label for="street">Rua</label>
-                    <input type="text" class="form-control" id="street" name="street" formControlName="street">
+                    <input type="text" class="form-control form-control-sm" id="street" name="street" formControlName="street">
                 </div>
                 <div class="form-group col-md-1">
                     <label for="number">Número</label>
-                    <input type="text" class="form-control" id="number" name="number" formControlName="number">
+                    <input type="text" class="form-control form-control-sm" id="number" name="number" formControlName="number">
                 </div>
                 <div class="form-group col-md-2">
                     <label for="complement">Complemento</label>
-                    <input type="text" class="form-control" id="complement" name="complement" formControlName="complement">
+                    <input type="text" class="form-control form-control-sm" id="complement" name="complement" formControlName="complement">
                 </div>
                 <div class="form-group col-md-2">
                     <label for="city">Cidade</label>
-                    <input type="text" class="form-control" id="city" name="city" formControlName="city">
+                    <input type="text" class="form-control form-control-sm" id="city" name="city" formControlName="city">
                 </div>
                 <div class="form-group col-md-2">
                     <label for="state">Estado</label>
-                    <select id="state" class="form-control" name="state" formControlName="state">
+                    <select id="state" class="form-control form-control-sm" name="state" formControlName="state">
                         <option selected value="1">Rio de Janeiro</option>
                         <option value="2">São Paulo</option>
                     </select>
                 </div>
                 <div class="form-group col-md-2">
                     <label for="zip">CEP</label>
-                    <input type="text" class="form-control" id="zip" name="zip" formControlName="zip">
+                    <input type="text" class="form-control form-control-sm" id="zip" name="zip" formControlName="zip">
                 </div>
             </div>
         </div>

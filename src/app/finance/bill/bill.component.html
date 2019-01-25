@@ -5,30 +5,30 @@
     <div class="form-row">
       <div class="col-md-6">
         <label for="document" class="col-form-label">Número do Documento</label>
-        <input type="text" class="form-control" id="document" name="document" autocomplete="false" placeholder="Número do Documento">
+        <input type="text" class="form-control form-control-sm" id="document" name="document" autocomplete="false" placeholder="Número do Documento">
       </div>
       <div class="col-md-6">
         <label for="expireAt" class="col-form-label">Data de Validade</label>
-        <input type="date" autocomplete="off" name="expireAt" id="expireAt" class="form-control" required />
+        <input type="date" autocomplete="off" name="expireAt" id="expireAt" class="form-control form-control-sm" required />
       </div>
     </div>
     <div class="form-row">
       <div class="col-md-12">
         <label for="description" class="col-form-label">Descrição</label>
-        <input type="text" class="form-control" id="description" name="description" autocomplete="false" placeholder="Descrição">
+        <input type="text" class="form-control form-control-sm" id="description" name="description" autocomplete="false" placeholder="Descrição">
       </div>
     </div>
     <div class="form-row">
       <div class="col-md-6">
         <label for="nature" class="col-form-label">Natureza</label>
-        <select id="nature" name="nature" class="form-control" required>
+        <select id="nature" name="nature" class="form-control form-control-sm" required>
           <option>RECEITA</option>
           <option>DESPESA</option>
         </select>
       </div>
       <div class="col-md-6">
         <label for="category" class="col-form-label">Categoria</label>
-        <select id="category" name="category" class="form-control" required>
+        <select id="category" name="category" class="form-control form-control-sm" required>
           <option selected>FIXO</option>
           <option>VARIÁVEL</option>
         </select>
@@ -37,12 +37,12 @@
     <div class="form-row">
       <div class="col-md-6">
         <label for="value" class="col-form-label">Valor Total</label>
-        <input type="text" class="form-control" id="value" name="value" autocomplete="false" placeholder="Valor Total" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', align : 'left' }"
+        <input type="text" class="form-control form-control-sm" id="value" name="value" autocomplete="false" placeholder="Valor Total" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', align : 'left' }"
           required>
       </div>
       <div class="col-md-6">
         <label for="status" class="col-form-label">Forma de Pagamento</label>
-        <select id="status" name="status" class="form-control" required>
+        <select id="status" name="status" class="form-control form-control-sm" required>
           <option selected>Dinheiro A Vista</option>
         </select>
       </div>
@@ -50,7 +50,7 @@
     <div class="form-row">
       <div class="col-md-6">
         <label for="status" class="col-form-label">Status</label>
-        <select id="status" name="status" class="form-control mb-3" required>
+        <select id="status" name="status" class="form-control form-control-sm mb-3" required>
           <option selected>ABERTO</option>
           <option>FECHADO</option>
         </select>
