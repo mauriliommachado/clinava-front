@@ -1,6 +1,13 @@
-<h4>Procedimentos</h4>
-<button class="btn btn-primary btn-sm float-right mb-4" (click)="toggle()">{{title}}</button>
-<br>
+<section class="row">
+    <div class="col-md-8">
+        <h4>Procedimentos</h4>
+    </div>
+    <div class="col-md-4">
+        <div class="btn-group float-right" role="group">
+            <button class="btn btn-primary btn-sm mb-4 float-right" (click)="toggle()">{{title}}</button>
+        </div>
+    </div>
+</section>
 <div id="new" [@popOverState]="stateList">
   <input type="number" [(ngModel)]="procedure.id" class="d-none" />
   <div class="form-group">

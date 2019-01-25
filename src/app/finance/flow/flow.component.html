@@ -1,5 +1,13 @@
-<h4>Fluxo de Caixa</h4>
-<br>
+<section class="row">
+    <div class="col-md-8">
+        <h4>Fluxo de Caixa</h4>
+    </div>
+    <div class="col-md-4">
+        <div class="btn-group float-right" role="group">
+            <button class="btn btn-primary btn-sm mb-4 float-right" (click)="toggle()">{{title}}</button>
+        </div>
+    </div>
+</section>
 <div>
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
     <div class="form-row">
