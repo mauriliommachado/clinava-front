@@ -4,12 +4,12 @@
 <div id="new" [@popOverState]="stateList">
   <div class="form-group">
     <label for="name">Nome</label>
-    <input type="text" class="form-control" [(ngModel)]="procedure.name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+    <input type="text" class="form-control" [(ngModel)]="procedure.name" />
   </div>
   <div class="form-row" *ngFor="let p of plans; index as i">
     <div class="form-group col-md-6">
       <label for="code">Código - {{p.name}}</label>
-      <input type="text" class="form-control" [(ngModel)]="codes[i]" [ngClass]="{ 'is-invalid': submitted && f.code.errors }" />
+      <input type="text" class="form-control" [(ngModel)]="codes[i]"/>
     </div>
     <div class="form-group col-md-6">
       <label for="value">Valor - {{p.name}}</label>
