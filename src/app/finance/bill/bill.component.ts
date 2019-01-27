@@ -169,3 +169,14 @@ export class RepeatPipe implements PipeTransform {
     }
   }
 }
+
+@Pipe({ name: 'nature' })
+export class NaturePipe implements PipeTransform {
+  transform(value: any) {
+    if(value == "1"){
+      return "RECEITA";
+    }else{
+      return "DESPESA"
+    }
+  }
+}

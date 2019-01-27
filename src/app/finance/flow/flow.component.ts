@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { User } from 'src/app/_models';
+import { BillService } from '../../_services';
+import { Bill } from 'src/app/_models';
+
 
 @Component({
   selector: 'app-flow',
@@ -9,18 +10,47 @@ import { User } from 'src/app/_models';
 })
 export class FlowComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private billService: BillService) { }
 
-  registerForm: FormGroup;
-  submitted = false;
-  users: User[];
-  get f() { return this.registerForm.controls; }
 
+  bills: Bill[];
+  initDate = new Date().toISOString().substring(0, 10);
+  endDate = new Date().toISOString().substring(0, 10);
+  paid: boolean;
+  toPay: boolean;
+  received: boolean;
+  toReceive: boolean;
 
   ngOnInit() {
   }
 
-  onSubmit(){
-     
+  onSubmit() {
+    if (!this.initDate) {
+      this.initDate = new Date().toISOString().substring(0, 10);
+    }
+    if (!this.endDate) {
+      this.endDate = new Date().toISOString().substring(0, 10);
+    }
+    if (!this.paid) {
+      this.paid = false;
+    }
+    if (!this.toPay) {
+      this.toPay = false;
+    }
+    if (!this.received) {
+      this.received = false;
+    }
+    if (!this.toReceive) {
+      this.toReceive = false;
+    }
+    this.billService.getBetween(this.initDate,
+      this.endDate,
+      this.paid,
+      this.toPay,
+      this.received,
+      this.toReceive).subscribe(resp => {
+        this.bills = resp
+      });
   }
 }

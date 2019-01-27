@@ -92,11 +92,12 @@ export class ProceduresComponent implements OnInit {
       alert("Nome do procedimento não pode estar vazio.");
       return;
     }
+    let nok = false;
     this.plans.forEach((p, i) => {
       let procedure = new Procedure();
       if (this.editing && !this.codes[i]) {
         alert("Código de procedimento para o plano " + this.plans[i].name + " não pode estar vazio")
-        return;
+        nok = true;
       } else if (this.codes[i]) {
         procedure.code = this.codes[i];
         procedure.value = this.numbers[i];
@@ -105,6 +106,9 @@ export class ProceduresComponent implements OnInit {
         inserts.push(procedure);
       }
     });
+    if (nok) {
+      return;
+    }
     if (this.editing) {
       inserts.forEach(procedure => {
         procedure.id = this.currentProcedure;

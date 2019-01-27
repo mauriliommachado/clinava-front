@@ -17,12 +17,21 @@ export class BillService {
         return this.http.get<Bill[]>(`${environment.apiUrl}` + this.getBusinessId() + `/bills`);
     }
 
+    getBetween(initDate: string, endDate: string, paid: boolean, toPay: boolean, received: boolean, toReceive: boolean, ) {
+        return this.http.get<Bill[]>(`${environment.apiUrl}` + this.getBusinessId() + `/bills?initDate=` + new Date(initDate).toISOString().split('T')[0] 
+        + '&endDate=' + new Date(endDate).toISOString().split('T')[0]
+        + '&paid=' + paid
+        + '&toPay=' + toPay
+        + '&received=' + received
+        + '&toReceive=' + toReceive);
+    }
+
     getById(id: number) {
         return this.http.get(`${environment.apiUrl}` + this.getBusinessId() + `/bills/` + id);
     }
 
     register(bill: Bill) {
-        return this.http.post(`${environment.apiUrl}` + this.getBusinessId() + `/bills/`, bill, {observe: 'response'});
+        return this.http.post(`${environment.apiUrl}` + this.getBusinessId() + `/bills/`, bill, { observe: 'response' });
     }
 
     update(bill: Bill) {
