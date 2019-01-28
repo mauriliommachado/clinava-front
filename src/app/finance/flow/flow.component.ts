@@ -3,6 +3,7 @@ import { BillService } from '../../_services';
 import { Bill } from 'src/app/_models';
 import jsPDF from 'jspdf';
 import { autoTable } from 'jspdf-autotable';
+declare var require: any;
 
 
 @Component({
