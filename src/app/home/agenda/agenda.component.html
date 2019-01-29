@@ -45,6 +45,6 @@
     </div>
 </div>
 
-<app-event-register [date]="eventDate" [user]="id" [visible]="visible" (close)="onClose()"></app-event-register>
+<app-record-register [date]="eventDate" [user]="id" [visible]="visible" (close)="onClose()"></app-record-register>
 <app-consult-summary *ngIf="showSummary" [event]="event" [visible]="showSummary" (close)="onClose()"></app-consult-summary>
 <app-billing *ngIf="showBilling" [event]="event" [visible]="showBilling" (close)="onClose()"></app-billing>

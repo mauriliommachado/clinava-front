@@ -29,7 +29,7 @@ export class AgendaComponent implements OnInit {
   id: string;
   visible = false;
   showSummary = false;
-  showBilling = false;
+  showBilling = true;
   attendants;
   docName: string = "Selecione um atendente";
   event: Event= null;

@@ -78,7 +78,7 @@ export class FlowComponent implements OnInit {
           body: rows,
           startY: 30,
         });
-        doc.save('table.pdf');
+        doc.save('flow.pdf');
       });
     
   }

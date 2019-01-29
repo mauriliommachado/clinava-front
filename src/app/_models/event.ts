@@ -1,4 +1,4 @@
-﻿import {User, Patient} from "./";
+﻿import {User, Patient, Record,Procedure} from "./";
 
 export class Event {
     id: string;
@@ -10,5 +10,7 @@ export class Event {
     confirmed: boolean;
     finished: boolean;
     checkIn: Date;
+    record: Record;
+    procedures: Procedure[];
 }
 

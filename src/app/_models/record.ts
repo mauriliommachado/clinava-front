@@ -1,4 +1,4 @@
-﻿import {User, Patient, Event} from "./";
+﻿import {User, Patient, Event,Procedure} from "./";
 
 export class Record {
     id: string;
@@ -15,5 +15,7 @@ export class Record {
     prescriptions: string;
     exams: string;
     attest: string;
+    procedures: Procedure[];
+    
 }
 

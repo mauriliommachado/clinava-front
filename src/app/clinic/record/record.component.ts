@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService, RecordService, ConfigService } from '../../_services';
-import { Record, Event, Patient, Config, Template } from '../../_models';
+import { Record, Event, Patient, Config, Template, Plan, Procedure } from '../../_models';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Subject } from 'rxjs';
 
 
 @Component({
-  selector: 'app-event',
-  templateUrl: './event.component.html',
-  styleUrls: ['./event.component.css']
+  selector: 'app-record',
+  templateUrl: './record.component.html',
+  styleUrls: ['./record.component.css']
 })
 export class EventComponent implements OnInit {
+  procedures: Procedure[];
 
   constructor(private route: ActivatedRoute,
     private nav: Router,
@@ -35,8 +37,9 @@ export class EventComponent implements OnInit {
 
   }
 
-  registerForm: FormGroup;
+  private eventsSubject: Subject<Event> = new Subject<Event>();
   event: Event;
+  registerForm: FormGroup;
   record: Record;
   pastRecords: Record[];
   ptName: string;
@@ -53,7 +56,15 @@ export class EventComponent implements OnInit {
             alert("Esta consulta já foi encerrada.");
             this.nav.navigate(["/event/list"]);
           }
+          //todo fix this
+          resp.patient.plan = new Plan();
+          resp.patient.plan.ansCode = "123123123";
+          if (!resp.procedures) {
+            resp.procedures = new Array();
+          }
+          this.procedures = resp.procedures;
           this.event = resp;
+          this.eventsSubject.next(resp);
           this.recordService.getLastRecords(resp.patient.id).subscribe(resp => this.pastRecords = <Record[]>resp);
           this.configService.getConfig().subscribe(resp => {
             this.config = resp[0];
@@ -74,11 +85,16 @@ export class EventComponent implements OnInit {
     });
   }
 
+  setProcedures(procedures: Procedure[]) {
+    this.procedures = procedures;
+  }
+
   close() {
     if (confirm("Deseja realmente encerrar essa consulta? Você não poderá alterar os dados depois.")) {
       this.record = <Record>this.registerForm.value;
       this.record.event = this.event;
       this.record.date = new Date();
+      this.record.procedures = this.procedures;
       this.recordService.register(this.record).subscribe(resp => this.nav.navigate(["/event/list"]));
     }
   }
@@ -111,7 +127,7 @@ export class EventComponent implements OnInit {
     if (string) {
       return string.replace("#cliente", this.event.patient.name == null ? "____" : this.event.patient.name).replace("#cpf", this.event.patient.cpf == null ? "____" : this.event.patient.cpf)
         .replace("#crm", this.event.user.crm == null ? "____" : this.event.user.crm)
-        .replace("#data", new Date(this.event.date).toLocaleDateString()).replace("#hora", new Date(this.event.date).toLocaleTimeString().slice(0,5));
+        .replace("#data", new Date(this.event.date).toLocaleDateString()).replace("#hora", new Date(this.event.date).toLocaleTimeString().slice(0, 5));
     } else {
       return string;
     }

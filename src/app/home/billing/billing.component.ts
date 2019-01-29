@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input  } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { User } from 'src/app/_models';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-billing',
@@ -18,9 +19,10 @@ export class BillingComponent implements OnInit {
   registerForm: FormGroup;
   submitted = false;
   get f() { return this.registerForm.controls; }
+  private eventsSubject: Subject<Event> = new Subject<Event>();
 
   ngOnInit() {
-
+    this.eventsSubject.next(this.event);
   }
 
   onSubmit(){

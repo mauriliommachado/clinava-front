@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EventComponent } from './event.component';
+import { EventComponent } from './record.component';
 
 describe('EventComponent', () => {
   let component: EventComponent;

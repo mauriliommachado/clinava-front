@@ -11,7 +11,7 @@ import { PatientComponent } from './home/patient/patient.component';
 import { UserComponent } from './admin-module/user/user.component';
 import { ConfigurationComponent } from './admin-module/configuration/configuration.component';
 import { AdminComponent } from './admin-module/admin.component';
-import { EventComponent } from './clinic/event/event.component';
+import { EventComponent } from './clinic/record/record.component';
 import { ListComponent } from './clinic/list/list.component';
 import { ClinicHome } from './clinic/clinic.component';
 import { FinanceHome } from './finance/finance.component';
@@ -57,7 +57,7 @@ const appRoutes: Routes = [
     ]
   },
   {
-    path: 'event', component: IndexComponent, canActivate: [AuthGuard],
+    path: 'record', component: IndexComponent, canActivate: [AuthGuard],
     children: [
       {
         path: '', component: ClinicHome,
