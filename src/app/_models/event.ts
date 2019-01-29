@@ -1,9 +1,10 @@
-﻿import {User, Patient, Record,Procedure} from "./";
+﻿import {User, Patient, Record,Procedure, Bill} from "./";
 
 export class Event {
     id: string;
     user: User;
     patient: Patient;
+    bill: Bill;
     date: Date;
     obs: string;
     duration: number;

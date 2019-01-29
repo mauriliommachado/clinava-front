@@ -1,28 +1,35 @@
 <div class="modal-custom-lg" [hidden]="!visible" (click)="hide($event)" id="customModal">
-  <div class="card ">
+  <div class="card " [formGroup]="registerForm">
     <h5 class="card-header">Faturamento</h5>
-    <div class="card-body">
+    <div class="card-body" >
       <div class="form-row">
-        <div class="form-group col-md-4">
-          <label for="inputTipodePagamento">Operadora</label>
-          <select id="inputTipodePagamento" class="form-control form-control-sm">
-            <option selected>Unimed</option>
+        <div class="form-group col-md-6">
+          <label for="plan">Operadora</label>
+          <select formControlName="operator" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.operator.errors }">
+            <option [value]="p.ansCode" *ngFor="let p of operators">{{p.name}}</option>
           </select>
+          <div *ngIf="submitted && f.operator.errors" class="invalid-feedback">
+            <div *ngIf="f.operator.errors.required">Obrigatório</div>
+          </div>
         </div>
-        <div class="form-group col-md-4">
-          <label for="inputTipodePagamento">Plano</label>
-          <select id="inputTipodePagamento" class="form-control form-control-sm">
-            <option selected>Flex 1</option>
+        <div class="form-group col-md-6">
+          <label for="plan">Planos</label>
+          <select formControlName="plan" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.plan.errors }">
+            <option [value]="p.ansCode" *ngFor="let p of plans">{{p.name}}</option>
           </select>
+          <div *ngIf="submitted && f.plan.errors" class="invalid-feedback">
+            <div *ngIf="f.plan.errors.required">Obrigatório</div>
+          </div>
         </div>
-        <div class="form-group col-md-4">
-          <label for="inputFormadePagamento">Forma de Pagamento</label>
-          <select id="inputFormadePagamento" class="form-control form-control-sm">
-            <option selected>Escolher Formao de Pagamento...</option>
-            <option>Dinheiro</option>
-            <option>Cartão Debito</option>
-            <option>Cartão Credito</option>
-          </select>
+      </div>
+      <div class="form-group">
+        <label for="paymentMethod" class="col-form-label">Forma de Pagamento</label>
+        <select id="paymentMethod" formControlName="paymentMethod" name="status" class="form-control form-control-sm"
+          [ngClass]="{ 'is-invalid': submitted && f.paymentMethod.errors }">
+          <option *ngFor="let p of payMethod" [value]="p.id">{{p.description}}</option>
+        </select>
+        <div *ngIf="submitted && f.paymentMethod.errors" class="invalid-feedback">
+          <div *ngIf="f.paymentMethod.errors.required">Obrigatório</div>
         </div>
       </div>
       <div class="form-row">
@@ -30,7 +37,7 @@
         <input type="obs" class="form-control form-control-sm" id="inputObs4" placeholder="Observação">
       </div>
       <br>
-      <app-add-procedures [events]="eventsSubject.asObservable()" (setProcedures)="setProcedures($event)"></app-add-procedures>
+      <app-add-procedures [events]="events.asObservable()" (setProcedures)="setProcedures($event)"></app-add-procedures>
     </div>
     <div class="card-footer text-right">
       <button type="button" class="btn btn-secondary" id="close" (click)="hide($event)">Cancelar</button>

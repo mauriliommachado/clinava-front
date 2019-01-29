@@ -122,7 +122,6 @@ export class PlanComponent implements OnInit {
     let plan = new Plan();
     this.planService.getById(id).subscribe(resp => {
       plan = <Plan>resp
-      console.log(plan)
       this.registerForm.setValue({
         name: plan.name,
         ansCode: plan.ansCode,

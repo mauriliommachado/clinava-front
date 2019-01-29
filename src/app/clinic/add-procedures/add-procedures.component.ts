@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, EventEmitter, Output } from '@angular/core';
 import { ProcedureService } from '../../_services';
-import { Procedure, Event } from 'src/app/_models';
+import { Procedure, Event, Plan } from 'src/app/_models';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -15,17 +15,26 @@ export class AddProceduresComponent implements OnInit, OnDestroy {
 
   constructor(private procedureService: ProcedureService) { }
 
+  total: string = "0.00";
+  isPaid: boolean = true;
+
   ngOnInit() {
-    this.procedureService.getAll().subscribe(resp => {
-      this.procedures = resp;
-      this.original = this.procedures;
-    });
     this.addedProcedures = new Array();
     this.originalAdd = new Array();
     this.eventsSubscription = this.events.subscribe((e) => {
       if (e) {
+        this.procedureService.getAll().subscribe(resp => {
+          this.procedures = resp;
+          this.original = this.procedures;
+        });
         this.event = <Event>e;
+        this.event.procedures.forEach(p => {
+          this.originalAdd.push(p);
+          this.isPaid = false;
+        })
+        this.addedProcedures = this.originalAdd;
         this.filterPlan();
+        this.reset();
       }
     })
   }
@@ -44,10 +53,12 @@ export class AddProceduresComponent implements OnInit, OnDestroy {
 
   filterPlan() {
     if (this.original) {
-      this.original = this.original.filter(p => p.plan.ansCode == this.event.patient.plan.ansCode);
-      this.reset();
-    }else{
-      setTimeout(()=>{
+      if (this.event.patient.plan) {
+        this.original = this.original.filter(p => p.plan.ansCode == this.event.patient.plan.ansCode);
+        this.reset();
+      }
+    } else {
+      setTimeout(() => {
         this.filterPlan();
       }, 100)
     }
@@ -71,6 +82,7 @@ export class AddProceduresComponent implements OnInit, OnDestroy {
     this.filterProc();
     this.filterAdd();
     this.setProcedures.emit(this.originalAdd);
+    this.total = this.originalAdd.reduce((a, b) => +a + +b.value, 0).toFixed(2);
   }
 
   filterProc() {
@@ -88,5 +100,4 @@ export class AddProceduresComponent implements OnInit, OnDestroy {
       this.addedProcedures = this.originalAdd.filter(p => p.code.toUpperCase().search(this.filterAdded.toUpperCase()) != -1 || p.name.toUpperCase().search(this.filterAdded.toUpperCase()) != -1);
     }
   }
-
 }

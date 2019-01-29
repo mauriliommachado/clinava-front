@@ -111,7 +111,6 @@ export class BillComponent implements OnInit {
     bill.value = this.registerForm.value.value;
     bill.paymentMethod = new PaymentMethod();
     bill.paymentMethod.id = this.registerForm.value.paymentMethod;
-    console.log(bill);
     if (this.editing) {
       bill.id = this.currentBill;
       this.billService.update(bill).subscribe(r => {

@@ -1,4 +1,4 @@
-import { PaymentMethod } from './payment_method'
+import { PaymentMethod, Event } from './index'
 
 export class Bill {
     id: number;
@@ -9,6 +9,6 @@ export class Bill {
     category: number;
     value: number;
     paymentMethod: PaymentMethod;
+    event: Event;
     status: number;
 }
-

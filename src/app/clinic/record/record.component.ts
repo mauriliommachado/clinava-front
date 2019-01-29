@@ -56,9 +56,6 @@ export class EventComponent implements OnInit {
             alert("Esta consulta já foi encerrada.");
             this.nav.navigate(["/event/list"]);
           }
-          //todo fix this
-          resp.patient.plan = new Plan();
-          resp.patient.plan.ansCode = "123123123";
           if (!resp.procedures) {
             resp.procedures = new Array();
           }
@@ -90,12 +87,13 @@ export class EventComponent implements OnInit {
   }
 
   close() {
+
     if (confirm("Deseja realmente encerrar essa consulta? Você não poderá alterar os dados depois.")) {
       this.record = <Record>this.registerForm.value;
       this.record.event = this.event;
       this.record.date = new Date();
       this.record.procedures = this.procedures;
-      this.recordService.register(this.record).subscribe(resp => this.nav.navigate(["/event/list"]));
+      this.recordService.register(this.record).subscribe(resp => this.nav.navigate(["/record/list"]));
     }
   }
 

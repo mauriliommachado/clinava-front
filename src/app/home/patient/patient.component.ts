@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Patient, Address} from '../../_models';
-import { PatientService, AlertService } from '../../_services';
+import { Patient, Address, Plan } from '../../_models';
+import { PatientService, AlertService, PlanService } from '../../_services';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import {
@@ -40,15 +40,19 @@ export class PatientComponent implements OnInit {
   show = false;
   editing = false;
   patients: Array<Patient>;
+  plans: Array<Plan>;
 
-  constructor(private formBuilder: FormBuilder, private patientService: PatientService,
+  constructor(private formBuilder: FormBuilder, private plansService: PlanService, private patientService: PatientService,
     private alertService: AlertService) {
 
   }
 
 
   ngOnInit() {
-    this.patientService.getAll().subscribe(resp => this.patients = resp);
+    this.patientService.getAll().subscribe(resp => {
+      this.patients = resp;
+      this.plansService.getAll().subscribe(plans => this.plans = plans);
+    });
     this.cleanForm();
     this.title = this.show ? 'Cancelar' : 'Cadastrar'
   }
@@ -63,7 +67,7 @@ export class PatientComponent implements OnInit {
     if (this.editing && !this.show) {
       this.cleanForm()
     }
-    if(this.editing){
+    if (this.editing) {
       this.editing = false;
     }
     this.title = this.show ? 'Cancelar' : 'Cadastrar'
@@ -74,8 +78,9 @@ export class PatientComponent implements OnInit {
       name: ['', Validators.required],
       cpf: [''],
       birthday: [''],
-      phone: ['',Validators.required],
+      phone: ['', Validators.required],
       email: [''],
+      plan: ['', Validators.required],
       addressId: [''],
       street: [],
       number: [],
@@ -86,18 +91,19 @@ export class PatientComponent implements OnInit {
     });
   }
 
-  // convenience getter for easy access to form fields
   get f() { return this.registerForm.controls; }
 
   edit(id: string) {
     let patient = new Patient();
-    this.patientService.getById(id).subscribe(resp => {patient = <Patient>resp
+    this.patientService.getById(id).subscribe(resp => {
+      patient = <Patient>resp
       this.registerForm = this.formBuilder.group({
         name: [patient.name, Validators.required],
         cpf: [patient.cpf],
         birthday: [patient.birthday ? patient.birthday.toString().split('T')[0] : ''],
         phone: [patient.phone, Validators.required],
         email: [patient.email],
+        plan: [patient.plan ? patient.plan.ansCode: '', Validators.required],
         addressId: [patient.address ? patient.address.id : ''],
         street: [patient.address ? patient.address.street : ''],
         number: [patient.address ? patient.address.number : ''],
@@ -113,7 +119,7 @@ export class PatientComponent implements OnInit {
   }
 
   delete(id: string) {
-    this.patientService.delete(id).subscribe(resp=> {
+    this.patientService.delete(id).subscribe(resp => {
       this.patientService.getAll().subscribe(resp => this.patients = resp);
     });
   }
@@ -125,11 +131,13 @@ export class PatientComponent implements OnInit {
     }
     let patient = new Patient();
     let form = this.registerForm.value;
-    patient.name=form.name;
+    patient.name = form.name;
     patient.email = form.email;
     patient.phone = form.phone
     patient.cpf = form.cpf;
     patient.birthday = form.birthday;
+    patient.plan = new Plan();
+    patient.plan.ansCode = form.plan;
     let address = new Address();
     address.id = form.addressId;
     address.city = form.city;
@@ -141,13 +149,13 @@ export class PatientComponent implements OnInit {
     patient.address = address;
     if (this.editing) {
       patient.id = this.currentPatient;
-      this.patientService.update(patient).subscribe(r=> {
+      this.patientService.update(patient).subscribe(r => {
         this.patientService.getAll().subscribe(resp => this.patients = resp);
         this.alertService.success("Salvo com sucesso.", 5000);
       });
       this.editing = false;
     } else {
-      this.patientService.register(patient).subscribe(r=> {
+      this.patientService.register(patient).subscribe(r => {
         this.patientService.getAll().subscribe(resp => this.patients = resp);
         this.alertService.success("Salvo com sucesso.", 5000);
       });

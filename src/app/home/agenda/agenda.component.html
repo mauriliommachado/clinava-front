@@ -46,5 +46,5 @@
 </div>
 
 <app-record-register [date]="eventDate" [user]="id" [visible]="visible" (close)="onClose()"></app-record-register>
-<app-consult-summary *ngIf="showSummary" [event]="event" [visible]="showSummary" (close)="onClose()"></app-consult-summary>
-<app-billing *ngIf="showBilling" [event]="event" [visible]="showBilling" (close)="onClose()"></app-billing>
+<app-consult-summary *ngIf="showSummary" [event]="event" [visible]="showSummary" (close)="onClose()" (openBilling)="bill($event)"></app-consult-summary>
+<app-billing *ngIf="showBilling" [events]="eventsSubject" [visible]="showBilling"  (close)="onClose()"></app-billing>

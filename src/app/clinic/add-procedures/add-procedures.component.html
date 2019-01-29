@@ -14,15 +14,15 @@
             <th scope="col">#</th>
             <th scope="col">Nome</th>
             <th scope="col">Valor</th>
-            <th scope="col"></th>
+            <th *ngIf="isPaid" scope="col"></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let p of procedures">
             <th scope="row">{{p.code}}</th>
-            <td style="width:50%">{{p.name}}</td>
+            <td style="width:50%">{{p.plan.name}}: {{p.name}}</td>
             <td>R$ {{p.value}}</td>
-            <td><a class="btn btn-success btn-sm" (click)="add(p)">+</a></td>
+            <td *ngIf="isPaid"><a class="btn btn-success btn-sm" (click)="add(p)">+</a></td>
           </tr>
         </tbody>
       </table>
@@ -44,15 +44,23 @@
               <th scope="col">#</th>
               <th scope="col">Nome</th>
               <th scope="col">Valor</th>
-              <th scope="col"></th>
+              <th *ngIf="isPaid" scope="col"></th>
             </tr>
           </thead>
+          <tfoot>
+            <tr class="table-secondary">
+              <th scope="col"></th>
+              <th *ngIf="isPaid" scope="col"></th>
+              <th scope="col">Total:</th>
+              <th scope="col">R$ {{total}}</th>
+            </tr>
+          </tfoot>
           <tbody>
             <tr *ngFor="let p of addedProcedures; index as i">
               <th scope="row">{{p.code}}</th>
               <td style="width:50%">{{p.name}}</td>
               <td>R$ {{p.value}}</td>
-              <td><a class="btn btn-danger btn-sm" (click)="remove(i)">-</a></td>
+              <td *ngIf="isPaid"><a class="btn btn-danger btn-sm" (click)="remove(i)">-</a></td>
             </tr>
           </tbody>
         </table>
