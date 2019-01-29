@@ -37,7 +37,7 @@ export class EventComponent implements OnInit {
 
   }
 
-  private eventsSubject: Subject<Event> = new Subject<Event>();
+  public eventsSubject: Subject<Event> = new Subject<Event>();
   event: Event;
   registerForm: FormGroup;
   record: Record;
