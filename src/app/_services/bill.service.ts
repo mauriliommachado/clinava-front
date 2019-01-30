@@ -21,7 +21,7 @@ export class BillService {
         var ed = new Date(endDate);
         ed.setDate(ed.getDate()+1);
         return this.http.get<Bill[]>(`${environment.apiUrl}` + this.getBusinessId() + `/bills?initDate=` + new Date(initDate).toISOString().split('T')[0] 
-        + '&endDate=' + new Date(endDate).toISOString().split('T')[0]
+        + '&endDate=' + ed.toISOString().split('T')[0]
         + '&paid=' + paid
         + '&toPay=' + toPay
         + '&received=' + received
