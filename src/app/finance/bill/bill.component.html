@@ -113,7 +113,7 @@
         <td class="align-middle">{{ b.description }}</td>
         <td class="align-middle">{{ b.validUntil | date:'dd/MM/yy' }}</td>
         <td class="align-middle">{{ b.value }}</td>
-        <td class="align-middle">{{ b.paymentMethod.description }}</td>
+        <td class="align-middle">{{ b.paymentMethod?.description }} {{ b.operator?.name }}</td>
         <td class="align-middle">{{ b.nature | nature}}</td>
         <td class="align-middle">{{ b.status | status }}</td>
         <td class="align-middle">

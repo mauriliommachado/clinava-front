@@ -4,7 +4,7 @@ export class Event {
     id: string;
     user: User;
     patient: Patient;
-    bill: Bill;
+    bills: Bill[];
     date: Date;
     obs: string;
     duration: number;

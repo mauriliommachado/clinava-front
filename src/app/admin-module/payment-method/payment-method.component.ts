@@ -50,7 +50,7 @@ export class PaymentMethodComponent implements OnInit {
       description: ["", Validators.required],
       type: [1, Validators.required],
       installment: [1],
-      installmentInterval: [0],
+      billingDay: [0],
       discount: [0]
     });
     this.paymentMethodService.getAll().subscribe(resp => this.paymentMethods = resp);
@@ -78,7 +78,7 @@ export class PaymentMethodComponent implements OnInit {
       description: ["", Validators.required],
       type: [1, Validators.required],
       installment: [1],
-      installmentInterval: [0],
+      billingDay: [0],
       discount: [0]
     });
   }
@@ -116,7 +116,7 @@ export class PaymentMethodComponent implements OnInit {
         description: [paymentMethod.description, Validators.required],
         type: [paymentMethod.type, Validators.required],
         installment: [paymentMethod.installment],
-        installmentInterval: [paymentMethod.installmentInterval],
+        billingDay: [paymentMethod.billingDay],
         discount: [paymentMethod.discount]
       });
       this.currentPaymentMethod = id;

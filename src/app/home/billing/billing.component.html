@@ -1,8 +1,18 @@
 <div class="modal-custom-lg" [hidden]="!visible" (click)="hide($event)" id="customModal">
   <div class="card " [formGroup]="registerForm">
     <h5 class="card-header">Faturamento</h5>
-    <div class="card-body" >
-      <div class="form-row">
+    <div class="card-body">
+      <div class="form-group">
+        <label for="bill" class="col-form-label">Faturar</label>
+        <select id="bill" formControlName="bill" name="status" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.bill.errors }">
+          <option value="1">PARTICULAR</option>
+          <option value="2">OPERADORA</option>
+        </select>
+        <div *ngIf="submitted && f.bill.errors" class="invalid-feedback">
+          <div *ngIf="f.bill.errors.required">Obrigatório</div>
+        </div>
+      </div>
+      <div class="form-row" *ngIf="registerForm.value.bill == 2">
         <div class="form-group col-md-6">
           <label for="plan">Operadora</label>
           <select formControlName="operator" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.operator.errors }">
@@ -22,7 +32,7 @@
           </div>
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group" *ngIf="registerForm.value.bill == 1">
         <label for="paymentMethod" class="col-form-label">Forma de Pagamento</label>
         <select id="paymentMethod" formControlName="paymentMethod" name="status" class="form-control form-control-sm"
           [ngClass]="{ 'is-invalid': submitted && f.paymentMethod.errors }">
@@ -33,8 +43,8 @@
         </div>
       </div>
       <div class="form-row">
-        <label for="inputObs4">Observação</label>
-        <input type="obs" class="form-control form-control-sm" id="inputObs4" placeholder="Observação">
+        <label for="obs">Observação</label>
+        <input type="text" class="form-control form-control-sm" id="obs" formControlName="obs" placeholder="Observação">
       </div>
       <br>
       <app-add-procedures [events]="events.asObservable()" (setProcedures)="setProcedures($event)"></app-add-procedures>

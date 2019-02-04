@@ -3,7 +3,7 @@ export class PaymentMethod {
     description: string;
     type: number;
     installment: number;
-    installmentInterval: number;
+    billingDay: number;
     discount: number;
 }
 

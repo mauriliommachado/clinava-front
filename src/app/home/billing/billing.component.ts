@@ -15,7 +15,8 @@ export class BillingComponent implements OnInit, OnDestroy {
   @Input() event: Event;
   @Input() visible = false;
   @Input() events;
-  private eventsSubscription: any
+  private eventsSubscription: any;
+
 
   constructor(private formBuilder: FormBuilder,
     private plansService: PlanService,
@@ -28,7 +29,20 @@ export class BillingComponent implements OnInit, OnDestroy {
       operator: [''],
       plan: [''],
       paymentMethod: [''],
-      obs: ['']
+      obs: [''],
+      bill: ['1'],
+      firstDate: [new Date().toISOString().split('T')[0]]
+    });
+  }
+
+  initForm() {
+    this.registerForm = this.formBuilder.group({
+      operator: [this.event.patient.plan ? this.event.patient.plan.operator.ansCode : ''],
+      plan: [this.event.patient.plan ? this.event.patient.plan.ansCode : ''],
+      paymentMethod: [''],
+      obs: [''],
+      bill: ['1'],
+      firstDate: [new Date().toISOString().split('T')[0]]
     });
   }
 
@@ -73,34 +87,77 @@ export class BillingComponent implements OnInit, OnDestroy {
     if (this.registerForm.invalid) {
       return;
     }
-    let form = this.registerForm.value;
-    var bill = new Bill();
-    var BC = new BillConstants()
-    bill.category = BC.CATEGORY_FIXED;
-    bill.description = form.obs;
-    bill.document = this.event.id;
-    bill.event = this.event;
-    bill.nature = BC.NATURE_INCOME;
-    var pm = new PaymentMethod();
-    pm.id = form.paymentMethod;
-    bill.paymentMethod = pm;
-    bill.status = BC.STATUS_CLOSED;
-    bill.validUntil = new Date();
     var total = 0;
     this.event.procedures.forEach(p => {
       total += p.value;
     })
-    if(total <= 0){
+    if (total <= 0) {
       alert("O valor mínimo é 0,01 centavos!");
       return;
     }
-    bill.value = <number>new Number(total.toFixed(2));
-    this.billService.register(bill).subscribe(resp => {
-      this.eventService.update(this.event).subscribe(r => {
-        this.alertService.success("Faturato com Sucesso!", 5000);
-        this.closeModal();
-      })
-    })
+    var bills:Bill[] = new Array();
+    var bill: Bill = this.generateBill(total, new Date());
+    if (bill.paymentMethod) {
+      if (bill.paymentMethod.discount != 0) {
+        bill.value = bill.value * (1 + (bill.paymentMethod.discount / 100));
+      }
+      if (bill.paymentMethod.type == 2 && bill.paymentMethod.installment > 0) {
+        var parcial = <number>new Number((bill.value / bill.paymentMethod.installment).toFixed(2));
+        var d = bill.validUntil;
+        for (let i = 0; i < bill.paymentMethod.installment; i++) {
+          bill.value = parcial;
+          bill.validUntil = new Date(d.getFullYear(), d.getMonth()+ i, d.getDate());
+          bills.push(Object.assign({}, bill));
+        }
+      } else {
+        bills.push(bill);
+      }
+    } else {
+      bills.push(bill);
+    }
+    this.event.bills = bills;
+      this.eventService.update(this.event).subscribe(resp => {
+          this.alertService.success("Faturato com Sucesso!", 5000);
+          this.closeModal();
+      });
+  }
+
+  generateBill(value: number, valid: Date) {
+    let form = this.registerForm.value;
+    var bill = new Bill();
+    var BC = new BillConstants();
+    bill.category = BC.CATEGORY_FIXED;
+    bill.description = form.obs;
+    bill.document = this.event.id;
+    bill.event = new Event();
+    bill.event.id = this.event.id;
+    bill.nature = BC.NATURE_INCOME;
+    bill.validUntil = valid;
+    if (form.bill == 1) {
+      var pm = this.payMethod.find(p => p.id == form.paymentMethod);
+      bill.paymentMethod = pm;
+      if (pm.type == 1) {
+        bill.status = BC.STATUS_CLOSED;
+      } else {
+        bill.status = BC.STATUS_OPEN;
+        if (valid.getDate() >= pm.billingDay) {
+          bill.validUntil = new Date(bill.validUntil.getFullYear(), bill.validUntil.getMonth() + 1, pm.billingDay);
+        } else {
+          bill.validUntil = new Date(bill.validUntil.getFullYear(), bill.validUntil.getMonth(), pm.billingDay);
+        }
+      }
+    } else {
+      bill.operator = this.operators.find(p => p.ansCode == form.operator);
+      bill.status = BC.STATUS_OPEN;
+      if (valid.getDate() >= bill.operator.billingDay) {
+        bill.validUntil = new Date(bill.validUntil.getFullYear(), bill.validUntil.getMonth() + 1, bill.operator.billingDay);
+      } else {
+        bill.validUntil = new Date(bill.validUntil.getFullYear(), bill.validUntil.getMonth(), bill.operator.billingDay);
+      }
+    }
+
+    bill.value = <number>new Number(value.toFixed(2));
+    return bill;
   }
 
   hide(event) {
@@ -113,15 +170,6 @@ export class BillingComponent implements OnInit, OnDestroy {
   closeModal(): void {
     this.visible = false;
     this.close.emit();
-  }
-
-  initForm() {
-    this.registerForm = this.formBuilder.group({
-      operator: [this.event.patient.plan ? this.event.patient.plan.operator.ansCode : '', Validators.required],
-      plan: [this.event.patient.plan ? this.event.patient.plan.ansCode : '', Validators.required],
-      paymentMethod: ['', Validators.required],
-      obs: ['']
-    });
   }
 
   setProcedures(procedures: Procedure[]) {

@@ -34,11 +34,10 @@
                         <h6 class="mb-1" *ngIf="consult.user == null">Vago</h6>
                         <h6 class="mb-1" *ngIf="consult.user != null">Consulta</h6>
                     </div>
-                    <p class="mb-1" *ngIf="consult.patient != null"><span *ngIf="consult.checkIn"
-                         class="mr-1">
-                        <i style="color: rgb(0, 123, 255);" class="fas fa-check"></i>
-                        <i *ngIf="consult.bill" style="color: rgb(92,184,92);" class="fas fa-check"></i>
-                    </span>{{consult.patient.name}} </p>
+                    <p class="mb-1" *ngIf="consult.patient != null"><span *ngIf="consult.checkIn" class="mr-1">
+                            <i style="color: rgb(0, 123, 255);" class="fas fa-check"></i>
+                            <i *ngIf="consult.bills.length>0" style="color: rgb(92,184,92);" class="fas fa-check"></i>
+                        </span>{{consult.patient.name}} </p>
                     <p class="mb-1" *ngIf="consult.patient == null">Horário vago</p>
                 </a>
             </ul>
@@ -48,4 +47,4 @@
 
 <app-record-register [date]="eventDate" [user]="id" [visible]="visible" (close)="onClose()"></app-record-register>
 <app-consult-summary *ngIf="showSummary" [event]="event" [visible]="showSummary" (close)="onClose()" (openBilling)="bill($event)"></app-consult-summary>
-<app-billing *ngIf="showBilling" [events]="eventsSubject" [visible]="showBilling"  (close)="onClose()"></app-billing>
+<app-billing *ngIf="showBilling" [events]="eventsSubject" [visible]="showBilling" (close)="onClose()"></app-billing>
