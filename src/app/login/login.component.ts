@@ -5,8 +5,10 @@ import { first } from 'rxjs/operators';
 
 import { AlertService, AuthenticationService } from '../_services';
 
-@Component({templateUrl: 'login.component.html',
-styleUrls: ['./login.component.css']})
+@Component({
+    templateUrl: 'login.component.html',
+    styleUrls: ['./login.component.css']
+})
 export class LoginComponent implements OnInit {
     loginForm: FormGroup;
     loading = false;
@@ -18,7 +20,7 @@ export class LoginComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private authenticationService: AuthenticationService,
-        private alertService: AlertService) {}
+        private alertService: AlertService) { }
 
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
@@ -43,13 +45,16 @@ export class LoginComponent implements OnInit {
         if (this.loginForm.invalid) {
             return;
         }
-        
+
         this.loading = true;
         this.authenticationService.login(this.f.username.value, this.f.password.value)
             .pipe(first())
             .subscribe(
                 data => {
-                    this.router.navigate([this.returnUrl]);
+                    if (data.acceptedTerm)
+                        this.router.navigate([this.returnUrl]);
+                    else
+                        this.router.navigate(['acceptTerm']);
                 },
                 error => {
                     console.log(error);

@@ -36,7 +36,8 @@ import { ClinicHome } from './clinic/clinic.component';
 import { FinanceModule } from './finance/finance.module';
 import { FinanceHome } from './finance/finance.component';
 import { AdminModuleModule } from './admin-module/admin-module.module';
-import { NgxMaskModule } from 'ngx-mask'
+import { NgxMaskModule } from 'ngx-mask';
+import { ThermComponent } from './therm/therm.component'
 
 @NgModule({
     imports: [
@@ -58,7 +59,7 @@ import { NgxMaskModule } from 'ngx-mask'
         LoginComponent,
         ClinicHome,
         FinanceHome,
-        RegisterComponent, IndexComponent],
+        RegisterComponent, IndexComponent, ThermComponent], 
     providers: [
         AuthGuard,
         AlertService,
