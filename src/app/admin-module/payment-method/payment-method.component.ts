@@ -47,11 +47,11 @@ export class PaymentMethodComponent implements OnInit {
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
       id: [""],
-      description: ["", Validators.required],
+      description: [""],
       type: [1, Validators.required],
-      installment: [1],
-      billingDay: [0],
-      discount: [0]
+      installment: [1, Validators.required],
+      billingDay: [0, Validators.required],
+      discount: [0, Validators.required]
     });
     this.paymentMethodService.getAll().subscribe(resp => this.paymentMethods = resp);
     this.cleanForm();
@@ -77,9 +77,9 @@ export class PaymentMethodComponent implements OnInit {
       id: [""],
       description: ["", Validators.required],
       type: [1, Validators.required],
-      installment: [1],
-      billingDay: [0],
-      discount: [0]
+      installment: [1, Validators.required],
+      billingDay: [0, Validators.required],
+      discount: [0, Validators.required]
     });
   }
 
@@ -113,11 +113,11 @@ export class PaymentMethodComponent implements OnInit {
       paymentMethod = <PaymentMethod>resp
       this.registerForm = this.formBuilder.group({
         id: [paymentMethod.id],
-        description: [paymentMethod.description, Validators.required],
+        description: [paymentMethod.description],
         type: [paymentMethod.type, Validators.required],
-        installment: [paymentMethod.installment],
-        billingDay: [paymentMethod.billingDay],
-        discount: [paymentMethod.discount]
+        installment: [paymentMethod.installment, Validators.required],
+        billingDay: [paymentMethod.billingDay, Validators.required],
+        discount: [paymentMethod.discount, Validators.required]
       });
       this.currentPaymentMethod = id;
       this.toggle();

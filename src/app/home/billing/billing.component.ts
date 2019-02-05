@@ -30,8 +30,7 @@ export class BillingComponent implements OnInit, OnDestroy {
       plan: [''],
       paymentMethod: [''],
       obs: [''],
-      bill: ['1'],
-      firstDate: [new Date().toISOString().split('T')[0]]
+      bill: ['1']
     });
   }
 
@@ -41,8 +40,7 @@ export class BillingComponent implements OnInit, OnDestroy {
       plan: [this.event.patient.plan ? this.event.patient.plan.ansCode : ''],
       paymentMethod: [''],
       obs: [''],
-      bill: ['1'],
-      firstDate: [new Date().toISOString().split('T')[0]]
+      bill: ['1']
     });
   }
 
@@ -85,6 +83,14 @@ export class BillingComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.submitted = true;
     if (this.registerForm.invalid) {
+      return;
+    }
+    if (this.registerForm.value.bill == 1 && !this.registerForm.value.paymentMethod) {
+      alert("Selecione uma forma de pagamento");
+      return;
+    }
+    if (this.registerForm.value.bill == 2 && (!this.registerForm.value.operator || !this.registerForm.value.plan)) {
+      alert("Selecione uma operadora e plano");
       return;
     }
     var total = 0;
