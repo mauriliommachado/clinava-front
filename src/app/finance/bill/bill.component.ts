@@ -108,6 +108,7 @@ export class BillComponent implements OnInit {
     bill.nature = this.registerForm.value.nature;
     bill.status = this.registerForm.value.status;
     bill.validUntil = new Date(this.registerForm.value.validUntil);
+    bill.validUntil.setHours(12);
     bill.value = this.registerForm.value.value;
     bill.paymentMethod = new PaymentMethod();
     bill.paymentMethod.id = this.registerForm.value.paymentMethod;
