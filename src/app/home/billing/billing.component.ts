@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
-import { Event, Procedure, Plan, Operator, PaymentMethod, Bill, BillConstants } from 'src/app/_models';
-import { PlanService, OperatorService, PaymentMethodService, BillService, AlertService, EventService } from 'src/app/_services';
+import { Event, Procedure, Plan, Operator, PaymentMethod, Bill, BillConstants, Template } from 'src/app/_models';
+import { PlanService, OperatorService, PaymentMethodService, BillService, AlertService, EventService, RecordService } from 'src/app/_services';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
@@ -24,7 +24,8 @@ export class BillingComponent implements OnInit, OnDestroy {
     private billService: BillService,
     private payService: PaymentMethodService,
     private eventService: EventService,
-    private alertService: AlertService) {
+    private alertService: AlertService,
+    private recordService: RecordService) {
     this.registerForm = this.formBuilder.group({
       operator: [''],
       plan: [''],
@@ -101,7 +102,7 @@ export class BillingComponent implements OnInit, OnDestroy {
       alert("O valor mínimo é 0,01 centavos!");
       return;
     }
-    var bills:Bill[] = new Array();
+    var bills: Bill[] = new Array();
     var bill: Bill = this.generateBill(total, new Date());
     if (bill.paymentMethod) {
       if (bill.paymentMethod.discount != 0) {
@@ -112,7 +113,7 @@ export class BillingComponent implements OnInit, OnDestroy {
         var d = bill.validUntil;
         for (let i = 0; i < bill.paymentMethod.installment; i++) {
           bill.value = parcial;
-          bill.validUntil = new Date(d.getFullYear(), d.getMonth()+ i, d.getDate());
+          bill.validUntil = new Date(d.getFullYear(), d.getMonth() + i, d.getDate());
           bills.push(Object.assign({}, bill));
         }
       } else {
@@ -122,10 +123,10 @@ export class BillingComponent implements OnInit, OnDestroy {
       bills.push(bill);
     }
     this.event.bills = bills;
-      this.eventService.update(this.event).subscribe(resp => {
-          this.alertService.success("Faturato com Sucesso!", 5000);
-          this.closeModal();
-      });
+    this.eventService.update(this.event).subscribe(resp => {
+      this.alertService.success("Faturato com Sucesso!", 5000);
+      this.closeModal();
+    });
   }
 
   generateBill(value: number, valid: Date) {
@@ -180,6 +181,22 @@ export class BillingComponent implements OnInit, OnDestroy {
 
   setProcedures(procedures: Procedure[]) {
     this.event.procedures = procedures;
+  }
+
+  estimate() {
+    let template = new Template();
+    template.attendantName = this.event.user.name;
+    template.patientName = this.event.patient.name;
+    template.crm = this.event.user.crm;
+    template.docName = "Orçamento";
+    template.text = "Nome - Valor\n\n\n";
+    let total = 0;
+    this.event.procedures.forEach((p, i) => {
+      template.text +=  p.name+ " - R$ " + p.value +"\n";
+      total += p.value;
+    });
+    template.text += "\n\nValor total: R$ "+ total.toFixed(2);
+    this.recordService.getPDF(template);
   }
 
 }
