@@ -115,6 +115,16 @@ export class EventComponent implements OnInit {
         template.docName = "Precrição";
         template.text = (<Record>this.registerForm.value).prescriptions;
         break;
+      case "estimate":
+        template.docName = "Orçamento";
+        template.text = "Nome - Valor\n\n\n";
+        let total = 0;
+        this.procedures.forEach((p, i) => {
+          template.text += p.name + " - R$ " + p.value + "\n";
+          total += p.value;
+        });
+        template.text += "\n\nValor total: R$ " + total.toFixed(2);
+        break;
       default:
         return;
     }

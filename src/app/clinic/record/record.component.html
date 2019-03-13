@@ -123,6 +123,7 @@
     </div>
     <div class="tab-pane fade" id="procedimentos" role="tabpanel" aria-labelledby="procedimentos-tab">
       <app-add-procedures [events]="eventsSubject.asObservable()" (setProcedures)="setProcedures($event)"></app-add-procedures>
+      <a class="btn btn-info" (click)="print('estimate')">Imprimir Orçamento</a>
     </div>
   </div>
 </form>
