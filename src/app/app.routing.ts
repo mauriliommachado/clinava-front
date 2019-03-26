@@ -22,6 +22,7 @@ import { ProceduresComponent } from './admin-module/procedures/procedures.compon
 import { PaymentMethodComponent } from './admin-module/payment-method/payment-method.component';
 import { BillComponent } from './finance/bill/bill.component';
 import { FlowComponent } from './finance/flow/flow.component';
+import { ReportFlowComponent } from './report/report-flow/report-flow.component';
 import { BillingComponent } from './home/billing/billing.component';
 
 
@@ -80,6 +81,17 @@ const appRoutes: Routes = [
 
           { path: 'bill', component: BillComponent },
           { path: 'flow', component: FlowComponent }
+        ]
+      }
+    ]
+  },
+  {
+    path: 'report', canActivate: [AuthGuard],
+    children: [
+      {
+        path: '', component: ReportFlowComponent,
+        children: [
+          { path: 'flow', component: ReportFlowComponent }
         ]
       }
     ]

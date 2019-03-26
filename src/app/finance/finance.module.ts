@@ -5,11 +5,12 @@ import { FlowComponent } from './flow/flow.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxCurrencyModule } from "ngx-currency";
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
   imports: [
-    CommonModule,ReactiveFormsModule, NgxCurrencyModule,FormsModule
+    CommonModule,ReactiveFormsModule, NgxCurrencyModule,FormsModule,RouterModule
   ],
   declarations: [BillComponent,RepeatPipe, NaturePipe,
   FlowComponent]
