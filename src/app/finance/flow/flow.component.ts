@@ -40,47 +40,16 @@ export class FlowComponent implements OnInit {
       });
   }
 
-  report() {
-    this.validateFields();
-    let jsPDF = require('jspdf');
-    require('jspdf-autotable');
-    var doc = new jsPDF({
-      orientation: 'landscape'});
-    doc.text('Fluxo de Caixa', 14, 22);
+  getSum() : number {
+    let sum = 0;
+    for(let i = 0; i < this.bills.length; i++) {
+      sum += this.bills[i].value;
+    }
+    return sum;
+  }
 
-    this.billService.getBetween(this.initDate,
-      this.endDate,
-      this.paid,
-      this.toPay,
-      this.received,
-      this.toReceive).subscribe(resp => {
-        var rows = [];
-        rows = resp;
-        rows.forEach(b => {
-          b.validUntil = new Date(b.validUntil).toLocaleDateString();
-          b.paymentMethod = b.paymentMethod.description;
-          b.status = b.status == 1? "ABERTO": "FECHADO";
-          b.nature = b.nature == 1? "RECEITA": "DESPESA";
-          b.category = b.category == 1? "FIXO": "VARIAVEL";
-        })
-        doc.autoTable({
-          head: [{
-            id: '#',
-            document: 'Nº',
-            description: 'Descrição',
-            category: 'Cat.',
-            validUntil: 'Validade',
-            value: 'Valor',
-            paymentMethod: 'Forma Pgto.',
-            nature: 'Natureza',
-            status: 'Status'
-          }],
-          body: rows,
-          startY: 30,
-        });
-        doc.save('flow.pdf');
-      });
-    
+  print() {
+    window.print();
   }
 
   validateFields(){

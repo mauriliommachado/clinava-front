@@ -35,7 +35,6 @@ import { ClinicModule } from './clinic/clinic.module';
 import { ClinicHome } from './clinic/clinic.component';
 import { FinanceModule } from './finance/finance.module';
 import { FinanceHome } from './finance/finance.component';
-import { ReportModule } from './report/report.module';
 import { AdminModuleModule } from './admin-module/admin-module.module';
 import { NgxMaskModule } from 'ngx-mask';
 import { ThermComponent } from './therm/therm.component'
@@ -47,7 +46,7 @@ import { ThermComponent } from './therm/therm.component'
         HttpClientModule,
         routing,
         ClinicModule,
-        FinanceModule,ReportModule,
+        FinanceModule,
         HomeModule, AdminModuleModule,
         HomeRoutingModule,
         BrowserModule,

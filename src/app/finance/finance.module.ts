@@ -13,6 +13,7 @@ import { RouterModule } from '@angular/router';
     CommonModule,ReactiveFormsModule, NgxCurrencyModule,FormsModule,RouterModule
   ],
   declarations: [BillComponent,RepeatPipe, NaturePipe,
-  FlowComponent]
+  FlowComponent],
+  exports: [RepeatPipe, NaturePipe]
 })
 export class FinanceModule { }
