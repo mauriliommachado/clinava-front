@@ -1,12 +1,76 @@
-﻿<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+﻿<!-- <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
   <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Clinava</a>
   <ul class="navbar-nav px-3">
     <li class="nav-item text-nowrap">
       <a class="nav-link" [routerLink]="['/login']">Sair</a>
     </li>
   </ul>
-</nav>
+</nav> -->
 
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">Clinava</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown" routerLinkActive="active">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Recepção
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" routerLink="/home/agenda" routerLinkActive="active">Agenda</a>
+          <a class="dropdown-item" routerLink="/home/consult" routerLinkActive="active">Consulta</a>
+          <a class="dropdown-item" routerLink="/home/patient" routerLinkActive="active">Paciente</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown" *ngIf="role != 'ROLE_USER'" routerLinkActive="active">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" routerLinkActive="active" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Clínico
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" routerLink="/record/list" routerLinkActive="active">Lista</a>
+          <!-- <a class="dropdown-item" routerLink="/record/record" routerLinkActive="active">Atendimento</a> -->
+        </div>
+      </li>
+      <li class="nav-item dropdown" *ngIf="role != 'ROLE_USER'"routerLinkActive="active">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" routerLinkActive="active" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Financeiro
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown" >
+          <a class="dropdown-item" routerLink="/finance/bill" routerLinkActive="active">Contas</a> 
+          <a class="dropdown-item"  routerLink="/finance/flow" routerLinkActive="active">Fluxo de Caixa</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown" >
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" routerLinkActive="active" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Administrativo
+        </a>
+        <div class="dropdown-menu" routerLinkActive="active" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" routerLink="/admin/user" routerLinkActive="active">Usuários</a>
+          <a class="dropdown-item" routerLink="/admin/operator" routerLinkActive="active">Operadoras</a>
+          <a class="dropdown-item" routerLink="/admin/plan" routerLinkActive="active">Planos</a>
+          <a class="dropdown-item" routerLink="/admin/procedures" routerLinkActive="active">Procedimentos</a>
+          <a class="dropdown-item" routerLink="/admin/payment_method" routerLinkActive="active">Formas de
+            Pagamento</a>
+          <a class="dropdown-item" routerLink="/admin/configuration" routerLinkActive="active">Configurações</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav px-3">
+      <li class="nav-item text-nowrap">
+        <a class="nav-link" [routerLink]="['/login']">Sair</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<main role="main" class="px-4">
+  <alert></alert>
+  <router-outlet></router-outlet>
+
+</main>
+<!-- 
 <div class="container-fluid">
   <div class="row">
     <nav class="col-md-2 d-none d-md-block bg-light sidebar">
@@ -91,4 +155,4 @@
 
     </main>
   </div>
-</div>
+</div> -->
