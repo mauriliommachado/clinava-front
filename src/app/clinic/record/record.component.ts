@@ -133,9 +133,12 @@ export class EventComponent implements OnInit {
 
   replaceMarkers(string: string) {
     if (string) {
-      return string.replace("#cliente", this.event.patient.name == null ? "____" : this.event.patient.name).replace("#cpf", this.event.patient.cpf == null ? "____" : this.event.patient.cpf)
+      return string.replace("#cliente", this.event.patient.name == null ? "____" : this.event.patient.name)
+        .replace("#cpf", this.event.patient.cpf == null ? "____" : this.event.patient.cpf)
         .replace("#crm", this.event.user.crm == null ? "____" : this.event.user.crm)
-        .replace("#data", new Date(this.event.date).toLocaleDateString()).replace("#hora", new Date(this.event.date).toLocaleTimeString().slice(0, 5));
+        .replace("#nome", this.event.user.name == null ? "____" : this.event.user.name)
+        .replace("#data", new Date(this.event.date).toLocaleDateString())
+        .replace("#hora", new Date(this.event.date).toLocaleTimeString().slice(0, 5));
     } else {
       return string;
     }
