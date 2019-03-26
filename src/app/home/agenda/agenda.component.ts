@@ -3,6 +3,7 @@ import { Event } from '../../_models/event'
 import { User, Config, Patient } from '../../_models';
 import { ConfigService, EventService, UserService } from '../../_services';
 import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
 
 
 
@@ -29,9 +30,11 @@ export class AgendaComponent implements OnInit {
   id: string;
   visible = false;
   showSummary = false;
+  showBilling = false;
   attendants;
   docName: string = "Selecione um atendente";
   event: Event= null;
+  private eventsSubject: Subject<Event> = new Subject<Event>();
 
   constructor(private userService: UserService, private configService: ConfigService, private eventService: EventService, private route: ActivatedRoute) {
 
@@ -143,6 +146,7 @@ export class AgendaComponent implements OnInit {
   onClose() {
     this.visible = false;
     this.showSummary = false;
+    this.showBilling = false;
     this.event = null;
     this.initDates();
   }
@@ -156,10 +160,18 @@ export class AgendaComponent implements OnInit {
       this.showSummary = true;
     }
   }
+
+  bill(event){
+    this.showSummary = false;
+    this.showBilling = true;
+    setTimeout(()=> {
+      this.eventsSubject.next(this.event);
+    },10)
+  }
+
   getDaysInMonth(m, y) {
     return m === 2 ? y & 3 || !(y % 25) && y & 15 ? 28 : 29 : 30 + (m + (m >> 3) & 1);
   }
-
 }
 class Day {
   header: string;

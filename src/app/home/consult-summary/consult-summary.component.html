@@ -4,12 +4,12 @@
     <div class="card-body">
         <div class="form-group">
             <label for="date">Data</label>
-            <input type="text" id="date" name="date" [(ngModel)]="formatedDate" class="form-control"
+            <input type="text" id="date" name="date" [(ngModel)]="formatedDate" class="form-control form-control-sm"
               readonly />
           </div>
       <div class="form-group">
         <label for="phone">Telefone</label>
-        <input type="text" id="phone" name="phone" mask="(00)0 0000-0000" [(ngModel)]="event.patient.phone" class="form-control"
+        <input type="text" id="phone" name="phone" mask="(00)0 0000-0000" [(ngModel)]="event.patient.phone" class="form-control form-control-sm"
           readonly />
       </div>
     </div>
@@ -18,6 +18,7 @@
       <button type="button" *ngIf="!event.checkIn" class="btn btn-success ml-3" id="checkin" (click)="checkin($event)">Check in</button>
       <button type="button" *ngIf="!event.confirmed" class="btn btn-info ml-3" id="confirm" (click)="confirm($event)">Confirmar Consulta</button>
       <button type="button" *ngIf="event.confirmed" class="btn btn-danger ml-3" id="cancel" (click)="cancel($event)">Cancelar Consulta</button>
+      <button type="button" *ngIf="event.confirmed && event.bills.length==0 && event.checkIn" class="btn btn-info ml-3" id="bill" (click)="bill($event)">Faturar</button>
     </div>
   </div>
 </div>

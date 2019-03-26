@@ -27,17 +27,17 @@
                     <span *ngIf="consult.user != null">{{consult.user.name}}</span>
                     <span *ngIf="consult.user == null">Vago</span>
                 </li> -->
-                <a *ngFor="let consult of day.events" (click)="show(consult)" [ngClass]="{'list-group-item-success': consult.user == null, 'list-group-item-danger': consult.user != null && consult.confirmed , 'list-group-item-warning': consult.user != null && !consult.confirmed}"
+                <a *ngFor="let consult of day.events" (click)="show(consult)" [ngClass]="{'list-group-item-success': consult.user == null, 'list-group-item-danger': consult.user != null && consult.confirmed, 'list-group-item-warning': consult.user != null && !consult.confirmed}"
                     class="list-group-item list-group-item-action flex-column align-items-start">
                     <div class="d-flex w-100 justify-content-between">
                         <span class="badge badge-pill">{{consult.date | date: "HH:mm"}}</span>
                         <h6 class="mb-1" *ngIf="consult.user == null">Vago</h6>
                         <h6 class="mb-1" *ngIf="consult.user != null">Consulta</h6>
                     </div>
-                    <p class="mb-1" *ngIf="consult.patient != null"><span *ngIf="consult.checkIn"
-                        style="color: rgb(0, 123, 255);" class="mr-1">
-                        <i class="fas fa-check"></i>
-                    </span>{{consult.patient.name}} </p>
+                    <p class="mb-1" *ngIf="consult.patient != null"><span *ngIf="consult.checkIn" class="mr-1">
+                            <i style="color: rgb(0, 123, 255);" class="fas fa-check"></i>
+                            <i *ngIf="consult.bills.length>0" style="color: rgb(92,184,92);" class="fas fa-check"></i>
+                        </span>{{consult.patient.name}} </p>
                     <p class="mb-1" *ngIf="consult.patient == null">Horário vago</p>
                 </a>
             </ul>
@@ -45,5 +45,6 @@
     </div>
 </div>
 
-<app-event-register [date]="eventDate" [user]="id" [visible]="visible" (close)="onClose()"></app-event-register>
-<app-consult-summary *ngIf="showSummary" [event]="event" [visible]="showSummary" (close)="onClose()"></app-consult-summary>
+<app-record-register [date]="eventDate" [user]="id" [visible]="visible" (close)="onClose()"></app-record-register>
+<app-consult-summary *ngIf="showSummary" [event]="event" [visible]="showSummary" (close)="onClose()" (openBilling)="bill($event)"></app-consult-summary>
+<app-billing *ngIf="showBilling" [events]="eventsSubject" [visible]="showBilling" (close)="onClose()"></app-billing>

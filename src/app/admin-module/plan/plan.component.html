@@ -1,0 +1,70 @@
+<section class="row">
+    <div class="col-md-8">
+        <h4>Planos</h4>
+    </div>
+    <div class="col-md-4">
+        <div class="btn-group float-right" role="group">
+            <button class="btn btn-primary btn-sm mb-4 float-right" (click)="toggle()">{{title}}</button>
+        </div>
+    </div>
+</section>
+<div id="new" [@popOverState]="stateList">
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="ansCode">Registro ANS</label>
+        <input type="text" formControlName="ansCode" mask="000000000" [readonly]="editing" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.ansCode.errors }" />
+        <div *ngIf="submitted && f.ansCode.errors" class="invalid-feedback">
+          <div *ngIf="f.ansCode.errors.required">Obrigatório</div>
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="operator">Operadora</label>
+        <select formControlName="operator" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.operator.errors }">
+          <option [value]="op.ansCode" *ngFor="let op of operators">{{op.name}}</option>
+        </select>
+        <div *ngIf="submitted && f.operator.errors" class="invalid-feedback">
+          <div *ngIf="f.operator.errors.required">Obrigatório</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="name">Nome</label>
+      <input type="text" formControlName="name" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+      <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+        <div *ngIf="f.name.errors.required">Obrigatório</div>
+      </div>
+    </div>
+    <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary  btn-sm">Salvar</button>
+        <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+    </div>
+  </form>
+</div>
+
+<div id="list">
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th scope="col">Registro ANS</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Operadora</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let op of plans">
+        <th class="align-middle">{{ op.ansCode }}</th>
+        <td class="align-middle">{{ op.name }}</td>
+        <td class="align-middle">{{ op.operator.name }}</td>
+        <td class="align-middle">
+          <a class="btn btn-info btn-sm" (click)="edit(op.ansCode)">
+            <i class="far fa-edit"></i></a></td>
+        <td class="align-middle">
+          <a class="btn btn-danger btn-sm" (click)="delete(op.ansCode)">
+            <i class="far fa-trash-alt"></i></a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

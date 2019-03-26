@@ -1,84 +1,94 @@
 ﻿<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Clinava</a>
-    <ul class="navbar-nav px-3">
-      <li class="nav-item text-nowrap">
-        <a class="nav-link" [routerLink]="['/login']">Sair</a>
-      </li>
-    </ul>
+  <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Clinava</a>
+  <ul class="navbar-nav px-3">
+    <li class="nav-item text-nowrap">
+      <a class="nav-link" [routerLink]="['/login']">Sair</a>
+    </li>
+  </ul>
 </nav>
 
-  <div class="container-fluid">
-    <div class="row">
-      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-        <div class="sidebar-sticky">
-          <ul class="nav flex-column">
-            
-            <li class="nav-item">
-              <a class="nav-link" href="#recepcao" >Recepção</a>
-              <div id="recepcao" routerLinkActive="show">
-                <ul class="nav flex-column ml-3">
-                  <li class="nav-item">
-                    <a class="nav-link"  routerLink="/home/agenda" routerLinkActive="active">Agenda</a>
-                  </li>
-                  <li class="nav-item" >
-                    <a class="nav-link" routerLink="/home/consult" routerLinkActive="active">Consulta</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" routerLink="/home/patient" routerLinkActive="active">Paciente</a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li class="nav-item" *ngIf="role != 'ROLE_USER'">
-              <a class="nav-link" href="#admin" >Clínico</a>
-              <div id="admin"  routerLinkActive="show">
-                <ul class="nav flex-column ml-3">
-                  <li class="nav-item">
-                    <a class="nav-link"  routerLink="/event/list" routerLinkActive="active">Lista</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link"  routerLink="/event/record" routerLinkActive="active">Atendimento</a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li class="nav-item" *ngIf="role != 'ROLE_USER'">
-              <a class="nav-link" href="#admin" >Financeiro</a>
-              <div id="admin"  routerLinkActive="show">
-                <ul class="nav flex-column ml-3">
-                  <li class="nav-item">
-                    <a class="nav-link"  routerLink="/finance/insurance" routerLinkActive="active">Convênio</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link"  routerLink="/finance/payment_methods" routerLinkActive="active">Formas de Pagamento</a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#admin">Administrativo</a>
-              <div id="admin"  routerLinkActive="show">
-                <ul class="nav flex-column ml-3">
-                  <li class="nav-item">
-                    <a class="nav-link"  routerLink="/admin/user" routerLinkActive="active">Usuários</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link"  routerLink="/admin/configuration" routerLinkActive="active">Configurações</a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            
-          </ul>
-        </div>
-      </nav>
+<div class="container-fluid">
+  <div class="row">
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="#recepcao">Recepção</a>
+            <div id="recepcao" routerLinkActive="show">
+              <ul class="nav flex-column ml-3">
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/home/agenda" routerLinkActive="active">Agenda</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/home/consult" routerLinkActive="active">Consulta</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/home/patient" routerLinkActive="active">Paciente</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item" *ngIf="role != 'ROLE_USER'">
+            <a class="nav-link" href="event">Clínico</a>
+            <div id="admin" routerLinkActive="show">
+              <ul class="nav flex-column ml-3">
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/record/list" routerLinkActive="active">Lista</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/record/record" routerLinkActive="active">Atendimento</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item" *ngIf="role != 'ROLE_USER'">
+            <a class="nav-link" href="finance">Financeiro</a>
+            <div id="admin" routerLinkActive="show">
+              <ul class="nav flex-column ml-3">
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/finance/bill" routerLinkActive="active">Contas</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/finance/flow" routerLinkActive="active">Fluxo de Caixa</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="admin">Administrativo</a>
+            <div id="admin" routerLinkActive="show">
+              <ul class="nav flex-column ml-3">
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/admin/user" routerLinkActive="active">Usuários</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/admin/operator" routerLinkActive="active">Operadoras</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/admin/plan" routerLinkActive="active">Planos</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/admin/procedures" routerLinkActive="active">Procedimentos</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/admin/payment_method" routerLinkActive="active">Formas de
+                    Pagamento</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/admin/configuration" routerLinkActive="active">Configurações</a>
+                </li>
+              </ul>
+            </div>
+          </li>
 
-      <main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-4">
-          <alert></alert>
-          <router-outlet></router-outlet>
-          
-      </main>
-    </div>
+        </ul>
+      </div>
+    </nav>
+
+    <main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-4">
+      <alert></alert>
+      <router-outlet></router-outlet>
+
+    </main>
   </div>
-
-
+</div>

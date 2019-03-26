@@ -1,5 +1,5 @@
 ﻿import {Address} from "./address";
-import { Contact } from "./contact";
+import { Plan } from "./plan";
 
 export class Patient {
 
@@ -10,6 +10,7 @@ export class Patient {
     birthday: Date;
     phone: string;
     address: Address;
+    plan:Plan;
     
 }
 

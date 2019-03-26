@@ -56,7 +56,6 @@ export class ConsultComponent implements OnInit {
 
   }
 
-
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
       user: ['', Validators.required],
@@ -157,9 +156,7 @@ export class ConsultComponent implements OnInit {
       return;
     }
     let event = <Event>this.registerForm.value;
-    event.date = new Date(this.registerForm.value.date);
-    event.date.setHours(this.registerForm.value.time.split(':')[0]);
-    event.date.setMinutes(this.registerForm.value.time.split(':')[1]);
+    event.date = new Date(this.indexDate);
     this.userService.getById(this.registerForm.value.user).subscribe(user => {
       event.user = user;
       this.patientService.getById(this.registerForm.value.patient).subscribe(resp => {

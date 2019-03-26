@@ -1,0 +1,70 @@
+<div class="row">
+  <div class="col">
+    <div class="mt-2">
+      <h5>Lançar Procedimentos</h5>
+    </div>
+    <div class="form-group">
+      <label for="procedures">Filtrar</label>
+      <input class="form-control form-control-sm" [(ngModel)]="filterProcedures" (input)="filterProc()" type="text">
+    </div>
+    <div class="form-group">
+      <table class="table table-sm table-striped" style="overflow: auto;max-height:50px">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Valor</th>
+            <th *ngIf="isPaid" scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of procedures">
+            <th scope="row">{{p.code}}</th>
+            <td style="width:50%">{{p.plan.name}}: {{p.name}}</td>
+            <td>R$ {{p.value}}</td>
+            <td *ngIf="isPaid"><a class="btn btn-success btn-sm" (click)="add(p)">+</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col">
+    <div class="mt-2">
+      <h5>Procedimentos Adicionados</h5>
+    </div>
+    <div class="form-group">
+      <label for="procedures">Filtrar</label>
+      <input class="form-control form-control-sm" [(ngModel)]="filterAdded" (input)="filterAdd()" type="text">
+    </div>
+    <div>
+      <div class="form-group">
+        <table class="table table-sm table-striped">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Nome</th>
+              <th scope="col">Valor</th>
+              <th *ngIf="isPaid" scope="col"></th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr class="table-secondary">
+              <th scope="col"></th>
+              <th *ngIf="isPaid" scope="col"></th>
+              <th scope="col">Total:</th>
+              <th scope="col">R$ {{total}}</th>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr *ngFor="let p of addedProcedures; index as i">
+              <th scope="row">{{p.code}}</th>
+              <td style="width:50%">{{p.name}}</td>
+              <td>R$ {{p.value}}</td>
+              <td *ngIf="isPaid"><a class="btn btn-danger btn-sm" (click)="remove(i)">-</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

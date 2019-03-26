@@ -1,0 +1,128 @@
+<section class="row">
+  <div class="col-md-8">
+    <h4>Lançamento de Contas</h4>
+  </div>
+  <div class="col-md-4">
+    <div class="btn-group float-right" role="group">
+      <button class="btn btn-primary btn-sm mb-4 float-right" (click)="toggle()">{{title}}</button>
+    </div>
+  </div>
+</section>
+<div id="new" [@popOverState]="stateList">
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <input type="number" formControlName="id" class="d-none" />
+    <div class="form-row">
+      <div class="col-md-6">
+        <label for="document" class="col-form-label">Número do Documento</label>
+        <input type="text" formControlName="document" class="form-control form-control-sm" id="document" name="document"
+          autocomplete="false" placeholder="Número do Documento">
+      </div>
+      <div class="col-md-6">
+        <label for="status" class="col-form-label">Forma de Pagamento</label>
+        <select id="status" formControlName="paymentMethod" name="status" class="form-control form-control-sm"
+          [ngClass]="{ 'is-invalid': submitted && f.paymentMethod.errors }">
+          <option *ngFor="let p of payMethod" [value]="p.id">{{p.description}}</option>
+        </select>
+        <div *ngIf="submitted && f.paymentMethod.errors" class="invalid-feedback">
+          <div *ngIf="f.paymentMethod.errors.required">Obrigatório</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-12">
+        <label for="description" class="col-form-label">Descrição</label>
+        <input type="text" formControlName="description" class="form-control form-control-sm" id="description" name="description"
+          autocomplete="false" placeholder="Descrição" [ngClass]="{ 'is-invalid': submitted && f.description.errors }">
+        <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
+          <div *ngIf="f.description.errors.required">Obrigatório</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-6">
+        <label for="nature" class="col-form-label">Natureza</label>
+        <select id="nature" formControlName="nature" name="nature" class="form-control form-control-sm" required>
+          <option value="1" selected>RECEITA</option>
+          <option value="2">DESPESA</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="category" class="col-form-label">Categoria</label>
+        <select id="category" formControlName="category" name="category" class="form-control form-control-sm" required>
+          <option value="1" selected>FIXO</option>
+          <option value="2">VARIÁVEL</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-6">
+        <label for="value" class="col-form-label">Valor Total</label>
+        <input type="text" formControlName="value" class="form-control form-control-sm" id="value" name="value"
+          autocomplete="false" placeholder="Valor Total" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', align : 'left' }"
+          [ngClass]="{ 'is-invalid': submitted && f.value.errors }">
+        <small>Valor mínimo 0,01</small>
+        <div *ngIf="submitted && f.value.errors" class="invalid-feedback">
+          <div *ngIf="f.value.errors.required">Obrigatório</div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="validUntil" class="col-form-label">Data de Validade</label>
+        <input type="date" autocomplete="off" formControlName="validUntil" name="validUntil" id="validUntil"
+          class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.validUntil.errors }" />
+        <div *ngIf="submitted && f.validUntil.errors" class="invalid-feedback">
+          <div *ngIf="f.validUntil.errors.required">Obrigatório</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-6">
+        <label for="status" class="col-form-label">Status</label>
+        <select id="status" name="status" formControlName="status" class="form-control form-control-sm mb-3" required>
+          <option value="1" selected>ABERTO</option>
+          <option value="2">FECHADO</option>
+        </select>
+      </div>
+    </div>
+  </form>
+  <div class="form-group">
+    <button [disabled]="loading" (click)="onSubmit()" class="btn btn-primary  btn-sm">Salvar</button>
+    <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+  </div>
+</div>
+
+<div id="list">
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Documento</th>
+        <th scope="col">Descrição</th>
+        <th scope="col">Validade</th>
+        <th scope="col">Valor</th>
+        <th scope="col">Forma de Pagamento</th>
+        <th scope="col">Natureza</th>
+        <th scope="col">Status</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let b of bills">
+        <th scope="row" class="align-middle">{{ b.id }}</th>
+        <td class="align-middle">{{ b.document }}</td>
+        <td class="align-middle">{{ b.description }}</td>
+        <td class="align-middle">{{ b.validUntil | date:'dd/MM/yy' }}</td>
+        <td class="align-middle">{{ b.value }}</td>
+        <td class="align-middle">{{ b.paymentMethod?.description }} {{ b.operator?.name }}</td>
+        <td class="align-middle">{{ b.nature | nature}}</td>
+        <td class="align-middle">{{ b.status | status }}</td>
+        <td class="align-middle">
+          <a class="btn btn-info btn-sm" (click)="edit(b.id)">
+            <i class="far fa-edit"></i></a></td>
+        <td class="align-middle">
+          <a class="btn btn-danger btn-sm" (click)="delete(b.id)">
+            <i class="far fa-trash-alt"></i></a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

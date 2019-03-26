@@ -5,7 +5,7 @@ import { Patient, User, Event, Contact } from 'src/app/_models';
 
 
 @Component({
-  selector: 'app-event-register',
+  selector: 'app-record-register',
   templateUrl: './event-register.component.html',
   styleUrls: ['./event-register.component.css']
 })

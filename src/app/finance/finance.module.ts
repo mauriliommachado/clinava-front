@@ -1,13 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InsuranceComponent } from './insurance/insurance.component';
-import { PaymentMethodComponent } from './payment-method/payment-method.component';
+import { BillComponent, RepeatPipe, NaturePipe } from './bill/bill.component';
+import { FlowComponent } from './flow/flow.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgxCurrencyModule } from "ngx-currency";
+import { FormsModule } from '@angular/forms';
+
 
 @NgModule({
   imports: [
-    CommonModule,ReactiveFormsModule
+    CommonModule,ReactiveFormsModule, NgxCurrencyModule,FormsModule
   ],
-  declarations: [InsuranceComponent, PaymentMethodComponent]
+  declarations: [BillComponent,RepeatPipe, NaturePipe,
+  FlowComponent]
 })
 export class FinanceModule { }

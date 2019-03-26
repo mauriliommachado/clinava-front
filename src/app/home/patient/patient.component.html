@@ -1,35 +1,57 @@
-<h4>Pacientes</h4>
+<section class="row">
+    <div class="col-md-8">
+        <h4>Pacientes</h4>
+    </div>
+    <div class="col-md-4">
+        <div class="btn-group float-right" role="group">
+            <button class="btn btn-primary btn-sm mb-4 float-right" (click)="toggle()">{{title}}</button>
+        </div>
+    </div>
+</section>
 <div id="new" [@popOverState]="stateList">
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="name">Nome Completo</label>
-                <input type="text" class="form-control" id="name" name="name" formControlName="name" placeholder="Nome Completo" [ngClass]="{ 'is-invalid': submitted && f.name.errors }">
+                <input type="text" class="form-control form-control-sm" id="name" name="name" formControlName="name"
+                    placeholder="Nome Completo" [ngClass]="{ 'is-invalid': submitted && f.name.errors }">
                 <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
                     <div *ngIf="f.name.errors.required">Obrigatório</div>
                 </div>
             </div>
             <div class="form-group col-md-3">
                 <label for="cpf">CPF</label>
-                <input type="text" class="form-control" id="cpf" name="cpf" formControlName="cpf" placeholder="CPF">
+                <input type="text" class="form-control form-control-sm" id="cpf" name="cpf" formControlName="cpf"
+                    placeholder="CPF">
             </div>
             <div class="form-group col-md-3">
                 <label for="birthday">Data de Nascimento</label>
-                <input id="birthday" name="birthday" placeholder="DD/MM/AAAA" formControlName="birthday" class="form-control"
+                <input id="birthday" name="birthday" placeholder="DD/MM/AAAA" formControlName="birthday" class="form-control form-control-sm"
                     type="date">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="plan">Planos</label>
+            <select formControlName="plan" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.plan.errors }">
+                <option [value]="p.ansCode" *ngFor="let p of plans">{{p.name}}</option>
+            </select>
+            <div *ngIf="submitted && f.plan.errors" class="invalid-feedback">
+                <div *ngIf="f.plan.errors.required">Obrigatório</div>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="phone">Telefone</label>
-                <input type="text" class="form-control" id="phone" name="phone" formControlName="phone" placeholder="Telefone" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }">
+                <input type="text" class="form-control form-control-sm" id="phone" name="phone" formControlName="phone"
+                    placeholder="Telefone" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }">
                 <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
                     <div *ngIf="f.phone.errors.required">Obrigatório</div>
                 </div>
             </div>
             <div class="form-group col-md-6">
                 <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" name="email" formControlName="email" placeholder="Email">
+                <input type="email" class="form-control form-control-sm" id="email" name="email" formControlName="email"
+                    placeholder="Email">
             </div>
         </div>
         <div class="form-group">
@@ -40,30 +62,31 @@
             <div class="form-row">
                 <div class="form-group col-md-3">
                     <label for="street">Rua</label>
-                    <input type="text" class="form-control" id="street" name="street" formControlName="street">
+                    <input type="text" class="form-control form-control-sm" id="street" name="street" formControlName="street">
                 </div>
                 <div class="form-group col-md-1">
                     <label for="number">Número</label>
-                    <input type="text" class="form-control" id="number" name="number" formControlName="number">
+                    <input type="text" class="form-control form-control-sm" id="number" name="number" formControlName="number">
                 </div>
                 <div class="form-group col-md-2">
                     <label for="complement">Complemento</label>
-                    <input type="text" class="form-control" id="complement" name="complement" formControlName="complement">
+                    <input type="text" class="form-control form-control-sm" id="complement" name="complement"
+                        formControlName="complement">
                 </div>
                 <div class="form-group col-md-2">
                     <label for="city">Cidade</label>
-                    <input type="text" class="form-control" id="city" name="city" formControlName="city">
+                    <input type="text" class="form-control form-control-sm" id="city" name="city" formControlName="city">
                 </div>
                 <div class="form-group col-md-2">
                     <label for="state">Estado</label>
-                    <select id="state" class="form-control" name="state" formControlName="state">
+                    <select id="state" class="form-control form-control-sm" name="state" formControlName="state">
                         <option selected value="1">Rio de Janeiro</option>
                         <option value="2">São Paulo</option>
                     </select>
                 </div>
                 <div class="form-group col-md-2">
                     <label for="zip">CEP</label>
-                    <input type="text" class="form-control" id="zip" name="zip" formControlName="zip">
+                    <input type="text" class="form-control form-control-sm" id="zip" name="zip" formControlName="zip">
                 </div>
             </div>
         </div>
@@ -73,7 +96,6 @@
         </div>
     </form>
 </div>
-<button class="btn btn-primary btn-sm mb-3 float-right" (click)="toggle()">{{title}}</button>
 <div id="list">
     <table class="table table-striped table-sm">
         <thead>
@@ -81,15 +103,17 @@
                 <th scope="col">Nome</th>
                 <th scope="col">CPF</th>
                 <th scope="col">Email</th>
+                <th scope="col">Plano</th>
                 <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let patient of patients">
-                <td>{{ patient.name }} </td>
-                <td>{{ patient.cpf }}</td>
-                <td>{{ patient.email }}</td>
-                <td>
+                <td class="align-middle">{{ patient.name }} </td>
+                <td class="align-middle">{{ patient.cpf }}</td>
+                <td class="align-middle">{{ patient.email }}</td>
+                <td class="align-middle">{{ patient.plan?.name }}</td>
+                <td class="align-middle">
                     <a class="btn btn-info btn-sm" (click)="edit(patient.id)">
                         <i class="far fa-edit"></i></a>
                     <a class="btn btn-danger btn-sm ml-1" (click)="delete(patient.id)">

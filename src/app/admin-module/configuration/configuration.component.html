@@ -6,35 +6,35 @@
     <input type="number" formControlName="id" class="d-none" />
     <div class="form-group">
       <label for="hourInit">Abertura de Horário de Atendimento</label>
-      <input type="number" formControlName="hourInit" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.hourInit.errors }" />
+      <input type="number" formControlName="hourInit" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.hourInit.errors }" />
       <div *ngIf="submitted && f.hourInit.errors" class="invalid-feedback">
         <div *ngIf="f.hourInit.errors.required">Obrigatório</div>
       </div>
     </div>
     <div class="form-group">
       <label for="hourEnd">Fechamento de Horário de Atendimento</label>
-      <input type="number" formControlName="hourEnd" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.hourEnd.errors }" />
+      <input type="number" formControlName="hourEnd" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.hourEnd.errors }" />
       <div *ngIf="submitted && f.hourEnd.errors" class="invalid-feedback">
         <div *ngIf="f.hourEnd.errors.required">Obrigatório</div>
       </div>
     </div>
     <div class="form-group">
       <label for="interval">Intervalo de Atendimentos (Minutos)</label>
-      <input type="number" formControlName="interval" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.interval.errors }" />
+      <input type="number" formControlName="interval" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.interval.errors }" />
       <div *ngIf="submitted && f.interval.errors" class="invalid-feedback">
         <div *ngIf="f.interval.errors.required">Obrigatório</div>
       </div>
     </div>
     <div class="form-group">
       <label for="interval">Limite de SMS´s (Os primeiros 100 são por nossa conta!)</label>
-      <input type="number" formControlName="smsLimit" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.smsLimit.errors }" />
+      <input type="number" formControlName="smsLimit" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.smsLimit.errors }" />
       <div *ngIf="submitted && f.smsLimit.errors" class="invalid-feedback">
         <div *ngIf="f.smsLimit.errors.required">Obrigatório</div>
       </div>
     </div>
     <div class="form-group">
       <label for="workingDays">Dias de trabalhados (Selecione dias diferentes usando a tecla CTRL)</label>
-      <select multiple class="form-control" id="workingDays" size="7" formControlName="workingDays">
+      <select multiple class="form-control form-control-sm" id="workingDays" size="7" formControlName="workingDays">
         <option value="Domingo">Domingo</option>
         <option value="Segunda">Segunda</option>
         <option value="Terça">Terça</option>
@@ -54,18 +54,19 @@
     <small>#hora - Hora completa (Ex. 14:25)</small><br>
     <small>#crm - CRM do atendente</small><br>
     <small>#cpf - CPF do paciente</small><br>
+    <small>#nome - Nome do atendente</small><br>
     <br>
     <div class="form-group">
       <label for="interval">Modelo Anamnese</label>
-      <textarea formControlName="anamneseTemplate" class="form-control" rows="10"></textarea>
+      <textarea formControlName="anamneseTemplate" class="form-control form-control-sm" rows="10"></textarea>
     </div>
     <div class="form-group">
       <label for="interval">Modelo Atestado</label>
-      <textarea formControlName="attestTemplate" class="form-control" rows="10"></textarea>
+      <textarea formControlName="attestTemplate" class="form-control form-control-sm" rows="10"></textarea>
     </div>
     <div class="form-group">
       <label for="interval">Modelo Prescrição</label>
-      <textarea formControlName="prescriptionTemplate" class="form-control" rows="10"></textarea>
+      <textarea formControlName="prescriptionTemplate" class="form-control form-control-sm" rows="10"></textarea>
     </div>
     <div class="form-group">
       <button [disabled]="loading" class="btn btn-primary">Salvar</button>

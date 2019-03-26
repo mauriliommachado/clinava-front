@@ -25,7 +25,7 @@ export class ListComponent implements OnInit {
   }
 
   openEvent(id:string) {
-    this.route.navigate(['/event/record/'+ id]);
+    this.route.navigate(['/record/record/'+ id]);
   }
 
 }

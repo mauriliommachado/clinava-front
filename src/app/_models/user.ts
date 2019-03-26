@@ -13,4 +13,5 @@ export class User {
     address: Address;
     contacts: Contact[];
     crm: string;
+    acceptedTerm: boolean;
 }

@@ -1,14 +1,13 @@
 <div class="p-2">
   <h4>Paciente</h4>
   <h5>{{event.patient.name}}</h5>
-  <p><strong>Idade: </strong> {{event.patient.birthday | date: "dd/MM/yyyy"}} </p>
+  <p>Data de Nascimento: {{event.patient.birthday | date: "dd/MM/yyyy"}} </p>
   <button type="button" class="btn btn-danger" (click)="close()">Encerrar atendimento</button>
 </div>
 <form [formGroup]="registerForm">
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item">
-      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
-        aria-selected="true">Histórico</a>
+      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Histórico</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" id="anamnese-tab" data-toggle="tab" href="#anamnese" role="tab" aria-controls="anamnese"
@@ -34,10 +33,14 @@
       <a class="nav-link" id="atestado-tab" data-toggle="tab" href="#atestado" role="tab" aria-controls="atestado"
         aria-selected="false">Atestados</a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link" id="procedimentos-tab" data-toggle="tab" href="#procedimentos" role="tab"
+        aria-controls="procedimentos" aria-selected="false">Procedimentos</a>
+    </li>
 
   </ul>
   <div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade show active p-1" id="home" role="tabpanel" aria-labelledby="home-tab">
+    <div class="tab-pane fade p-1  show active" id="home" role="tabpanel" aria-labelledby="home-tab">
       <div class="card bg-light mt-1" *ngFor="let r of pastRecords">
         <h6 class="card-header">Consulta - {{r.date | date: "dd/MM/yyyy"}}</h6>
         <div class="card-body">
@@ -56,6 +59,8 @@
           <p class="card-text">{{r.exams}}</p>
           <h6 class="card-title">Atestados:</h6>
           <p class="card-text">{{r.attest}}</p>
+          <h6 class="card-title">Procedimentos:</h6>
+          <p class="card-text" *ngFor="let p of r.procedures">{{p.name}}</p>
         </div>
       </div>
     </div>
@@ -63,40 +68,40 @@
     <div class="tab-pane fade" id="anamnese" role="anamnese" aria-labelledby="anamnese-tab">
       <div class="form-group">
         <label for="lblAnamnese">Anamnese</label>
-        <textarea class="form-control" id="lblAnamnese" rows="10" formControlName="anamnese"></textarea>
+        <textarea class="form-control form-control-sm" id="lblAnamnese" rows="10" formControlName="anamnese"></textarea>
       </div>
     </div>
 
     <div class="tab-pane fade" id="evolucao" role="tabpanel" aria-labelledby="evolucao-tab">
       <div class="form-group">
         <label for="lblevolucao">Evolução</label>
-        <textarea class="form-control" id="lblevolucao" rows="10" formControlName="evolution"></textarea>
+        <textarea class="form-control form-control-sm" id="lblevolucao" rows="10" formControlName="evolution"></textarea>
       </div>
     </div>
 
     <div class="tab-pane fade" id="diagnostico" role="tabpanel" aria-labelledby="diagnostico-tab">
       <div class="form-group">
         <label for="lbldiagnostico1">Diagnostico 1</label>
-        <input class="form-control" formControlName="diagnosis1" id="lbldiagnostico1" />
+        <input class="form-control form-control-sm" formControlName="diagnosis1" id="lbldiagnostico1" />
       </div>
       <div class="form-group">
         <label for="lbldiagnostico2">Diagnostico 2</label>
-        <input class="form-control" formControlName="diagnosis2" id="lbldiagnostico2" />
+        <input class="form-control form-control-sm" formControlName="diagnosis2" id="lbldiagnostico2" />
       </div>
       <div class="form-group">
         <label for="lbldiagnostico3">Diagnostico 3</label>
-        <input class="form-control" formControlName="diagnosis3" id="lbldiagnostico3" />
+        <input class="form-control form-control-sm" formControlName="diagnosis3" id="lbldiagnostico3" />
       </div>
       <div class="form-group">
         <label for="lbldiagnostico4">Diagnostico 4</label>
-        <input class="form-control" formControlName="diagnosis4" id="lbldiagnostico4" />
+        <input class="form-control form-control-sm" formControlName="diagnosis4" id="lbldiagnostico4" />
       </div>
     </div>
 
     <div class="tab-pane fade" id="precricao" role="tabpanel" aria-labelledby="precricao-tab">
       <div class="form-group">
         <label for="lblprescricao">Prescrição</label>
-        <textarea class="form-control" id="lblprescricao" rows="10" formControlName="prescriptions"></textarea>
+        <textarea class="form-control form-control-sm" id="lblprescricao" rows="10" formControlName="prescriptions"></textarea>
       </div>
       <a class="btn btn-info" (click)="print('prescriptions')">Imprimir</a>
     </div>
@@ -104,7 +109,7 @@
     <div class="tab-pane fade" id="exames" role="tabpanel" aria-labelledby="exames-tab">
       <div class="form-group">
         <label for="lblexames">Exames</label>
-        <textarea class="form-control" id="lblexames" rows="10" formControlName="exams"></textarea>
+        <textarea class="form-control form-control-sm" id="lblexames" rows="10" formControlName="exams"></textarea>
       </div>
       <a class="btn btn-info" (click)="print('exams')">Imprimir</a>
     </div>
@@ -112,9 +117,13 @@
     <div class="tab-pane fade" id="atestado" role="tabpanel" aria-labelledby="atestado-tab">
       <div class="form-group">
         <label for="lblatestados">Atestados</label>
-        <textarea class="form-control" id="lblatestados" rows="10" formControlName="attest"></textarea>
+        <textarea class="form-control form-control-sm" id="lblatestados" rows="10" formControlName="attest"></textarea>
       </div>
       <a class="btn btn-info" (click)="print('attest')">Imprimir</a>
+    </div>
+    <div class="tab-pane fade" id="procedimentos" role="tabpanel" aria-labelledby="procedimentos-tab">
+      <app-add-procedures [events]="eventsSubject.asObservable()" (setProcedures)="setProcedures($event)"></app-add-procedures>
+      <a class="btn btn-info" (click)="print('estimate')">Imprimir Orçamento</a>
     </div>
   </div>
 </form>

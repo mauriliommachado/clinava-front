@@ -1,24 +1,32 @@
-<h4>Consulta</h4>
-<button class="btn btn-primary btn-sm float-right mb-4" (click)="toggle()">{{title}}</button>
-<br>
+<section class="row">
+    <div class="col-md-8">
+        <h4>Consulta</h4>
+    </div>
+    <div class="col-md-4">
+        <div class="btn-group float-right" role="group">
+            <button class="btn btn-primary btn-sm mb-4 float-right" (click)="toggle()">{{title}}</button>
+        </div>
+    </div>
+</section>
 <div id="new" [@popOverState]="stateList">
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="date">Data</label>
-                <input type="date" formControlName="date" class="form-control" [ngModel]="date" [ngClass]="{ 'is-invalid': submitted && f.date.errors }" />
+                <input type="date" formControlName="date" class="form-control form-control-sm" [ngModel]="date"
+                    [ngClass]="{ 'is-invalid': submitted && f.date.errors }" />
                 <div *ngIf="submitted && f.date.errors" class="invalid-feedback">
                     <div *ngIf="f.date.errors.required">Obrigatório</div>
                 </div>
             </div>
             <div class="form-group col-md-6">
                 <label for="time">Hora</label>
-                <div class="input-group mb-2">
+                <div class="input-group input-group-sm mb-2">
                     <div class="input-group-prepend">
                         <a class="input-group-text" (click)="subMinutes()">-</a>
                     </div>
                     <input type="time" formControlName="time" [ngModel]="time" [ngClass]="{ 'is-invalid': submitted && f.time.errors }"
-                        class="form-control" id="time">
+                        class="form-control form-control-sm" id="time">
                     <div class="input-group-prepend">
                         <a class="input-group-text" (click)="addMinutes()">+</a>
                     </div>
@@ -27,7 +35,7 @@
         </div>
         <div class="form-group">
             <label for="user">Paciente</label>
-            <select formControlName="patient" class="form-control"  [ngClass]="{ 'is-invalid': submitted && f.patient.errors }">
+            <select formControlName="patient" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.patient.errors }">
                 <option [value]="patient.id" *ngFor="let patient of patients">{{patient.name}}</option>
             </select>
             <div *ngIf="submitted && f.patient.errors" class="invalid-feedback">
@@ -36,18 +44,18 @@
         </div>
         <div class="form-group">
             <label for="duration">Duração</label>
-            <input type="number" formControlName="duration" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.duration.errors }" />
+            <input type="number" formControlName="duration" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.duration.errors }" />
             <div *ngIf="submitted && f.duration.errors" class="invalid-feedback">
                 <div *ngIf="f.duration.errors.required">Duração tem que ser preenchida</div>
             </div>
         </div>
         <div class="form-group">
             <label for="obs">Observação</label>
-            <input type="text" formControlName="obs" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.obs.errors }" />
+            <input type="text" formControlName="obs" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.obs.errors }" />
         </div>
         <div class="form-group">
             <label for="user">Atendente</label>
-            <select formControlName="user" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.user.errors }">
+            <select formControlName="user" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.user.errors }">
                 <option selected>Selecionar</option>
                 <option [value]="user.id" *ngFor="let user of attendants">{{user.name}}</option>
             </select>
@@ -74,11 +82,11 @@
         </thead>
         <tbody>
             <tr *ngFor="let event of events">
-                <td>{{ event.date | date:'dd/MM/yy - HH:mm' }}</td>
-                <td>{{ event.patient.name }}</td>
-                <td>{{ event.obs }}</td>
-                <td>{{ event.user.name }}</td>
-                <td>
+                <td class="align-middle">{{ event.date | date:'dd/MM/yy - HH:mm' }}</td>
+                <td class="align-middle">{{ event.patient.name }}</td>
+                <td class="align-middle">{{ event.obs }}</td>
+                <td class="align-middle">{{ event.user.name }}</td>
+                <td class="align-middle">
                     <a class="btn btn-info btn-sm" (click)="edit(event.id)">
                         <i class="far fa-edit"></i></a>
                     <a class="btn btn-danger btn-sm ml-1" (click)="delete(event.id)">

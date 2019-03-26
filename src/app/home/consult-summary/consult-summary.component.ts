@@ -9,6 +9,7 @@ import { EventService } from '../../_services';
 })
 export class ConsultSummaryComponent implements OnInit {
   @Output() close: EventEmitter<String> = new EventEmitter();
+  @Output() openBilling: EventEmitter<String> = new EventEmitter();
   @Input() event: Event = new Event();
   @Input() visible = false;
   formatedDate: string = "";
@@ -44,6 +45,14 @@ export class ConsultSummaryComponent implements OnInit {
         this.visible = false;
         this.closeModal();
       });
+    }
+  }
+
+  bill(event) {
+    let elementId: string = (event.target as Element).id;
+    if (elementId == "customModal" || elementId == "bill") {
+      this.visible = false;
+      this.openBilling.emit("oi")
     }
   }
 
