@@ -1,0 +1,58 @@
+<h4>Faturamento por Profissional</h4>
+<div class="noprint">
+  <div class="form-row">
+    <div class="form-group col-md-2">
+      <label for="initDate">Data Início </label>
+      <input [(ngModel)]="initDate" id="initDate" name="initDate" class="form-control form-control-sm input-md"
+        type="date">
+    </div>
+
+    <div class="form-group col-md-2">
+      <label for="endDate">Data Fim</label>
+      <input [(ngModel)]="endDate" id="endDate" name="endDate" class="form-control form-control-sm input-md"
+        type="date">
+    </div>
+  </div>
+  <br>
+  <a class="btn btn-primary mt-2 mb-2 mr-2" (click)="onSubmit()">Buscar</a>
+  <a class="btn btn-info mt-2 mb-2" (click)="print()">Emitir Relatório</a>
+  <hr>
+</div>
+<div>
+  <table class="table table-striped table-sm" *ngFor="let e of events" >
+    <thead>
+      <tr>
+          <th scope="col">Documento</th>
+          <th scope="col">Descrição</th>
+          <th scope="col">Lançamento</th>
+          <th scope="col">Valor</th>
+          <th scope="col">Forma de Pagamento</th>
+          <th scope="col">Natureza</th>
+          <th scope="col">Status</th>
+      </tr>
+      <tr>
+        <th colspan="7">{{e.user.name}}</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr class="table-active">
+        <td colspan="3"></td>
+        <td >Total:</td>
+        <td>{{ getSum(e.bills) | currency:'BRL'}}</td>
+        <td colspan="3"></td>
+      </tr>
+    </tfoot>
+    <tbody>
+      <tr *ngFor="let b of e.bills">
+          <td class="align-middle">{{ b.document }}</td>
+          <td class="align-middle">{{ b.description }}</td>
+          <td class="align-middle">{{ b.createdAt | date:'dd/MM/yy' }}</td>
+          <td class="align-middle">{{ b.value | currency:'BRL'}}</td>
+          <td class="align-middle">{{ b.paymentMethod != null ? b.paymentMethod.description: "" }}</td>
+          <td class="align-middle">{{ b.nature | nature}}</td>
+          <td class="align-middle">{{ b.status | status }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+

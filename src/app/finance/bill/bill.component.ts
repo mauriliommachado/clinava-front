@@ -56,7 +56,7 @@ export class BillComponent implements OnInit {
       status: [1],
       category: [1],
       value: [0],
-      paymentMethod: ["", Validators.required]
+      paymentMethod: [null]
     });
     this.billService.getAll().subscribe(resp => {
       this.bills = resp
@@ -90,7 +90,7 @@ export class BillComponent implements OnInit {
       status: [1],
       category: [1],
       value: [0, Validators.min(0.01)],
-      paymentMethod: [, Validators.required]
+      paymentMethod: [null]
     });
   }
 
@@ -110,8 +110,11 @@ export class BillComponent implements OnInit {
     bill.validUntil = new Date(this.registerForm.value.validUntil);
     bill.validUntil.setHours(12);
     bill.value = this.registerForm.value.value;
-    bill.paymentMethod = new PaymentMethod();
-    bill.paymentMethod.id = this.registerForm.value.paymentMethod;
+    if(this.registerForm.value.paymentMethod){
+      bill.paymentMethod = new PaymentMethod();
+      bill.paymentMethod.id = this.registerForm.value.paymentMethod;
+    }
+    console.log(this.editing);
     if (this.editing) {
       bill.id = this.currentBill;
       this.billService.update(bill).subscribe(r => {
@@ -142,7 +145,7 @@ export class BillComponent implements OnInit {
         status: [bill.status],
         category: [bill.category],
         value: [bill.value],
-        paymentMethod: [bill.paymentMethod.id, Validators.required]
+        paymentMethod: [bill.paymentMethod == null? null: bill.paymentMethod.id]
       });
       this.currentBill = id;
       this.toggle();

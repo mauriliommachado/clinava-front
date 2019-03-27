@@ -5,6 +5,7 @@ export class Bill {
     document: string;
     description: string;
     validUntil: Date;
+    createdAt: Date;
     nature: number;
     category: number;
     value: number;

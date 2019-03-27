@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BillService } from '../../_services';
-import { Bill } from 'src/app/_models';
-import jsPDF from 'jspdf';
-import { autoTable } from 'jspdf-autotable';
+import { Bill, Event } from 'src/app/_models';
 declare var require: any;
 
 
@@ -13,13 +11,14 @@ declare var require: any;
 })
 export class FlowComponent implements OnInit {
 
-  constructor(
-    private billService: BillService) { }
+  constructor(private billService: BillService) { }
 
 
-  bills: Bill[];
-  initDate = new Date().toISOString().substring(0, 10);
-  endDate = new Date().toISOString().substring(0, 10);
+  bills: Bill[] = new Array();
+  events: Event[] = new Array();
+  date = new Date();
+  initDate = new Date(this.date.getFullYear(), this.date.getMonth(), 1).toISOString().substring(0, 10);
+  endDate = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0).toISOString().substring(0, 10);
   paid: boolean;
   toPay: boolean;
   received: boolean;
@@ -40,10 +39,10 @@ export class FlowComponent implements OnInit {
       });
   }
 
-  getSum() : number {
+  getSum(bills: Bill[]): number {
     let sum = 0;
-    for(let i = 0; i < this.bills.length; i++) {
-      sum += this.bills[i].value;
+    for (let i = 0; i < bills.length; i++) {
+      sum += bills[i].value;
     }
     return sum;
   }
@@ -52,7 +51,7 @@ export class FlowComponent implements OnInit {
     window.print();
   }
 
-  validateFields(){
+  validateFields() {
     if (!this.initDate) {
       this.initDate = new Date().toISOString().substring(0, 10);
     }

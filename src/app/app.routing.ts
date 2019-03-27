@@ -23,6 +23,7 @@ import { PaymentMethodComponent } from './admin-module/payment-method/payment-me
 import { BillComponent } from './finance/bill/bill.component';
 import { FlowComponent } from './finance/flow/flow.component';
 import { BillingComponent } from './home/billing/billing.component';
+import { RevenueComponent } from './finance/revenue/revenue.component';
 
 
 
@@ -79,7 +80,8 @@ const appRoutes: Routes = [
         children: [
 
           { path: 'bill', component: BillComponent },
-          { path: 'flow', component: FlowComponent }
+          { path: 'flow', component: FlowComponent },
+          { path: 'revenue', component: RevenueComponent }
         ]
       }
     ]

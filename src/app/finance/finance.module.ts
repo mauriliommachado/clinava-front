@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgxCurrencyModule } from "ngx-currency";
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { RevenueComponent } from './revenue/revenue.component';
 
 
 @NgModule({
@@ -13,7 +14,7 @@ import { RouterModule } from '@angular/router';
     CommonModule,ReactiveFormsModule, NgxCurrencyModule,FormsModule,RouterModule
   ],
   declarations: [BillComponent,RepeatPipe, NaturePipe,
-  FlowComponent],
+  FlowComponent, RevenueComponent],
   exports: [RepeatPipe, NaturePipe]
 })
 export class FinanceModule { }

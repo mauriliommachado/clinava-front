@@ -34,12 +34,12 @@
   <br>
   <a class="btn btn-primary mt-2 mb-2 mr-2" (click)="onSubmit()">Buscar</a>
   <a class="btn btn-info mt-2 mb-2" (click)="print()">Emitir Relatório</a>
+  <hr>
 </div>
 <div id="list">
   <table class="table table-striped table-sm">
     <thead>
       <tr>
-        <th scope="col">#</th>
         <th scope="col">Documento</th>
         <th scope="col">Descrição</th>
         <th scope="col">Validade</th>
@@ -53,17 +53,16 @@
       <tr class="table-active">
         <td colspan="3"></td>
         <td >Total:</td>
-        <td>{{ getSum() | currency:'BRL':true:'2.2'}}</td>
+        <td>{{ getSum(bills) | currency:'BRL'}}</td>
         <td colspan="3"></td>
       </tr>
     </tfoot>
     <tbody>
       <tr *ngFor="let b of bills">
-        <th scope="row" class="align-middle">{{ b.id }}</th>
         <td class="align-middle">{{ b.document }}</td>
         <td class="align-middle">{{ b.description }}</td>
         <td class="align-middle">{{ b.validUntil | date:'dd/MM/yy' }}</td>
-        <td class="align-middle">{{ b.value | currency:'BRL':true:'2.2'}}</td>
+        <td class="align-middle">{{ b.value | currency:'BRL'}}</td>
         <td class="align-middle">{{ b.paymentMethod != null ? b.paymentMethod.description: "" }}</td>
         <td class="align-middle">{{ b.nature | nature}}</td>
         <td class="align-middle">{{ b.status | status }}</td>
