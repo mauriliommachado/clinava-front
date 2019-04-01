@@ -91,7 +91,7 @@ export class AgendaComponent implements OnInit {
     endDate.setDate(this.endDay);
     endDate.setHours(this.config.hourEnd);
     endDate.setMinutes(this.config.interval)
-    this.eventService.getByTime(this.today, endDate, this.id).subscribe(resp => {
+    this.eventService.getByTimeWithUser(this.today, endDate, this.id).subscribe(resp => {
       this.days = new Array();
       for (let d = 0; d < this.config.workingDays.length; d++) {
         let day = new Day();

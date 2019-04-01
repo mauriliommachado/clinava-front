@@ -26,8 +26,12 @@ export class EventService {
         }
     }
 
-    getByTime(date: Date, endDate: Date, id: string) {
+    getByTimeWithUser(date: Date, endDate: Date, id: string) {
         return this.http.get<Event[]>(`${environment.apiUrl}` + this.getBusinessId() + `/events?userId=` + id + '&startDate=' + date.toISOString() + '&endDate=' + endDate.toISOString());
+    }
+
+    getByTime(date: Date, endDate: Date) {
+        return this.http.get<Event[]>(`${environment.apiUrl}` + this.getBusinessId() + `/events?startDate=` + date.toISOString() + '&endDate=' + endDate.toISOString());
     }
 
     getByCheckedId(date: Date) {
