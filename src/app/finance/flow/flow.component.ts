@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BillService } from '../../_services';
-import { Bill } from 'src/app/_models';
+import { Bill, BillConstants } from 'src/app/_models';
 import jsPDF from 'jspdf';
 import { autoTable } from 'jspdf-autotable';
 declare var require: any;
@@ -43,7 +43,11 @@ export class FlowComponent implements OnInit {
   getSum() : number {
     let sum = 0;
     for(let i = 0; i < this.bills.length; i++) {
-      sum += this.bills[i].value;
+      if(this.bills[i].nature == new BillConstants().NATURE_INCOME){
+        sum += this.bills[i].value;
+      }else{
+        sum -= this.bills[i].value;
+      }
     }
     return sum;
   }
