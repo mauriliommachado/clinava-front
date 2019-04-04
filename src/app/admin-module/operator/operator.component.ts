@@ -124,6 +124,7 @@ export class OperatorComponent implements OnInit {
       this.currentOperator = id;
       this.toggle();
       this.editing = true;
+      window.scrollTo(0, 0);
     });
   }
 

@@ -147,6 +147,7 @@ export class ProceduresComponent implements OnInit {
       this.currentProcedure = id;
       this.toggle();
       this.editing = true;
+      window.scrollTo(0, 0);
     });
   }
 

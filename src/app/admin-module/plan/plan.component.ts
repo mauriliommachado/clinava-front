@@ -130,6 +130,7 @@ export class PlanComponent implements OnInit {
       this.currentPlan = id;
       this.toggle();
       this.editing = true;
+      window.scrollTo(0, 0);
     });
   }
 

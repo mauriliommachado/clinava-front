@@ -141,6 +141,7 @@ export class ConsultComponent implements OnInit {
       this.editing = true;
       this.currentEvent = id;
       this.toggle();
+      window.scrollTo(0, 0);
     });
   }
 

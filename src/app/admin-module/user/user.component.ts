@@ -155,6 +155,7 @@ export class UserComponent implements OnInit {
       this.currentUser = user;
       this.toggle();
       this.editing = true;
+      window.scrollTo(0, 0);
     });
 
   }

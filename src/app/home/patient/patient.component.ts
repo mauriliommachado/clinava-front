@@ -115,6 +115,7 @@ export class PatientComponent implements OnInit {
       this.currentPatient = id;
       this.toggle();
       this.editing = true;
+      window.scrollTo(0, 0);
     });
   }
 
