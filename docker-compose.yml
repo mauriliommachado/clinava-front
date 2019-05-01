@@ -1,0 +1,32 @@
+# Use postgres/example user/password credentials
+# version: '3.1'
+
+# services:
+
+#   db:
+#     image: postgres
+#     restart: always
+#     environment:
+#       POSTGRES_PASSWORD: example
+
+#   adminer:
+#     image: adminer
+# manual: docker run -p 5432:5432 -e  POSTGRES_USER=maurilio.machado -e POSTGRES_PASSWORD= -e POSTGRES_DB=clinava postgres
+#     restart: always
+#     ports:
+#       - 5432:5432
+
+version: "3"
+services:
+  tad:
+    image: postgres:11.2
+    container_name: "postgres"
+    environment:
+      POSTGRES_DB: clinava
+      POSTGRES_USER: maurilio.machado
+      TZ: GMT
+      PGDATA: /tmp
+    volumes:
+      - "./data/postgres:/var/lib/postgresql/data"
+    ports:
+      - "5432:5432"

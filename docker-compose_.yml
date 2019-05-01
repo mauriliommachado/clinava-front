@@ -1,0 +1,13 @@
+version: "3"
+services:
+  tad:
+    image: postgres:11.2
+    container_name: "postgres"
+    environment:
+      - POSTGRES_DB=clinava
+      - POSTGRES_USER=maurilio.machado
+      - TZ=GMT
+    volumes:
+      - "./data/postgres:/var/lib/postgresql/data"
+    ports:
+      - 5432:5432
